@@ -31,6 +31,10 @@ body {
 	height: 50px;
 }
 
+#searchName{
+	margin-top: 9px;
+}
+
 #gender,#name {
 	width: 200px;
 	margin-right: 10px;
