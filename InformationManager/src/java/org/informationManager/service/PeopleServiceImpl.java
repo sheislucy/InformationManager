@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.informationManager.dto.HouseMemberRequestDTO;
 import org.informationManager.dto.JsonRequestDTO;
 import org.informationManager.dto.PeopleDomain;
 import org.informationManager.dto.PeopleRequestDTO;
@@ -38,7 +39,35 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	@Autowired
 	private PeopleDao dao;
 
-	public PeopleResponseDTO getPeopleList(PeopleRequestDTO requestDTO) {
+	public PeopleResponseDTO getHouseMembers(HouseMemberRequestDTO requestDTO) {
+
+		final HouseMemberRequestDTO dtoTemp = requestDTO;
+		List<PeopleEntity> memberList = dao
+				.findAll(buildSpecificationForHouse(dtoTemp));
+		PeopleResponseDTO dto = new PeopleResponseDTO();
+		dto.setPeopleList(buildResponse(memberList));
+		return dto;
+	}
+
+	private Specification<PeopleEntity> buildSpecificationForHouse(
+			final HouseMemberRequestDTO requestDTO) {
+		Specification<PeopleEntity> spec = new Specification<PeopleEntity>() {
+			@Override
+			public Predicate toPredicate(Root<PeopleEntity> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				// TODO Auto-generated method stub
+				List<Predicate> predicates = new ArrayList<Predicate>();
+				predicates.add(cb.equal(root.<String> get("hostId"), 227));
+				predicates.add(cb.equal(root.<String> get("pid"), 227));
+				return cb
+						.or(predicates.toArray(new Predicate[predicates.size()]));
+			}
+
+		};
+		return spec;
+	}
+
+	public PeopleResponseDTO getHostList(PeopleRequestDTO requestDTO) {
 		if (requestDTO.getRows() <= 0) {
 			requestDTO
 					.setRows(Integer.parseInt((String) MyPropertyPlaceholderConfigurer
@@ -79,6 +108,10 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 						.getSearchGender())) {
 					predicates.add(cb.equal(root.<String> get("gender"), 0));
 				}
+
+				// look up for all host
+				predicates.add(cb.equal(root.<String> get("pid"),
+						root.<String> get("hostId")));
 
 				// if ("lt".equalsIgnoreCase(requestDTO.getSearchAgeRule())) {
 				// Path<String> genderPath = root.get("idcard");

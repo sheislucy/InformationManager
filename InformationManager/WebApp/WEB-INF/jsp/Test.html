@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link
+	href="D:\workspace_people\git\InformationManager\InformationManager\WebApp\css\jquery-ui-1.10.3.custom.min.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="D:\workspace_people\git\InformationManager\InformationManager\WebApp\css\ui.jqgrid.css"
+	rel="stylesheet" type="text/css" />
+<title>Insert title here</title>
+<style>
+.house-detail {
+	font-size: 13px;
+}
+
+.center {
+	text-align: center;
+}
+
+.w1000 {
+	width: 1000px;
+}
+
+.w50 {
+	width: 50px;
+}
+
+.w100 {
+	width: 100px;
+}
+
+.w150 {
+	width: 150px;
+}
+
+.w200 {
+	width: 200px;
+}
+</style>
+</head>
+<body>
+	<div class="ui-jqgrid house-detail">
+		<table class="w1000">
+			<tr>
+				<td colspan="10" class="ui-widget-header center">户主</td>
+			</tr>
+			<tr class="ui-row-ltr jqgrow">
+				<td class="ui-state-default w50">姓名</td>
+				<td class="w100">${}</td>
+				<td class="ui-state-default w50">身份证</td>
+				<td class="w100">${};</td>
+				<td class="ui-state-default w50">绰号</td>
+				<td class="w150">${}</td>
+				<td class="ui-state-default w50">性别</td>
+				<td class="w100">${}</td>
+				<td colspan="2" rowspan="4" class="w200">照片</td>
+			</tr>
+			<tr class="ui-row-ltr jqgrow">
+				<td class="ui-state-default">教育程度</td>
+				<td>${}</td>
+				<td class="ui-state-default">工作</td>
+				<td>${}</td>
+				<td class="ui-state-default">工作地点</td>
+				<td>${}</td>
+				<td class="ui-state-default">技能</td>
+				<td>${}</td>
+			</tr>
+			<tr class="ui-row-ltr jqgrow">
+				<td class="ui-state-default">政治面貌</td>
+				<td>${}</td>
+				<td class="ui-state-default">联系电话</td>
+				<td>${}</td>
+				<td class="ui-state-default">收入来源</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr class="ui-row-ltr jqgrow">
+				<td class="ui-state-default">所属村</td>
+				<td>${}</td>
+				<td class="ui-state-default">所属乡</td>
+				<td>${}</td>
+				<td class="ui-state-default">最后修改时间</td>
+				<td>${}</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

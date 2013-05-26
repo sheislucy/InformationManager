@@ -37,7 +37,7 @@ MyPanZoomBar.prototype.draw = function(px) {
 	};
 	var centered = new OpenLayers.Pixel(px.x + largesz.w / 2, px.y);
 
-	var dir = web_context + "/img/material/";
+	var dir = web_context + "/images/material/";
 
 	this._addButton("panup", dir + "north-mini.png", centered, largesz);
 	px.y = centered.y + largesz.h;
@@ -62,7 +62,7 @@ MyPanZoomBar.prototype.draw = function(px) {
 };
 
 MyPanZoomBar.prototype._addZoomBar = function(centered) {
-	var imgLocation = web_context + "/img/material/slider.png";
+	var imgLocation = web_context + "/images/material/slider.png";
 	var id = this.id + "_" + this.map.id;
 	var zoomsToEnd = this.map.getNumZoomLevels() - this.map.getZoom() - 1;
 	var slider = OpenLayers.Util.createAlphaImageDiv(id, centered.add(0,
@@ -89,7 +89,7 @@ MyPanZoomBar.prototype._addZoomBar = function(centered) {
 		w : this.zoomStopWidth,
 		h : this.zoomStopHeight * (this.map.getNumZoomLevels() - 1) + 11
 	};
-	var imgLocation = web_context + "/img/material/zoombar.png";
+	var imgLocation = web_context + "/images/material/zoombar.png";
 	var div = null;
 
 	if (OpenLayers.Util.alphaHack()) {

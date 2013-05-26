@@ -51,7 +51,7 @@ MyLayerSwitcher.prototype.loadContents = function() {
 	}
 
 	// maximize button div
-	var img = web_context + '/img/material/layer-switcher-maximize.png';
+	var img = web_context + '/images/material/layer-switcher-maximize.png';
 	this.maximizeDiv = OpenLayers.Util.createAlphaImageDiv(
 			"OpenLayers_Control_MaximizeDiv", null, null, img, "absolute");
 	OpenLayers.Element.addClass(this.maximizeDiv, "maximizeDiv olButton");
@@ -60,7 +60,7 @@ MyLayerSwitcher.prototype.loadContents = function() {
 	this.div.appendChild(this.maximizeDiv);
 
 	// minimize button div
-	var img = web_context + '/img/material/layer-switcher-minimize.png';
+	var img = web_context + '/images/material/layer-switcher-minimize.png';
 	this.minimizeDiv = OpenLayers.Util.createAlphaImageDiv(
 			"OpenLayers_Control_MinimizeDiv", null, null, img, "absolute");
 	OpenLayers.Element.addClass(this.minimizeDiv, "minimizeDiv olButton");

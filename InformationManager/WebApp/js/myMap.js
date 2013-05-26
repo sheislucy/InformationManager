@@ -4,6 +4,7 @@ var Map = OpenLayers.Map;
 var Image = OpenLayers.Layer.Image;
 var Rule = OpenLayers.Rule;
 var Filter = OpenLayers.Filter;
+var web_context = "";
 
 // Point feature generator -------------start----------
 var FeatureManager = function() {
@@ -161,7 +162,7 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 				pointRadius : 15,
 				strokeWidth : 2,
 				srokeColor : '#9C9C9C',
-				externalGraphic : web_context + '/img/material/a20.png',
+				externalGraphic : web_context + '/images/material/a20.png',
 				graphicXOffset : -15,
 				graphicYOffset : -30,
 				cursor : "pointer"
@@ -198,7 +199,7 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 				pointRadius : 15,
 				strokeWidth : 2,
 				srokeColor : '#9C9C9C',
-				externalGraphic : web_context + '/img/material/a23.png',
+				externalGraphic : web_context + '/images/material/a23.png',
 				graphicXOffset : -15,
 				graphicYOffset : -30,
 				cursor : "pointer"
@@ -287,48 +288,79 @@ var showMarker = function(evt) {
 				mouseLonlatOnClick.lat);
 	}
 	var map = this.map;
-	$.getJSON(web_context + '/map/' + "map03" + "/feature/"
-			+ feature.data.dbFeatureId + "/marker",
-			function(data) {
-				if (data && data.resultCode == 'SUCCESS') {
-					/*
-					 * var popup = new MyMarker("myPopup", lonlat, new
-					 * OpenLayers.Size( 260, 180), data.resultData, null, false,
-					 * null, web_context + "/img/material/marker03.png");
-					 */
-					var result = data.resultData;
-					var markerHTML = $("#markerTemplate").clone();
-					var memberHTML = $("#markerTemplate > #member").clone();
-					markerHTML.removeClass("hide");
-					markerHTML.find("#primary > #host > #content").html(
-							result.host);
-					markerHTML.find("#primary > #address > #content").html(
-							result.address);
-					markerHTML.find("#primary > #job > #content").html(
-							result.business);
-					markerHTML.remove("#member");
-					for ( var i = 0; i < result.members.length; i++) {
-						memberHTML.find("#relation > #content").html(
-								result.members[i].relation);
-						memberHTML.find("#name > #content").html(result.members[i].name);
-						memberHTML.find("#job > #content").html(result.members[i].job);
-						markerHTML.append(memberHTML);
-					}
-					var popup = new MyMarker("myPopup", lonlat,
-							new OpenLayers.Size(260, 180), markerHTML[0].outerHTML,
-							null, false, null, null);
-					popup.minSize = new OpenLayers.Size(260, 180);
-					popup.autoSize = true;
-					feature.popup = popup;
-					map.addPopup(popup);
-				}
+	
+	var $overlay = $('<div class="ui-overlay"><div class="ui-widget-overlay"></div></div>').hide().appendTo('body');
+    $overlay.fadeIn();
+	
+    var dataToPost = JSON.stringify({"pid": 227});
+    
+	$.ajax({
+		url: "/people/houseMembers.json",
+		dataType :"html",
+		type: "POST",
+		contentType : "application/json",
+		data: dataToPost,
+//		beforeSend: function ( xhr ) {
+//		    xhr.overrideMimeType("text/html; charset=UTF-8");
+//		},
+		success: function(data, status){
+			var $overlayContent = $("<div class='ui-widget ui-widget-content'></div>");
+			$overlayContent.append(data);
+			$overlay.append($overlayContent);
+		},
+		error: function(){
+			alert("error happens");
+		},
+		complete: function(){
+			$("#closeButton").click(function() {
+//				$(".ui-overlay").fadeOut("fast");
+				$overlay.remove();
 			});
+		}
+	});
+	
+//	$.getJSON(web_context + '/map/' + "map03" + "/feature/"
+//			+ feature.data.dbFeatureId + "/marker",
+//			function(data) {
+//				if (data && data.resultCode == 'SUCCESS') {
+//					/*
+//					 * var popup = new MyMarker("myPopup", lonlat, new
+//					 * OpenLayers.Size( 260, 180), data.resultData, null, false,
+//					 * null, web_context + "/images/material/marker03.png");
+//					 */
+//					var result = data.resultData;
+//					var markerHTML = $("#markerTemplate").clone();
+//					var memberHTML = $("#markerTemplate > #member").clone();
+//					markerHTML.removeClass("hide");
+//					markerHTML.find("#primary > #host > #content").html(
+//							result.host);
+//					markerHTML.find("#primary > #address > #content").html(
+//							result.address);
+//					markerHTML.find("#primary > #job > #content").html(
+//							result.business);
+//					markerHTML.remove("#member");
+//					for ( var i = 0; i < result.members.length; i++) {
+//						memberHTML.find("#relation > #content").html(
+//								result.members[i].relation);
+//						memberHTML.find("#name > #content").html(result.members[i].name);
+//						memberHTML.find("#job > #content").html(result.members[i].job);
+//						markerHTML.append(memberHTML);
+//					}
+//					var popup = new MyMarker("myPopup", lonlat,
+//							new OpenLayers.Size(260, 180), markerHTML[0].outerHTML,
+//							null, false, null, null);
+//					popup.minSize = new OpenLayers.Size(260, 180);
+//					popup.autoSize = true;
+//					feature.popup = popup;
+//					map.addPopup(popup);
+//				}
+//			});
 };
 
 // map generator-----------end--------------
 var getMapAndHotSpot = function(mapId) {
 	$.getJSON(web_context + '/map/' + mapId, function(data) {
-		if (data && data.resultCode == 'SUCCESS') {
+		if (data && data.status == 'SUCCESS') {
 			$('#explore-map').html("");
 			var hotspotMeta = {};
 			var mapMeta = data.resultData.mapMeta;

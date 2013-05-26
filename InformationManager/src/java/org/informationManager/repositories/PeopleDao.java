@@ -1,5 +1,7 @@
 package org.informationManager.repositories;
 
+import java.util.List;
+
 import org.informationManager.entity.PeopleEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface PeopleDao extends JpaRepository<PeopleEntity, Integer> {
 
+	@Transactional(readOnly = true)
+	public List<PeopleEntity> findAll(Specification<PeopleEntity> spec);
+	
 	@Transactional(readOnly = true)
 	public Page<PeopleEntity> findAll(Pageable pageable);
 

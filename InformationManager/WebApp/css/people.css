@@ -1,18 +1,3 @@
-input[type="text"],input[type="password"],textarea {
-	outline-style: none;
-}
-
-ul,ol {
-	list-style: none;
-	-webkit-margin-before: 0em;
-	-webkit-margin-after: 0em;
-	-webkit-padding-start: 0em;
-}
-
-body {
-	font-family: "Microsoft YaHei" !important;;
-	font-size: 80%;
-}
 
 .fl {
 	float: left;
@@ -31,7 +16,7 @@ body {
 	height: 50px;
 }
 
-#searchName{
+#searchName {
 	margin-top: 9px;
 }
 
@@ -74,4 +59,12 @@ body {
 		repeat-x;
 	font-weight: normal;
 	color: #212121;
+}
+
+.hide {
+	display: none;
+}
+
+.hostRow {
+	background: #FF78FF;
 }

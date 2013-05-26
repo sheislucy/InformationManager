@@ -15,6 +15,7 @@ public class JsonResponseDTO extends BaseResponseDTO {
 	private int page = 0; // current page number
 	private int total = 0;// total page count
 	private int records = 0;// total record count
+	private Object resultData;
 
 	/**
 	 * @return the status
@@ -53,6 +54,14 @@ public class JsonResponseDTO extends BaseResponseDTO {
 
 	public void setTotal(int total) {
 		this.total = total;
+	}
+
+	public Object getResultData() {
+		return resultData;
+	}
+
+	public void setResultData(Object resultData) {
+		this.resultData = resultData;
 	}
 
 }

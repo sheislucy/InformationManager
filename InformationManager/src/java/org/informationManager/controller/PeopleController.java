@@ -3,13 +3,12 @@
  */
 package org.informationManager.controller;
 
+import org.informationManager.dto.HouseMemberRequestDTO;
 import org.informationManager.dto.JsonResponseDTO;
 import org.informationManager.dto.PeopleRequestDTO;
 import org.informationManager.dto.PeopleResponseDTO;
 import org.informationManager.service.PeopleService;
-import org.informationManager.utils.InformationManagerConstants;
 import org.informationManager.utils.JsonStatus;
-import org.informationManager.utils.MyPropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,27 +28,23 @@ public class PeopleController extends BaseController {
 	@Autowired
 	private PeopleService service;
 
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView goPeople() {
-		ModelAndView mv = new ModelAndView();
-		mv.addObject(
-				"defaultPageSize",
-				(String) MyPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE));
-		mv.addObject(
-				"optionalPageSize",
-				(String) MyPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.OPTIONAL_PAGE_SIZE));
-		mv.setViewName("people");
-		return mv;
-	}
-
-	@RequestMapping(value = "/getList.json", method = RequestMethod.POST)
+	@RequestMapping(value = "/hostList.json", method = RequestMethod.POST)
 	public @ResponseBody
 	PeopleResponseDTO getPeopleList(@RequestBody PeopleRequestDTO requestDTO) {
-		PeopleResponseDTO dto = service.getPeopleList(requestDTO);
+		PeopleResponseDTO dto = service.getHostList(requestDTO);
 		dto.setStatus(JsonStatus.SUCCESS);
 		return dto;
+	}
+
+	@RequestMapping(value = "/houseMembers.json", method = RequestMethod.POST)
+	public ModelAndView getHouseMembers(
+			@RequestBody HouseMemberRequestDTO requestDTO) {
+		PeopleResponseDTO dto = service.getHouseMembers(requestDTO);
+		dto.setStatus(JsonStatus.SUCCESS);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("response", dto);
+		mv.setViewName("inc/houseDetail.inc");
+		return mv;
 	}
 
 	@RequestMapping(value = "/update.json", method = RequestMethod.PUT)
