@@ -11,7 +11,19 @@
 	type="text/css" />
 <script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script>
+	$(function() {
+		adjustRightWidth();
+	});
 
+	$(window).resize(function() {
+		var width = $(document).width() - $(".left").width() - 36;
+		$(".right").css({
+			'width' : width + 'px'
+		});
+	});
+</script>
 <title>地图信息</title>
 </head>
 <body>

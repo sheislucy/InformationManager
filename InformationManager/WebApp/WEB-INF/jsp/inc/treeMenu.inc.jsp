@@ -31,10 +31,10 @@
 	<h3>统计数据</h3>
 	<div>
 		<p>
-			<a class="menuLink" href="/statistics/1">销售统计(3D柱状图)</a>
+			<a class="menuLink" href="/statistics/2">地区人口增长统计(3D饼图)</a>
 		</p>
 		<p>
-			<a class="menuLink" href="/statistics/2">地区人口增长统计(3D饼图)</a>
+			<a class="menuLink" href="/statistics/1">销售统计(3D柱状图)</a>
 		</p>
 		<p>
 			<a class="menuLink" href="/statistics/3">同期乡村就业率交叉比较(折线图)</a>

@@ -8,8 +8,9 @@
 <script type="text/javascript"
 	src="<c:url value="/js/myPanZoomBar.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/myMap.js" />"></script>
+<link type="text/css" rel="stylesheet" href="../css/myMap.css" />
 
-<div id="map-view" class="board content-wrapper p-r">
+<div id="map-view" class="map-wrapper">
 	<div id="explore-map" style="width: 100%; min-height: 300px">
 		<script type="text/javascript">
 			getMapAndHotSpot("init");

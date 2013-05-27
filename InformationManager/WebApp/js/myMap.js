@@ -342,7 +342,7 @@ var getMapAndHotSpot = function(mapId) {
 			// var map_width = $('#explore-map').innerWidth();
 			// var map_height = map_width / mapMeta.width * mapMeta.height;
 			// $('#explore-map').height(map_height);
-			var map_height = $(window).innerHeight() - 170;
+			var map_height = $(".map-wrapper").innerHeight();
 			$('#explore-map').height(map_height);
 			var map_width = map_height / mapMeta.height * mapMeta.width;
 

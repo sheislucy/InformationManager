@@ -1,6 +1,9 @@
-
 .fl {
 	float: left;
+}
+
+.fr {
+	float: right;
 }
 
 .h40 {
@@ -11,41 +14,32 @@
 	width: 50px;
 }
 
-#search-criteria {
-	height: 100px;
+.clearFix {
+	clear: both;
 }
 
-#search-result{
+#search-result {
 	margin-top: 10px;
 }
 
 #searchName {
-	margin-top: 9px;
+	margin-top: 3px;
 }
 
-#gender,#name {
-	width: 200px;
+#gender,#name,#ageRuleDropDown {
+	padding: 0 5px;
 	margin-right: 10px;
 	text-align: center;
-	line-height: 40px;
-}
-
-#ageRuleDropDown {
-	width: 160px;
-	margin-right: 10px;
-	text-align: center;
-	line-height: 40px;
+	line-height: 30px;
 }
 
 #button {
-	width: 80px;
-	margin-right: 10px;
 	text-align: center;
-	line-height: 40px;
+	line-height: 30px;
 }
 
 #search {
-	margin-top: 8px;
+	
 }
 
 #search:hover {
