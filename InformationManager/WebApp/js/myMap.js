@@ -289,35 +289,7 @@ var showMarker = function(evt) {
 	}
 	var map = this.map;
 	
-	var $overlay = $('<div class="ui-overlay"><div class="ui-widget-overlay"></div></div>').hide().appendTo('body');
-    $overlay.fadeIn();
-	
-    var dataToPost = JSON.stringify({"pid": 227});
-    
-	$.ajax({
-		url: "/people/houseMembers.json",
-		dataType :"html",
-		type: "POST",
-		contentType : "application/json",
-		data: dataToPost,
-//		beforeSend: function ( xhr ) {
-//		    xhr.overrideMimeType("text/html; charset=UTF-8");
-//		},
-		success: function(data, status){
-			var $overlayContent = $("<div class='ui-widget ui-widget-content'></div>");
-			$overlayContent.append(data);
-			$overlay.append($overlayContent);
-		},
-		error: function(){
-			alert("error happens");
-		},
-		complete: function(){
-			$("#closeButton").click(function() {
-//				$(".ui-overlay").fadeOut("fast");
-				$overlay.remove();
-			});
-		}
-	});
+	window.open("/people/houseMembers/" + 227);
 	
 //	$.getJSON(web_context + '/map/' + "map03" + "/feature/"
 //			+ feature.data.dbFeatureId + "/marker",

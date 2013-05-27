@@ -11,6 +11,7 @@ import org.informationManager.service.PeopleService;
 import org.informationManager.utils.JsonStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,14 +37,14 @@ public class PeopleController extends BaseController {
 		return dto;
 	}
 
-	@RequestMapping(value = "/houseMembers.json", method = RequestMethod.POST)
-	public ModelAndView getHouseMembers(
-			@RequestBody HouseMemberRequestDTO requestDTO) {
-		PeopleResponseDTO dto = service.getHouseMembers(requestDTO);
+	@RequestMapping(value = "/houseMembers/{pid}", method = RequestMethod.GET)
+	public ModelAndView getHouseMembers(@PathVariable("pid") String pid) {
+		PeopleResponseDTO dto = service
+				.getHouseMembers(new HouseMemberRequestDTO());
 		dto.setStatus(JsonStatus.SUCCESS);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("response", dto);
-		mv.setViewName("inc/houseDetail.inc");
+		mv.setViewName("houseDetail");
 		return mv;
 	}
 

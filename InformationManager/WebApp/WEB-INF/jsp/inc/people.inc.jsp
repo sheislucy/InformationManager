@@ -21,30 +21,38 @@
 					};
 					people.refreshGrid(postDataParam);
 				});
+		$("#search-criteria").tabs();
 	});
 </script>
-<div id="searchPeople">
-	<div id="name" class="fl ui-widget-header h40 ui-corner-all">
-		<span class="fl">姓名: </span> <input id="searchName" type="text"></input>
-	</div>
-	<div id="gender" class="fl ui-widget-header h40 ui-corner-all">
-		<span>性别: </span> <input type="radio" id="male" name="gender" /><label
-			for="male">男</label> <input type="radio" id="female" name="gender" /><label
-			for="female">女</label> <input type="radio" id="none" name="gender"
-			checked /><label for="none">不限</label>
-	</div>
-	<div id="ageRuleDropDown" class="fl ui-widget-header h40 ui-corner-all">
-		<span>年龄 </span> <select id="ageRuleSelect">
-			<option id="lt">&lt;=</option>
-			<option id="gt">&gt;=</option>
-		</select> <input id="searchAge" type="text" class="w50"></input>
-	</div>
-	<div id="button" class="fl h40">
-		<input id="search"
-			class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-			type="submit" value="搜索" />
+<div id="search-criteria">
+	<ul>
+		<li><a href="#search-tab-1">查询条件</a></li>
+	</ul>
+	<div id="search-tab-1">
+		<div id="name" class="fl ui-widget-header h40 ui-corner-all">
+			<span class="fl">姓名: </span> <input id="searchName" type="text"></input>
+		</div>
+		<div id="gender" class="fl ui-widget-header h40 ui-corner-all">
+			<span>性别: </span> <input type="radio" id="male" name="gender" /><label
+				for="male">男</label> <input type="radio" id="female" name="gender" /><label
+				for="female">女</label> <input type="radio" id="none" name="gender"
+				checked /><label for="none">不限</label>
+		</div>
+		<div id="ageRuleDropDown"
+			class="fl ui-widget-header h40 ui-corner-all">
+			<span>年龄 </span> <select id="ageRuleSelect">
+				<option id="lt">&lt;=</option>
+				<option id="gt">&gt;=</option>
+			</select> <input id="searchAge" type="text" class="w50"></input>
+		</div>
+		<div id="button" class="fl h40">
+			<input id="search"
+				class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+				type="submit" value="搜索" />
+		</div>
 	</div>
 </div>
-
-<table id="jqGrid-people"></table>
-<div id="pager-people"></div>
+<div id="search-result">
+	<table id="jqGrid-people"></table>
+	<div id="pager-people"></div>
+</div>

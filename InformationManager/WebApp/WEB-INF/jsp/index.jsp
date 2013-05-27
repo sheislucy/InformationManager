@@ -15,8 +15,8 @@
 <title>人员信息</title>
 </head>
 <body>
+	<div class="header"></div>
 	<div class="wrapper">
-		<div class="header"></div>
 		<div class="left">
 			<jsp:include page="/WEB-INF/jsp/inc/treeMenu.inc.jsp">
 				<jsp:param value="0" name="accodionIndex" />

@@ -2,7 +2,10 @@
 	pageEncoding="UTF-8"%>
 <script>
 	$(function() {
-		$("#treeMenu").accordion({ active: <%=request.getParameter("accodionIndex")%> });
+		$("#treeMenu").accordion({
+			active : <%=request.getParameter("accodionIndex")%>,
+			heightStyle : "fill"
+		});
 	});
 </script>
 <div id="treeMenu">

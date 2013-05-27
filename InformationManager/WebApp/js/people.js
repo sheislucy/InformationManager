@@ -18,7 +18,7 @@ var People = function() {
 			colModel : [ {
 				name : 'no',
 				index : '',
-				width : 30,
+				width : 20,
 				sortable : true
 			}, {
 				name : 'pid',
@@ -29,7 +29,7 @@ var People = function() {
 			}, {
 				name : 'lname',
 				index : 'lname',
-				width : 60,
+				width : 40,
 				editable : true
 			}, {
 				name : 'nName',
@@ -46,25 +46,25 @@ var People = function() {
 			}, {
 				name : 'idcard',
 				index : 'idcard',
-				width : 150,
+				width : 140,
 				align : "right",
 				editable : true
 			}, {
 				name : 'education',
 				index : 'education',
-				width : 60,
+				width : 40,
 				align : "right",
 				editable : true
 			}, {
 				name : 'address',
 				index : 'address',
-				width : 150,
+				width : 130,
 				sortable : false,
 				editable : true
 			}, {
 				name : 'job',
 				index : 'job',
-				width : 100,
+				width : 60,
 				sortable : false,
 				editable : true
 			}, {
@@ -72,17 +72,19 @@ var People = function() {
 				index : 'workPlace',
 				width : 150,
 				sortable : false,
-				editable : true
+				editable : true,
+				hidden : true
 			}, {
 				name : 'incomeSource',
 				index : 'incomeSource',
 				width : 100,
 				sortable : false,
-				editable : true
+				editable : true,
+				hidden : true
 			}, {
 				name : 'socialText',
 				index : 'socialText',
-				width : 60,
+				width : 50,
 				sortable : false,
 				editable : true
 			}, {
@@ -90,23 +92,25 @@ var People = function() {
 				index : 'physicalCharact',
 				width : 150,
 				sortable : false,
-				editable : true
+				editable : true,
+				hidden : true
 			}, {
 				name : 'hostName',
 				index : 'hostName',
-				width : 60,
+				width : 30,
 				sortable : false,
-				editable : true
+				editable : true,
+				hidden : true
 			}, {
 				name : 'relation',
 				index : 'relation',
-				width : 100,
+				width : 60,
 				sortable : false,
 				editable : true
 			}, {
 				name : 'updateDate',
 				index : 'updateDate',
-				width : 150,
+				width : 100,
 				sortable : false,
 				editable : true
 			}, {
@@ -151,7 +155,7 @@ var People = function() {
 		});
 		table.jqGrid("setGridParam", {
 			onSelectRow : function(rowid, status) {
-				getHouseMembers(table.jqGrid('getRowData', rowid).pid);
+				openHouseMembers(table.jqGrid('getRowData', rowid).pid);
 			}
 		});
 	};
@@ -162,36 +166,9 @@ var People = function() {
 		}).trigger("reloadGrid");
 	};
 
-	function getHouseMembers (pid) {
-		var $overlay = $('<div class="ui-overlay"><div class="ui-widget-overlay"></div></div>').hide().appendTo('body');
-        $overlay.fadeIn();
-		
-		$.ajax({
-			url: "/people/houseMembers.json",
-			dataType :"html",
-			type: "POST",
-			contentType : "application/json",
-			data: JSON.stringify({"pid": pid}),
-//			beforeSend: function ( xhr ) {
-//			    xhr.overrideMimeType("text/html; charset=UTF-8");
-//			},
-			success: function(data, status){
-				var $overlayContent = $("<div class='ui-widget ui-widget-content'></div>");
-				$overlayContent.append(data);
-				$overlay.append($overlayContent);
-			},
-			error: function(){
-				$overlay.remove();
-			},
-			complete: function(){
-				$("#closeButton").click(function() {
-//					$(".ui-overlay").fadeOut("fast");
-					$overlay.remove();
-				});
-			}
-		});
-
-	};
+	function openHouseMembers(pid) {
+		window.open("/people/houseMembers/" + pid);
+	}
 };
 
 var people = new People();

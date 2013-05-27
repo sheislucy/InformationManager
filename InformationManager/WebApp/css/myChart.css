@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+
+#search-criteria {
+	height: 100px;
+}
+
+#searchTime{
+	line-height: 30px;
+}
+
+.fl {
+	float: left;
+}

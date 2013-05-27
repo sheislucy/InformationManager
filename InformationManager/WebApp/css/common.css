@@ -14,6 +14,7 @@ ul,ol {
 body {
 	font-family: "Microsoft YaHei" !important;;
 	font-size: 80%;
+	background: #edf7ec;
 }
 
 a {
@@ -32,29 +33,45 @@ a:active {
 .wrapper {
 	width: 1000px;
 	margin: 0 auto;
+	height: 650px;
 }
 
 .header {
-	width: 100%;
+	width: 1000px;
+	margin: 0 auto;
 	height: 150px;
 	border-bottom: 1px solid #D3ECD1;
 	margin-bottom: 20px;
 	background: url(/images/material/head_logo.png) no-repeat;
 }
 
+.clear {
+	clear: both;
+}
+
 .left {
-	width: 200px;
+	width: 20%;
 	padding-right: 9px;
 	float: left;
 	display: inline;
+	height: 650px;
+	background: #fff;
 }
 
 .right {
 	border-left: 1px dashed #D3ECD1;
 	padding-left: 10px;
-	width: 780px;
+	width: 78%;
+	height: 650px;
 	float: right;
 	overflow-x: auto;
+	background: #fff;
+}
+
+.footer {
+	width: 1000px;
+	margin: 0 auto;
+	height: 50px;
 }
 
 .menuLink {
@@ -64,10 +81,9 @@ a:active {
 .house-detail {
 	font-size: 13px;
 	z-index: 10000;
-	position: absolute;
 	background: #fff;
-	left: 140px;
-	top: 100px;
+	margin: 20px auto;
+	width: 1010px;
 }
 
 .center {
@@ -94,4 +110,9 @@ a:active {
 	width: 300px;
 	display: inline-block;
 	text-align: center;
+}
+
+.house-detail-table {
+	width: 1000px;
+	margin: 0 auto;
 }
