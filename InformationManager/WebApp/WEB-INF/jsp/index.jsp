@@ -18,26 +18,23 @@
 <script>
 	$(function() {
 		$('body').layout({
-			applyDefaultStyles : true,
-			north__size : 100,
-			/* north: {
-				spacing_closed: 50
-			}, */
-			resizerDragOpacity : 0.9,
-			center : {
-				onresize_end : adjustCenterSize
+			defaults : {
+				applyDefaultStyles : true,
+				resizerDragOpacity : 0.9,
+				onresize_end : adjustAll
+			},
+			north : {
+				size : 100
 			}
 		});
-	});
-	$(window).resize(function(){
-		adjustCenterSize();
-		adjustAccordionSize();
 	});
 </script>
 <title>人员信息</title>
 </head>
 <body>
-	<div class="ui-layout-north"></div>
+	<div class="ui-layout-north">
+		<img src="/images/material/logo1.png" height="100%" width="100%" />
+	</div>
 	<div class="ui-layout-west">
 		<jsp:include page="/WEB-INF/jsp/inc/treeMenu.inc.jsp">
 			<jsp:param value="0" name="accodionIndex" />

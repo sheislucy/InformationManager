@@ -22,6 +22,7 @@
 					people.refreshGrid(postDataParam);
 				});
 		$("#search-criteria").tabs();
+		adjustCenterSize();
 	});
 </script>
 <div id="search-criteria">
