@@ -1,6 +1,7 @@
-function adjustRightWidth(){
-	var width = $(document).width() - $(".left").width() - 36;
-	$(".right").css({
-		'width' : width + 'px'
-	});
+function adjustCenterSize(){
+	$("#jqGrid-people").setGridWidth($(".ui-layout-center").context.width - 25);
+}
+
+function adjustAccordionSize(){
+	$("#treeMenu").accordion("refresh");
 }

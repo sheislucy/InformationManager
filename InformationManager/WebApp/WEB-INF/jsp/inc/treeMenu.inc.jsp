@@ -6,38 +6,41 @@
 			active : <%=request.getParameter("accodionIndex")%>,
 			heightStyle : "fill"
 		});
+		$(":button").button();
+		$(":button").click(function() {
+			$.ajax({
+				url : this.attributes.data.value,
+				success : function(data) {
+					$(".ui-layout-center").html(data);
+				}
+			});
+		});
 	});
 </script>
 <div id="treeMenu">
 	<h3>人员信息</h3>
 	<div>
 		<p>
-			<a class="menuLink" href="/">村1</a>&nbsp;&nbsp;&nbsp;<a
-				class="menuLink maplink" href="/map" target="_self">地图浏览</a>
+			<input class="peopleButton" type="button" value="人员统计"
+				data="/people/inc" />
 		</p>
 		<p>
-			<a class="menuLink" href="">村2</a>&nbsp;&nbsp;&nbsp;<a
-				class="menuLink" href="">地图浏览</a>
-		</p>
-		<p>
-			<a class="menuLink" href="">村3</a>&nbsp;&nbsp;&nbsp;<a
-				class="menuLink" href="">地图浏览</a>
-		</p>
-		<p>
-			<a class="menuLink" href="">村4</a>&nbsp;&nbsp;&nbsp;<a
-				class="menuLink" href="">地图浏览</a>
+			<input class="mapButton" type="button" value="地图浏览" data="/map/inc" />
 		</p>
 	</div>
 	<h3>统计数据</h3>
 	<div>
 		<p>
-			<a class="menuLink" href="/statistics/2">地区人口增长统计(3D饼图)</a>
+			<input class="peopleButton" type="button" value="地区人口增长统计(3D饼图)"
+				data="/chart/2" />
 		</p>
 		<p>
-			<a class="menuLink" href="/statistics/1">销售统计(3D柱状图)</a>
+			<input class="peopleButton" type="button" value="销售统计(3D柱状图)"
+				data="/chart/1" />
 		</p>
 		<p>
-			<a class="menuLink" href="/statistics/3">同期乡村就业率交叉比较(折线图)</a>
+			<input class="peopleButton" type="button" value="同期乡村就业率交叉比较(折线图)"
+				data="/chart/3" />
 		</p>
 	</div>
 </div>

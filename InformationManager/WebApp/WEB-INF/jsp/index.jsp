@@ -13,37 +13,42 @@
 <script type="text/javascript" src="../js/common.js"></script>
 <script type="text/javascript"
 	src="../js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="../js/jquery.layout-latest.min.js"></script>
+
 <script>
 	$(function() {
-		adjustRightWidth();
-		$("#jqGrid-people").setGridWidth($(".right").width()-15);
-	});
-
-	$(window).resize(function() {
-		var width = $(document).width() - $(".left").width() - 36;
-		$(".right").css({
-			'width' : width + 'px'
+		$('body').layout({
+			applyDefaultStyles : true,
+			north__size : 100,
+			/* north: {
+				spacing_closed: 50
+			}, */
+			resizerDragOpacity : 0.9,
+			center : {
+				onresize_end : adjustCenterSize
+			}
 		});
-		$("#jqGrid-people").setGridWidth($(".right").width()-15);
+	});
+	$(window).resize(function(){
+		adjustCenterSize();
+		adjustAccordionSize();
 	});
 </script>
 <title>人员信息</title>
 </head>
 <body>
-	<div class="header"></div>
-	<div class="wrapper">
-		<div class="left">
-			<jsp:include page="/WEB-INF/jsp/inc/treeMenu.inc.jsp">
-				<jsp:param value="0" name="accodionIndex" />
-			</jsp:include>
-		</div>
-		<div class="right">
-			<jsp:include page="/WEB-INF/jsp/inc/people.inc.jsp" />
-		</div>
-		<input id="initPageSize" type="hidden"
-			value="<c:out value="${defaultPageSize}" />" /> <input
-			id="optionalPageSize" type="hidden"
-			value="<c:out value="${optionalPageSize}" />" />
+	<div class="ui-layout-north"></div>
+	<div class="ui-layout-west">
+		<jsp:include page="/WEB-INF/jsp/inc/treeMenu.inc.jsp">
+			<jsp:param value="0" name="accodionIndex" />
+		</jsp:include>
 	</div>
+	<div class="ui-layout-center">
+		<jsp:include page="/WEB-INF/jsp/inc/people.inc.jsp" />
+	</div>
+	<input id="initPageSize" type="hidden"
+		value="<c:out value="${defaultPageSize}" />" />
+	<input id="optionalPageSize" type="hidden"
+		value="<c:out value="${optionalPageSize}" />" />
 </body>
 </html>

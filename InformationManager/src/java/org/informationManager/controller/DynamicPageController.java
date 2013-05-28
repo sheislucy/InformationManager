@@ -26,24 +26,38 @@ public class DynamicPageController extends BaseController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/map", method = RequestMethod.GET)
-	public ModelAndView initMapPage() {
+//	@RequestMapping(value = "/map", method = RequestMethod.GET)
+//	public ModelAndView initMapPage() {
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("map");
+//		return mv;
+//	}
+	
+	@RequestMapping(value = "/people/inc", method = RequestMethod.GET)
+	public ModelAndView initPeopleIncPage() {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("map");
+		mv.setViewName("inc/people.inc");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/map/inc", method = RequestMethod.GET)
+	public ModelAndView initMapIncPage() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("inc/map.inc");
 		return mv;
 	}
 
-	@RequestMapping(value = "/statistics", method = RequestMethod.GET)
+	@RequestMapping(value = "/chart", method = RequestMethod.GET)
 	public ModelAndView initDefaultStatisticsPage() {
 		return initStatisticsPage("1");
 	}
 
-	@RequestMapping(value = "/statistics/{chartId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/chart/{chartId}", method = RequestMethod.GET)
 	public ModelAndView initStatisticsPage(
 			@PathVariable("chartId") String chartId) {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("statistics");
 		mv.addObject("chartId", chartId);
+		mv.setViewName("inc/chart.inc");
 		return mv;
 	}
 }

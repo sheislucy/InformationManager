@@ -14,7 +14,7 @@ ul,ol {
 body {
 	font-family: "Microsoft YaHei" !important;;
 	font-size: 80%;
-	background: #edf7ec;
+	background: #f6f6f6;
 }
 
 a {
@@ -28,6 +28,18 @@ a:hover {
 
 a:active {
 	color: #ec6801;
+}
+
+.ui-layout-resizer {
+	background-color: #D3ECD1 !important;
+}
+
+.ui-layout-north{
+	*min-height: 100px;
+}
+
+.ui-layout-west {
+	overflow: hidden !important; 
 }
 
 .wrapper {
