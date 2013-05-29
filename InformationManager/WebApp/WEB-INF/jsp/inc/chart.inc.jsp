@@ -47,6 +47,6 @@
 <center style="margin-top: 100px;"><div id="dummyChart"></div></center>
 <script>
 	$(function() {
-		cFactory.generate3DColumn(<%=request.getParameter("chartId")%>, $(".ui-layout-center").width()*0.7, $(".ui-layout-center").height()*0.5);
+		cFactory.generate3DColumn(<%=request.getAttribute("chartId")%>, $(".ui-layout-center").width()*0.7, $(".ui-layout-center").height()*0.5);
 	});
 </script>

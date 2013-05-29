@@ -21,8 +21,9 @@
 					};
 					people.refreshGrid(postDataParam);
 				});
+		$(":button").button();
 		$("#search-criteria").tabs();
-		adjustCenterSize();
+		window.setTimeout(adjustCenterSize(),200);
 	});
 </script>
 <div id="search-criteria">
@@ -49,7 +50,7 @@
 		<div id="button" class="fr">
 			<input id="search"
 				class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-				type="submit" value="搜索" />
+				type="button" value="搜索" />
 		</div>
 		<div class="clearFix"></div>
 	</div>
