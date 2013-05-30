@@ -35,7 +35,7 @@
 </head>
 <body>
 	<div class="ui-layout-north">
-		<!-- <img src="/images/material/logo1.png" height="100%" width="100%" /> -->
+		<img src="/images/material/logo1.png" height="100%" width="100%" />
 	</div>
 	<div class="ui-layout-west">
 		<jsp:include page="/WEB-INF/jsp/inc/treeMenu.inc.jsp">
