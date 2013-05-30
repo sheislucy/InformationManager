@@ -50,7 +50,7 @@
 		<property name="password" value="${jdbc.password}" />
 	</bean>
 	<bean
-		class="org.informationManager.utils.MyPropertyPlaceholderConfigurer">
+		class="org.informationManager.web.MyPropertyPlaceholderConfigurer">
 		<property name="properties" ref="properties" />
 	</bean>
 </beans>

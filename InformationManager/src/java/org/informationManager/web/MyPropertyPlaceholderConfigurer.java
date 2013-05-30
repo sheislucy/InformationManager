@@ -1,4 +1,4 @@
-package org.informationManager.utils;
+package org.informationManager.web;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package org.informationManager.controller;
 
 import org.informationManager.utils.InformationManagerConstants;
-import org.informationManager.utils.MyPropertyPlaceholderConfigurer;
+import org.informationManager.web.MyPropertyPlaceholderConfigurer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

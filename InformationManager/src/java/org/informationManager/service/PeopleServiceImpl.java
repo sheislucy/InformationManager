@@ -19,7 +19,7 @@ import org.informationManager.dto.PeopleResponseDTO;
 import org.informationManager.entity.PeopleEntity;
 import org.informationManager.repositories.PeopleDao;
 import org.informationManager.utils.InformationManagerConstants;
-import org.informationManager.utils.MyPropertyPlaceholderConfigurer;
+import org.informationManager.web.MyPropertyPlaceholderConfigurer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -55,7 +55,6 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 			@Override
 			public Predicate toPredicate(Root<PeopleEntity> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				// TODO Auto-generated method stub
 				List<Predicate> predicates = new ArrayList<Predicate>();
 				predicates.add(cb.equal(root.<String> get("hostId"), 227));
 				predicates.add(cb.equal(root.<String> get("pid"), 227));
@@ -138,9 +137,6 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 			PeopleDomain pd = new PeopleDomain();
 
 			BeanUtils.copyProperties(pe, pd);
-			pd.setSortText(pe.getSortText());
-			pd.setSocialText(pe.getSocialText());
-			pd.setHostName(pe.getHostName());
 
 			domainList.add(pd);
 		}

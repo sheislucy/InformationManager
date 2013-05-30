@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -24,8 +25,7 @@
 					<td class="ui-state-default w50">绰号</td>
 					<td class="w150">${member.nname}</td>
 					<td class="ui-state-default w50">性别</td>
-					<td class="w100">${member.gender} <%-- <c:when test="${member.gender}">
-					男</c:when> <c:otherwise>女</c:otherwise> --%></td>
+					<td class="w100"><c:choose><c:when test="${member.gender}">男</c:when><c:otherwise>女</c:otherwise></c:choose></td>
 					<td colspan="2" rowspan="4" class="w200"><img height="130"
 						width="100" src="${pageContext.request.contextPath}/images/FJL.jpg" /></td>
 				</tr>
@@ -55,7 +55,7 @@
 					<td class="ui-state-default">所属乡</td>
 					<td>上方镇</td>
 					<td class="ui-state-default">最后修改时间</td>
-					<td>${member.updateDate}</td>
+					<td><fmt:formatDate value="${member.updateDate}" pattern="yyyy-MM-dd"/></td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 				</tr>
