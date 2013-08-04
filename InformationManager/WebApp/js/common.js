@@ -14,29 +14,41 @@ function adjustAll(){
 	adjustAccordionSize();
 }
 
-var OverlayManager = function() {
-
-	var overlay = $('<div class="ui-widget-overlay"></div>');
-	
-	function showLoadingOverlay() {
-		var loadingIcon = $('<div class="bubblingG"></div>');
-		for ( var i = 1; i < 4; i++) {
-			var bubbling = $('<span id="bubblingG_' + i + '"></span>');
-			loadingIcon.append(bubbling);
+AjaxLoading = function() {
+	this.showLoadingOverlay = function() {
+		if( $(".overlay-wrapper")&& $(".overlay-wrapper").length > 0 ){
+			$(".overlay-wrapper").show();
+		}else{
+			var wrapper = $('<div class="overlay-wrapper"></div>');
+			var overlay = $('<div class="ui-widget-overlay"></div>');
+			if ($.browser.chrome){
+				var loadingIcon = $('<div class="bubblingG"></div>');
+				for ( var i = 1; i < 4; i++) {
+					var bubbling = $('<span id="bubblingG_' + i + '"></span>');
+					loadingIcon.append(bubbling);
+				}
+				wrapper.append(overlay);
+				wrapper.append(loadingIcon);
+			}else {
+				var loadingIcon = $('<div class="circleLoading"></div>');
+				wrapper.append(overlay);
+				wrapper.append(loadingIcon);
+			}
+			$(document.body).append(wrapper);
 		}
-		overlay.append(loadingIcon);
-		$(document.body).append(overlay);
 	};
 	
-	function hideLoadingOverlay (){
-		$(".ui-widget-overlay").hide();
-//		$(document.body).remove(".ui-widget-overlay");
+	this.hideLoadingOverlay = function(){
+		$(".overlay-wrapper").hide();
 	};
-	
-	$(document.body).ajaxStart(function() { showLoadingOverlay(); });
-    $(document.body).ajaxSuccess(function() { hideLoadingOverlay(); });
-    $(document.body).ajaxError(function() { hideLoadingOverlay(); });
-
+	$(function() {
+		$(document.body).ajaxStart(function() {
+			AjaxLoading.showLoadingOverlay();
+		});
+		$(document.body).ajaxStop(function() {
+			AjaxLoading.hideLoadingOverlay();
+		});
+	});
 };
 
-var om = new OverlayManager();
+AjaxLoading = new AjaxLoading();

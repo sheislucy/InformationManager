@@ -27,15 +27,21 @@
 			},
 			north : {
 				size : 100
+			},
+			west : {
+				size : 250
 			}
 		});
 	});
 </script>
-<title>人员信息</title>
+<title>新农村规划系统</title>
 </head>
 <body>
 	<div class="ui-layout-north">
-		<img src="/images/material/logo1.png" height="100%" width="100%" />
+		<!-- <img src="/images/material/logo1.png" height="100%" width="100%" /> -->
+		<div class="logo">
+			<h2>新农村规划系统</h2>
+		</div>
 	</div>
 	<div class="ui-layout-west">
 		<jsp:include page="/WEB-INF/jsp/inc/treeMenu.inc.jsp">

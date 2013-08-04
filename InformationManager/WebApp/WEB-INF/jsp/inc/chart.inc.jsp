@@ -2,15 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link type="text/css" rel="stylesheet" href="../css/myChart.css" />
-<script type="text/javascript" src="../js/Fusion/FusionCharts.js"></script>
-<script type="text/javascript" src="../js/myChart.js"></script>
-<script type="text/javascript">
-	$(function() {
-		$("#search-criteria").tabs();
-		$("#search-criteria").css('min-height', '100px');
-		$(".datepicker").datepicker();
-	});
-</script>
+<script type="text/javascript" src="js/Fusion/FusionCharts.js"></script>
+<script type="text/javascript" src="js/myChart.js"></script>
 <div id="search-criteria">
 	<ul>
 		<li><a href="#search-tab-1">查询条件</a></li>
@@ -44,9 +37,14 @@
 		<div class="clearFix"></div>
 	</div>
 </div>
-<center style="margin-top: 100px;"><div id="dummyChart"></div></center>
+<center style="margin-top: 30px;"><div id="dummyChart"></div></center>
 <script>
 	$(function() {
-		cFactory.generate3DColumn(<%=request.getAttribute("chartId")%>, $(".ui-layout-center").width()*0.7, $(".ui-layout-center").height()*0.5);
+		$("#search-criteria").tabs();
+		$("#search-criteria").css('min-height', '100px');
+		$(".datepicker").datepicker();
+	});
+	$(function() {
+		cFactory.generate3DColumn(<%=request.getAttribute("chartId")%>, $(".ui-layout-center").width()*0.7, $(".ui-layout-center").height()*0.7);
 	});
 </script>

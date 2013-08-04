@@ -1,5 +1,36 @@
 @CHARSET "UTF-8";
 
-.map-wrapper{
-	height: 620px;
+#tool-bar {
+	position: fixed;
+	width: 200px;
+	height: 610px;
+	background: #D3ECD1;
+	color: #222222;
+	font-weight: bold;
+}
+.title {
+	font-size: 14px;
+}
+#controlRadio p, #shapeRadio p, #polygonRadio p {
+	color: #4f372d;
+	font-size: 13px;
+	margin-top: 1em;
+}
+#controlRadio p {
+	margin-left: 10px;
+}
+#shapeRadio p {
+	margin-left: 20px;
+}
+#polygonRadio{
+	margin-left: 30px;
+}
+#map-wrapper {
+	width: 810px;
+	height: 610px;
+	left: 210px;
+	position: relative;
+}
+.no-close .ui-dialog-titlebar-close {
+	display: none;
 }

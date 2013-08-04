@@ -21,13 +21,13 @@
 		<property name="properties" ref="properties" />
 	</bean> -->
 
-	<context:component-scan base-package="org.informationManager.service" />
+	<!-- <context:component-scan base-package="soho.chloe.informationmanager" /> -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="packagesToScan" value="org.informationManager.entity" />
+		<property name="packagesToScan" value="soho.chloe.informationmanager.entity" />
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
 				p:database="${jpa.database}" p:showSql="${jpa.showSql}"
@@ -38,7 +38,7 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	<jpa:repositories base-package="org.informationManager.repositories"
+	<jpa:repositories base-package="soho.chloe.informationmanager.repositories"
 		query-lookup-strategy="create-if-not-found">
 	</jpa:repositories>
 
@@ -50,7 +50,7 @@
 		<property name="password" value="${jdbc.password}" />
 	</bean>
 	<bean
-		class="org.informationManager.web.MyPropertyPlaceholderConfigurer">
+		class="soho.chloe.informationmanager.web.MyPropertyPlaceholderConfigurer">
 		<property name="properties" ref="properties" />
 	</bean>
 </beans>

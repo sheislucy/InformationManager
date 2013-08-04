@@ -69,7 +69,7 @@ MyMarker.prototype.updateBlocks = function() {
 		}
 
 		this.contentDiv.style.left = this.padding.left + "px";
-		this.contentDiv.style.top = this.padding.top + "px";
+		this.contentDiv.style.top = "8px";
 	}
 };
 

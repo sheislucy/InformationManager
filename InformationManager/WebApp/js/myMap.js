@@ -65,7 +65,7 @@ var MapManager = function() {
 };
 
 /**
- * mapMeta:{ width:"", height:"", mapName:"", mapImageUrl:"", }
+ * mapMeta:{ width:"", height:"", mapName:"", mapImageUrl:"" }
  * 
  * hotspotMeta:{ points:[{x:"",y:""}], polygons:[] }
  */
@@ -289,7 +289,17 @@ var showMarker = function(evt) {
 	}
 	var map = this.map;
 	
-	window.open("/people/houseMembers/" + 227);
+	if($("#dataParent").attr("value")=="p"){
+		window.open("/people/houseMembers/" + 227);
+	}else{
+		var popup = new MyMarker("myPopup", lonlat,
+				new OpenLayers.Size(70, 60), "规划用图",
+				null, false, null, null);
+		popup.minSize = new OpenLayers.Size(80, 60);
+		popup.autoSize = true;
+		feature.popup = popup;
+		map.addPopup(popup);
+	}
 	
 //	$.getJSON(web_context + '/map/' + "map03" + "/feature/"
 //			+ feature.data.dbFeatureId + "/marker",
@@ -330,8 +340,8 @@ var showMarker = function(evt) {
 };
 
 // map generator-----------end--------------
-var getMapAndHotSpot = function(mapId) {
-	$.getJSON(web_context + '/map/' + mapId, function(data) {
+var getMapAndHotSpot = function() {
+	$.getJSON(web_context + '/map/' + $("#mapId").val(),{"dataParent": $("#dataParent").val()}, function(data) {
 		if (data && data.status == 'SUCCESS') {
 			$('#explore-map').html("");
 			var hotspotMeta = {};

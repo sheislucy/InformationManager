@@ -7,9 +7,9 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd"
 	default-lazy-init="true">
 
-	<context:component-scan base-package="org.informationManager"></context:component-scan>
+	<context:component-scan base-package="soho.chloe.informationmanager" />
 
-	<bean id="frontContextInterceptor" class="org.informationManager.web.FrontContextInterceptor" />
+	<bean id="frontContextInterceptor" class="soho.chloe.informationmanager.web.FrontContextInterceptor" />
 
 	<mvc:annotation-driven />
 
