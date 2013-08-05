@@ -158,12 +158,13 @@ a:active {
 	margin-right: 10px;
 }
 
-.middle-window{
-	left: 40%;
-	top: 400px;
-	position: absolute;
-	width: 200px;
-	height: 100px;
+.left-right-corner{
+	left: 30px;
+	bottom: 0px;
+	position: fixed;
+	width: 100px;
+	height: 60px;
+	z-index: 9999;
 }
 
 /********************** load icon *******************************/

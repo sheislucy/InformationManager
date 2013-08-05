@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import soho.chloe.informationmanager.entity.GeoPointEntity;
+import soho.chloe.informationmanager.entity.GeoPolygonEntity;
 
-public interface GeoPointDao extends JpaRepository<GeoPointEntity, Integer> {
-
+/**
+ * @author lucy
+ *
+ */
+public interface GeoPolygonDao extends JpaRepository<GeoPolygonEntity, Integer> {
 	@Transactional(readOnly = true)
-	public List<GeoPointEntity> findByMapId(@Param("mapId") Integer mapId);
+	public List<GeoPolygonEntity> findByMapId(@Param("mapId") Integer mapId);
 }

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -29,6 +31,18 @@ public class GeoPointEntity implements Serializable {
 	private String type;
 	private String description;
 	private String coordination;
+	
+	@OneToOne
+	@JoinColumn(name = "houseid", insertable = false, updatable = false)
+	private HouseEntity house;
+
+	public HouseEntity getHouse() {
+		return house;
+	}
+
+	public void setHouse(HouseEntity house) {
+		this.house = house;
+	}
 
 	public int getId() {
 		return id;

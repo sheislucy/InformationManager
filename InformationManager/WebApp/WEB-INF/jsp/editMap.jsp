@@ -13,6 +13,15 @@
 <title>地图编辑</title>
 </head>
 <body>
+	<div id="delete-confirm-dialog" title="确认删除该热点?" class="hide"></div>
+	<div class="left-right-corner">
+		<div id="success-tip" class="ui-tooltip ui-widget-content hide">
+			<div class="ui-tooltip-content">保存成功</div>
+		</div>
+		<div id="failure-tip" class="ui-tooltip ui-widget-content hide">
+			<div class="ui-tooltip-content">保存失败</div>
+		</div>
+	</div>
 	<div id="tool-bar" class="ui-widget-header">
 		<div id="controlRadio">
 			<p><input name="control" id="cursor" type="radio" checked/><label for="cursor" class="title">普通鼠标</label></p>
@@ -32,35 +41,38 @@
 			<p><input name="polygonType" id="hexagon" type="radio" /><label for="hexagon">六边形</label><input name="polygonType" id="regHexagon" type="radio" /><label for="regHexagon">正六边形</label></p>
 			<p><input name="polygonType" id="oval" type="radio" /><label for="oval">&nbsp;椭&nbsp;圆&nbsp;</label><input name="polygonType" id="circle" type="radio" /><label for="circle">&nbsp;&nbsp;圆&nbsp;形&nbsp;&nbsp;&nbsp;</label></p>
 		</div>
+		<div>
+			<br />
+			<p><span>任意多边形或线段时：[ctrl+z]撤销一步，[ctrl+y]前进一步，[esc]撤销当前图形。</span></p><br />
+			<p><span>普通鼠标选中热点时：[backspace]删除</span></p>
+		</div>
 	</div>
 	<div id="map-wrapper">
 		<div id="explore-map" style="height: 600px">
 		</div>
 	</div>
 	<div id="point-people-dialog" title="户/家庭信息" class="hide">
-			<div class="validateTips hidden"></div>
-			<form>
-				<input type="hidden" id="mapId" name="mapId" value="${mapid}" />
-				<p>
-					<label for="host-input">户主姓名</label>
-					<input type="text" name="hostId" id="host-input" class="text ui-widget-content" />
-				</p>
-				<br />
-				<p>
-					<label for="remark">备注</label>
-				</p>
-					<textarea id="remark" rows="6" cols="48" class="text ui-widget-content"></textarea>
-			</form>
+		<div class="validateTips hidden"></div>
+		<p>
+			<label for="host-input">户主姓名</label>
+			<input type="text" name="hostId" id="host-input" class="text ui-widget-content" />
+		</p>
+		<br />
+		<p>
+			<label for="remark">备注</label>
+		</p>
+		<textarea id="remark" rows="6" cols="48" class="text ui-widget-content"></textarea>
 	</div>
-	<div id="delete-confirm-dialog" title="确认删除该热点?" class="hide"></div>
-	<div class="middle-window">
-		<div id="success-tip" class="ui-tooltip ui-widget ui-widget-content hide">
-			<div class="ui-tooltip-content">保存成功</div>
-		</div>
-		<div id="failure-tip" class="ui-tooltip ui-widget ui-widget-content hide">
-			<div class="ui-tooltip-content">保存失败</div>
-		</div>
+	
+	<div id="line-polygon-dialog" title="热点信息" class="hide">
+		<input type="hidden" id="saveUrl" name="saveUrl" value="" />
+		<p>
+			<label for="spot-description">说明</label>
+		</p>
+		<textarea id="spot-description" rows="6" cols="48" class="text ui-widget-content"></textarea>
 	</div>
+	
+	<input type="hidden" id="mapId" name="mapId" value="${mapid}" />
 	<input type="hidden" id="mapWidth" value="${map.width}" />
 	<input type="hidden" id="mapHeight" value="${map.height}" />
 	<input type="hidden" id="mapName" value="${map.mapName}" />

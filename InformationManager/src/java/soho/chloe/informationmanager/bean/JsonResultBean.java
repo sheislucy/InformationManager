@@ -6,7 +6,7 @@ import soho.chloe.informationmanager.utils.JsonStatus;
 
 public class JsonResultBean implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private JsonStatus status;
+	private JsonStatus status = JsonStatus.EXCEPTION;
 	private String message;
 
 	public JsonStatus getStatus() {

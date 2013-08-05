@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import soho.chloe.informationmanager.bean.JsonPointRequestBean;
 import soho.chloe.informationmanager.bean.JsonResultBean;
+import soho.chloe.informationmanager.bean.MapHotSpotBean;
+import soho.chloe.informationmanager.bean.PointDomainBean;
 import soho.chloe.informationmanager.service.MapService;
 import soho.chloe.informationmanager.utils.JsonStatus;
 
@@ -21,26 +22,37 @@ public class MapController extends BaseController {
 	@Autowired
 	private MapService mapService;
 
-	@RequestMapping(value = "/inc/{mapid}", method = RequestMethod.GET)
-	public ModelAndView initMapIncPage(@PathVariable("mapid") String mapid) {
+	@RequestMapping(value = "/inc/{mapId}", method = RequestMethod.GET)
+	public ModelAndView initMapIncPage(@PathVariable("mapId") String mapId) {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("mapid", mapid);
+		mv.addObject("mapid", mapId);
 		mv.setViewName("inc/map.inc");
 		return mv;
 	}
 
-	@RequestMapping(value = "/edit/{mapid}", method = RequestMethod.GET)
-	public ModelAndView goEditMapPage(@PathVariable("mapid") int mapid) {
+	@RequestMapping(value = "/edit/{mapId}", method = RequestMethod.GET)
+	public ModelAndView goEditMapPage(@PathVariable("mapId") int mapId) {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("mapid", mapid);
-		mv.addObject("map", mapService.getMapById(mapid));
+		mv.addObject("mapid", mapId);
+		mv.addObject("map", mapService.getMapById(mapId));
 		mv.setViewName("editMap");
 		return mv;
 	}
 
+	@RequestMapping(value = "/hotspots/{mapId}", method = RequestMethod.GET)
+	public @ResponseBody
+	MapHotSpotBean getHotSpotsByMapId(@PathVariable("mapId") int mapId) {
+		MapHotSpotBean bean = new MapHotSpotBean();
+		bean.setLines(mapService.getAllLineInTheMap(mapId));
+		bean.setPoints(mapService.getAllPointInTheMap(mapId));
+		bean.setPolygons(mapService.getAllPolygonInTheMap(mapId));
+		bean.setStatus(JsonStatus.SUCCESS);
+		return bean;
+	}
+
 	@RequestMapping(value = "/save/point", method = RequestMethod.POST)
 	public @ResponseBody
-	JsonResultBean savePoint(@RequestBody JsonPointRequestBean requestBean) {
+	JsonResultBean savePoint(@RequestBody PointDomainBean requestBean) {
 		JsonResultBean result = new JsonResultBean();
 		mapService.savePoint(requestBean);
 		result.setStatus(JsonStatus.SUCCESS);
