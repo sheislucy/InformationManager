@@ -290,12 +290,10 @@ var undoRedo = function (draw, evt){
 };
 
 var onStart = function(feature, pixel){
-	//TODO
 	dragStartPixel = pixel;
 };
 
 var onComplete = function(feature, pixel){
-	//TODO
 	$("#drag-confirm-dialog").dialog("open");
 };
 
@@ -879,7 +877,6 @@ function initAll(mapMeta){
 				});
 			},
 			"放弃": function() {
-				//TODO
 				var res = drawControls.drag.map.getResolution();
 				var dragedFeature = drawControls.drag.feature;
 				dragedFeature.geometry.move(res * (dragStartPixel.x - drawControls.drag.lastPixel.x),
