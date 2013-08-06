@@ -48,12 +48,35 @@ public class MapServiceImpl extends BaseService implements MapService {
 
 	@Override
 	public void savePoint(PointDomainBean pointBean) {
-		GeoPointEntity pointEntity = new GeoPointEntity();
-		pointEntity.setMapId(pointBean.getMapId());
-		pointEntity.setCoordination(pointBean.getCoordination());
-		pointEntity.setDescription(pointBean.getDescription());
-		pointEntity.setHouseId(pointBean.getHouseId());
-		pointDao.saveAndFlush(pointEntity);
+		if (pointBean.getId() != null) {
+			// update
+			GeoPointEntity pointEntity = pointDao.findOne(pointBean.getId());
+			if (pointEntity == null) {
+				//if can't find the one to be updated (multiple threads will cause this problem), force to insert one
+				pointEntity = new GeoPointEntity();
+				pointEntity.setId(pointBean.getId());
+			}
+			boolean isChanged = false;
+			if (pointBean.getCoordination() != null) {
+				pointEntity.setCoordination(pointBean.getCoordination());
+				isChanged = true;
+			}
+			if (pointBean.getDescription() != null) {
+				pointEntity.setDescription(pointBean.getDescription());
+				isChanged = true;
+			}
+			if (isChanged) {
+				pointDao.save(pointEntity);
+			}
+		} else {
+			// insert
+			GeoPointEntity pointEntity = new GeoPointEntity();
+			pointEntity.setMapId(pointBean.getMapId());
+			pointEntity.setCoordination(pointBean.getCoordination());
+			pointEntity.setDescription(pointBean.getDescription());
+			pointEntity.setHouseId(pointBean.getHouseId());
+			pointDao.save(pointEntity);
+		}
 	}
 
 	@Override
@@ -71,6 +94,89 @@ public class MapServiceImpl extends BaseService implements MapService {
 		return buildPolygonDomainBeanList(polygonDao.findByMapId(mapId));
 	}
 
+	@Override
+	public void deletePoint(int featureId) {
+		pointDao.delete(featureId);
+	}
+
+	@Override
+	public void saveLine(LineDomainBean lineBean) {
+		if (lineBean.getId() != null) {
+			// update
+			GeoLineEntity entity = lineDao.findOne(lineBean.getId());
+			if (entity == null) {
+				if (entity == null) {
+					//if can't find the one to be updated (multiple threads will cause this problem), force to insert one
+					entity = new GeoLineEntity();
+					entity.setId(entity.getId());
+				}
+			}
+			boolean isChanged = false;
+			if (lineBean.getCoordination() != null) {
+				entity.setCoordination(lineBean.getCoordination());
+				isChanged = true;
+			}
+			if (lineBean.getDescription() != null) {
+				entity.setDescription(lineBean.getDescription());
+				isChanged = true;
+			}
+			if (isChanged) {
+				lineDao.save(entity);
+			}
+		} else {
+			// insert
+			GeoLineEntity entity = new GeoLineEntity();
+			entity.setCoordination(lineBean.getCoordination());
+			entity.setDescription(lineBean.getDescription());
+			entity.setMapId(lineBean.getMapId());
+			lineDao.save(entity);
+		}
+	}
+
+	@Override
+	public void deleteLine(int featureId) {
+		lineDao.delete(featureId);
+	}
+
+	@Override
+	public void savePolygon(PolygonDomainBean polygonBean) {
+		if (polygonBean.getId() != null) {
+			// update
+			GeoPolygonEntity entity = polygonDao.findOne(polygonBean.getId());
+			if (entity == null) {
+				if (entity == null) {
+					//if can't find the one to be updated (multiple threads will cause this problem), force to insert one
+					entity = new GeoPolygonEntity();
+					entity.setId(entity.getId());
+				}
+			}
+			boolean isChanged = false;
+			if (polygonBean.getCoordination() != null) {
+				entity.setCoordination(polygonBean.getCoordination());
+				isChanged = true;
+			}
+			if (polygonBean.getDescription() != null) {
+				entity.setDescription(polygonBean.getDescription());
+				isChanged = true;
+			}
+			if (isChanged) {
+				polygonDao.save(entity);
+			}
+		} else {
+			// insert
+			GeoPolygonEntity entity = new GeoPolygonEntity();
+			entity.setCoordination(polygonBean.getCoordination());
+			entity.setDescription(polygonBean.getDescription());
+			entity.setMapId(polygonBean.getMapId());
+			polygonDao.save(entity);
+		}
+	}
+
+	@Override
+	public void deletePolygon(int featureId) {
+		polygonDao.delete(featureId);
+	}
+
 	private List<PolygonDomainBean> buildPolygonDomainBeanList(
 			List<GeoPolygonEntity> entityList) {
 		List<PolygonDomainBean> beanList = new ArrayList<PolygonDomainBean>();
@@ -85,6 +191,7 @@ public class MapServiceImpl extends BaseService implements MapService {
 		bean.setCoordination(entity.getCoordination());
 		bean.setDescription(entity.getDescription());
 		bean.setMapId(entity.getMapId());
+		bean.setId(entity.getId());
 		return bean;
 	}
 
@@ -102,6 +209,7 @@ public class MapServiceImpl extends BaseService implements MapService {
 		bean.setCoordination(entity.getCoordination());
 		bean.setDescription(entity.getDescription());
 		bean.setMapId(entity.getMapId());
+		bean.setId(entity.getId());
 		return bean;
 	}
 
@@ -120,7 +228,9 @@ public class MapServiceImpl extends BaseService implements MapService {
 		bean.setDescription(entity.getDescription());
 		bean.setHouseId(entity.getHouseId());
 		bean.setMapId(entity.getMapId());
+		bean.setId(entity.getId());
 		bean.setHostName(entity.getHouse().getHost().getName());
+		bean.setHostId(entity.getHouse().getHost().getPid());
 		return bean;
 	}
 

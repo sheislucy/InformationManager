@@ -14,6 +14,7 @@
 </head>
 <body>
 	<div id="delete-confirm-dialog" title="确认删除该热点?" class="hide"></div>
+	<div id="drag-confirm-dialog" title="确认拖拽至该位置?" class="hide"></div>
 	<div class="left-right-corner">
 		<div id="success-tip" class="ui-tooltip ui-widget-content hide">
 			<div class="ui-tooltip-content">保存成功</div>
@@ -28,10 +29,10 @@
 			<p><input name="control" id="drawer" type="radio" /><label for="drawer" class="title">选择画笔</label></p>
 		</div>
 		<div id="shapeRadio" class="hide">
+			<p><input name="shape" id="drag" type="radio" /><label for="drag">拖拽热点</label></p>
 			<p><input name="shape" id="point" type="radio" /><label for="point">画点</label></p>
 			<p><input name="shape" id="line" type="radio" /><label for="line">画线段</label></p>
 			<p><input name="shape" id="polygon" type="radio" /><label for="polygon">画多边形</label></p>
-			<!-- <p><input name="shape" id="drag" type="radio" /><label for="drag">拖拽热点</label></p> -->
 		</div>
 		<div id="polygonRadio" class="hide">
 			<p><input name="polygonType" id="freeform" type="radio" /><label for="freeform">任意多边形</label></p>
@@ -43,8 +44,8 @@
 		</div>
 		<div>
 			<br />
-			<p><span>任意多边形或线段时：[ctrl+z]撤销一步，[ctrl+y]前进一步，[esc]撤销当前图形。</span></p><br />
-			<p><span>普通鼠标选中热点时：[backspace]删除</span></p>
+			<p><span>任意多边形或线段时：[ctrl+z]撤销一步，[ctrl+y]前进一步，[esc]放弃当前绘制</span></p><br />
+			<p><span>普通鼠标选中热点时：[shift+del]删除</span></p>
 		</div>
 	</div>
 	<div id="map-wrapper">

@@ -15,6 +15,7 @@ var naviCtrlr;
 
 var defaultStyle;
 var selectStyle;
+var dragStartPixel;
 // map generator-----------start--------------
 var MapManager = function() {
 };
@@ -55,7 +56,8 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 			var feature = new Feature(new Geometry.fromWKT(hotspotMeta.points[i].coordination), {
 				styleClass : "pointDefault",
 				dbFeatureId : hotspotMeta.points[i].id,
-				hostName: hotspotMeta.points[i].hostName
+				hostName: hotspotMeta.points[i].hostName + " - 户主id: " + hotspotMeta.points[i].hostId,
+				description: hotspotMeta.points[i].description
 			});
 			pointFeatures.push(feature);
 		}
@@ -79,7 +81,7 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 			var feature = new Feature(new Geometry.fromWKT(hotspotMeta.polygons[i].coordination), {
 				styleClass : "zoneDefault",
 				dbFeatureId : hotspotMeta.polygons[i].id,
-				description: hotspotMeta.lines[i].description
+				description: hotspotMeta.polygons[i].description
 			});
 			polygonFeatures.push(feature);
 		}
@@ -220,19 +222,22 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 		point : new OpenLayers.Control.DrawFeature(vectorLayer, OpenLayers.Handler.Point),
 		line : new OpenLayers.Control.DrawFeature(vectorLayer, OpenLayers.Handler.Path),
 		freeformPolygon : new OpenLayers.Control.DrawFeature(vectorLayer, OpenLayers.Handler.Polygon),
-		polygon : new OpenLayers.Control.DrawFeature(vectorLayer, OpenLayers.Handler.RegularPolygon)
+		polygon : new OpenLayers.Control.DrawFeature(vectorLayer, OpenLayers.Handler.RegularPolygon),
+		drag: new OpenLayers.Control.DragFeature(vectorLayer)
 	};
 	
 	drawControls.point.handler.callbacks.done = pointCtrlDone;
 	drawControls.line.handler.callbacks.done = lineCtrlDone;
 	drawControls.freeformPolygon.handler.callbacks.done = polygonCtrlDone;
 	drawControls.polygon.handler.callbacks.done = polygonCtrlDone;
+	drawControls.drag.onComplete = onComplete;
+	drawControls.drag.onStart = onStart;
 
 	this.map.addLayers([graphic1, vectorLayer]);
 	this.map.addControls([ switcher, highlightCtrlr, selectCtrlr,
 			new OpenLayers.Control.MousePosition(), new MyPanZoomBar(), 
 			naviCtrlr, 
-			drawControls.point, drawControls.line, drawControls.freeformPolygon, drawControls.polygon]);
+			drawControls.point, drawControls.line, drawControls.freeformPolygon, drawControls.polygon, drawControls.drag]);
 	this.map.zoomToMaxExtent();
 	this.map.events.register("mousemove", this.map, function(e) {
 		mouseLonlat = e.object.getLonLatFromPixel(e.xy);
@@ -253,7 +258,7 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 };
 
 var removeFeature = function (selectCtrl, evt){
-	if(evt.keyCode == OpenLayers.Event.KEY_BACKSPACE){
+	if(evt.shiftKey && evt.keyCode == OpenLayers.Event.KEY_DELETE){
 		$("#delete-confirm-dialog").selectCtrl = selectCtrl;
 		$("#delete-confirm-dialog").dialog("open");
 	}
@@ -284,6 +289,16 @@ var undoRedo = function (draw, evt){
 	}
 };
 
+var onStart = function(feature, pixel){
+	//TODO
+	dragStartPixel = pixel;
+};
+
+var onComplete = function(feature, pixel){
+	//TODO
+	$("#drag-confirm-dialog").dialog("open");
+};
+
 var polygonCtrlDone = function(geometry){
 	var feature = new OpenLayers.Feature.Vector(geometry, {
 		styleClass : "zoneDefault"
@@ -301,7 +316,7 @@ var polygonCtrlDone = function(geometry){
     }
     
     $("#saveUrl").val("/map/save/polygon");
-    $( "#line-polygon-dialog" ).dialog( "open" );
+    $("#line-polygon-dialog").dialog( "open" );
 };
 
 var lineCtrlDone = function(geometry){
@@ -375,6 +390,11 @@ var switchToEditMode = function(mode){
         	drawControls.freeformPolygon.holeModifier = "altKey";
 			drawControls.freeformPolygon.activate();
 			break;
+		case "drag":
+			drawControls.point.handler.stopDown = true;
+        	drawControls.point.handler.stopUp = true;
+			drawControls.drag.activate();
+			break;
 		case "triangle":
 			drawControls.polygon.handler.setOptions({sides: 3, irregular: true});
 			drawControls.polygon.activate();
@@ -435,11 +455,15 @@ var showMarker = function(evt) {
 	var text = "";
 	if (feature.geometry instanceof Geometry.Point) {
 		lonlat = OpenLayers.LonLat.fromString(feature.geometry.toShortString());
-		text = "<a href='' target='_blank'>"+ feature.data.hostName +"</a>";
+		text = "户主：<a href='' style='margin-left: 5px;' target='_blank'>" + feature.data.hostName +"</a><br /><span style='position: absolute;'>备注：</span><textarea id='marker-description' style='margin-left: 45px;'>"
+			+ feature.data.description + "</textarea><br /><input type='button' value='保存' style='float: right;margin-right: 11px;' onclick=\"saveDescription(" 
+			+ feature.data.dbFeatureId + ", '"+ feature.geometry.CLASS_NAME + "')\"/><div class='clear'></div>";
 	} else {
 		lonlat = new OpenLayers.LonLat(mouseLonlatOnClick.lon,
 				mouseLonlatOnClick.lat);
-		text = feature.data.description;
+		text = "<span style='top: 5px;position: absolute;'>备注：</span><textarea id='marker-description' style='margin-left: 45px;'>" 
+			+ feature.data.description + "</textarea><br /><input type='button' value='保存' style='float: right;margin-right: 11px;' onclick=\"saveDescription(" 
+			+ feature.data.dbFeatureId + ", '"+ feature.geometry.CLASS_NAME + "')\"/><div class='clear'></div>";
 	}
 	var map = this.map;
 	
@@ -488,6 +512,71 @@ var showMarker = function(evt) {
 //			});
 };
 
+function saveDescription(featureId, featureGeo){
+	if(featureGeo == "OpenLayers.Geometry.Point"){
+		var requestData = {
+			"id": featureId,
+			"description": $("#marker-description").val()
+		};
+		jQuery.ajax({
+			url: "/map/save/point",
+			type: "POST",
+			data: JSON.stringify(requestData),
+			success: function(data){
+				if(data && data.status == "SUCCESS"){
+					selectCtrlr.handlers.feature.lastFeature.data.description =  $("#marker-description").val();
+					$("#success-tip").fadeIn("slow").delay(2000);
+					$("#success-tip").hide('explode');
+				}else{
+					$("#failure-tip").fadeIn("slow").delay(2000);
+					$("#failure-tip").hide('explode');
+				}
+			},
+			error: function(){
+				$("#failure-tip").fadeIn("slow").delay(2000);
+				$("#failure-tip").hide('explode');
+			},
+			contentType: "application/json; charset=UTF-8",
+			dataType: "json"
+		});
+	} else if (checkNotNull($("#marker-description"), "热点说明")){
+		var requestData = {
+			"id": featureId,
+			"description": $("#marker-description").val()
+		};
+		
+		var url = null;
+		if(featureGeo == "OpenLayers.Geometry.LineString"){
+			url = "/map/save/line";
+		} else if(featureGeo == "OpenLayers.Geometry.Polygon"){
+			url = "/map/save/polygon";
+		}
+		if(url){
+			jQuery.ajax({
+				url: url,
+				type: "POST",
+				data: JSON.stringify(requestData),
+				success: function(data){
+					if(data && data.status == "SUCCESS"){
+						selectCtrlr.handlers.feature.lastFeature.data.description =  $("#marker-description").val();
+						$("#success-tip").fadeIn("slow").delay(2000);
+						$("#success-tip").hide('explode');
+					}else{
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					}
+				},
+				error: function(){
+					$("#failure-tip").fadeIn("slow").delay(2000);
+					$("#failure-tip").hide('explode');
+				},
+				contentType: "application/json; charset=UTF-8",
+				dataType: "json"
+			});
+		}
+	}	
+}
+
 //---------------------dialog and init------------------
 function updateTips( t ) {
     $(".validateTips").text( t ).addClass( "ui-state-highlight" ).removeClass("hidden");
@@ -525,6 +614,13 @@ function initAll(mapMeta){
 			if($('[for=polygon]').attr("aria-pressed") == "true"){
 				$("#polygonRadio").show("fast");
 			}
+		}
+	});
+	$('[for=drag]').click(function(){
+		if($(this).attr("aria-pressed") == "true"){
+			switchToEditMode("drag");
+			$("#polygonRadio").hide("fast");
+			lastPaintBrush = $(this);
 		}
 	});
 	$('[for=point]').click(function(){
@@ -589,14 +685,20 @@ function initAll(mapMeta){
 						success: function(data){
 							$( "#point-people-dialog" ).dialog( "close" );
 							if(data && data.status == "SUCCESS"){
-								$("#success-tip").show().delay(2000);
+								$("#success-tip").fadeIn("slow").delay(2000);
+								selectCtrlr.handlers.feature.lastFeature.data.hostName = $("#host-input").tokenInput("get")[0].name;
+								selectCtrlr.handlers.feature.lastFeature.data.description = requestData.description;
 								$("#success-tip").hide('explode');
 							}else{
-								$("#failure-tip").show().delay(2000);
+								$("#failure-tip").fadeIn("slow").delay(2000);
 								$("#failure-tip").hide('explode');
 								var thisFeature = selectCtrlr.handlers.feature.lastFeature;
 								selectCtrlr.layer.removeFeatures([thisFeature]);
 							}
+						},
+						error: function(){
+							$("#failure-tip").fadeIn("slow").delay(2000);
+							$("#failure-tip").hide('explode');
 						},
 						contentType: "application/json; charset=UTF-8",
 						dataType: "json"
@@ -638,7 +740,7 @@ function initAll(mapMeta){
 		closeOnEscape: false,
 		buttons: {
 			"完成": function() {
-				if ( checkNotNull($("#spot-descriptiont"), "热点说明") ) {
+				if ( checkNotNull($("#spot-description"), "热点说明") ) {
 					var requestData = {
 							"mapId": $("#mapId").val(),
 							"coordination": WktFormat.write(selectCtrlr.handlers.feature.lastFeature),
@@ -650,16 +752,21 @@ function initAll(mapMeta){
 						type: "POST",
 						data: JSON.stringify(requestData),
 						success: function(data){
-							$( "#point-people-dialog" ).dialog( "close" );
+							$( "#line-polygon-dialog" ).dialog( "close" );
 							if(data && data.status == "SUCCESS"){
-								$("#success-tip").show().delay(2000);
+								$("#success-tip").fadeIn("slow").delay(2000);
+								selectCtrlr.handlers.feature.lastFeature.data.description = requestData.description;
 								$("#success-tip").hide('explode');
 							}else{
-								$("#failure-tip").show().delay(2000);
+								$("#failure-tip").fadeIn("slow").delay(2000);
 								$("#failure-tip").hide('explode');
 								var thisFeature = selectCtrlr.handlers.feature.lastFeature;
 								selectCtrlr.layer.removeFeatures([thisFeature]);
 							}
+						},
+						error: function(){
+							$("#failure-tip").fadeIn("slow").delay(2000);
+							$("#failure-tip").hide('explode');
 						},
 						contentType: "application/json; charset=UTF-8",
 						dataType: "json"
@@ -683,16 +790,101 @@ function initAll(mapMeta){
 		height:140,
 		modal: true,
 		buttons: {
-				"删除": function() {
-				//TODO remove feature from map, need ajax here 
+			"删除": function() {
 				var selectedFeature = selectCtrlr.handlers.feature.feature;
-				selectCtrlr.map.removePopup(selectedFeature.popup);
-				selectedFeature.popup.destroy();
-				selectedFeature.popup = null;
-				selectCtrlr.layer.removeFeatures([selectedFeature]);
 				$( this ).dialog( "close" );
+				
+				var url = null;
+				if(selectedFeature.geometry instanceof Geometry.Point){
+					url = "/map/delete/point";
+				} else if (selectedFeature.geometry instanceof Geometry.LineString){
+					url = "/map/delete/line";
+				} else if (selectedFeature.geometry instanceof Geometry.Polygon){
+					url = "/map/delete/polygon";
+				}
+				
+				jQuery.ajax({
+					url: url,
+					type: "POST",
+					data: {"featureId": selectedFeature.data.dbFeatureId},
+					success: function(data){
+						if(data && data.status == "SUCCESS"){
+							selectCtrlr.map.removePopup(selectedFeature.popup);
+							selectedFeature.popup.destroy();
+							selectedFeature.popup = null;
+							selectCtrlr.layer.removeFeatures([selectedFeature]);
+							$("#success-tip").fadeIn("slow").delay(2000);
+							$("#success-tip").hide('explode');
+						}else{
+							$("#failure-tip").fadeIn("slow").delay(2000);
+							$("#failure-tip").hide('explode');
+						}
+					},
+					error: function(){
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					},
+					dataType: "json"
+				});
 			},
-				"保留": function() {
+			"保留": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+	
+	$("#drag-confirm-dialog").dialog({
+		autoOpen: false,
+		resizable: false,
+		height:140,
+		modal: true,
+		buttons: {
+			"确认": function() {
+				var dragedFeature = drawControls.drag.feature;
+				var requestData = {
+					"id": dragedFeature.data.dbFeatureId,
+					"coordination": WktFormat.write(drawControls.drag.feature),
+				};
+				
+				$( this ).dialog( "close" );
+				
+				var url = null;
+				if(dragedFeature.geometry instanceof Geometry.Point){
+					url = "/map/save/point";
+				} else if (dragedFeature.geometry instanceof Geometry.LineString){
+					url = "/map/save/line";
+				} else if (dragedFeature.geometry instanceof Geometry.Polygon){
+					url = "/map/save/polygon";
+				}
+				
+				jQuery.ajax({
+					url: url,
+					type: "POST",
+					data: JSON.stringify(requestData),
+					success: function(data){
+						if(data && data.status == "SUCCESS"){
+							$("#success-tip").fadeIn("slow").delay(2000);
+							$("#success-tip").hide('explode');
+						}else{
+							$("#failure-tip").fadeIn("slow").delay(2000);
+							$("#failure-tip").hide('explode');
+						}
+					},
+					error: function(){
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					},
+					contentType: "application/json; charset=UTF-8",
+					dataType: "json"
+				});
+			},
+			"放弃": function() {
+				//TODO
+				var res = drawControls.drag.map.getResolution();
+				var dragedFeature = drawControls.drag.feature;
+				dragedFeature.geometry.move(res * (dragStartPixel.x - drawControls.drag.lastPixel.x),
+		                                   res * (drawControls.drag.lastPixel.y - dragStartPixel.y));
+				drawControls.drag.layer.drawFeature(dragedFeature);
 				$( this ).dialog( "close" );
 			}
 		}

@@ -30,7 +30,7 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 			HouseMiniDomainBean bean = new HouseMiniDomainBean();
 			bean.setId(entity.getId());
 			bean.setName(entity.getHost() != null ? entity.getHost().getName()
-					+ " - " + entity.getId() : null);
+					+ " - 户主id: " +  entity.getHost().getPid() : null);
 			miniBeanList.add(bean);
 		}
 

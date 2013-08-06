@@ -15,8 +15,19 @@ public interface MapService {
 	public void savePoint(PointDomainBean pointBean);
 
 	public List<PointDomainBean> getAllPointInTheMap(int mapId);
-	
+
 	public List<LineDomainBean> getAllLineInTheMap(int mapId);
-	
+
 	public List<PolygonDomainBean> getAllPolygonInTheMap(int mapId);
+
+	public void deletePoint(int featureId);
+
+	public void saveLine(LineDomainBean lineBean);
+
+	public void deleteLine(int featureId);
+
+	public void savePolygon(PolygonDomainBean polygonBean);
+
+	public void deletePolygon(int featureId);
+
 }

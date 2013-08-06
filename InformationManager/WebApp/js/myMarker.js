@@ -18,7 +18,7 @@ MyMarker.prototype.createBlocks = function() {
 	var divId = this.id + '_FrameDecorationDiv';
 	block.div = OpenLayers.Util.createDiv(divId, null, null, null, "absolute",
 			"1px solid #aaa", "hidden", 0.6);
-	block.div.style.cssText = "background: #f5f5f5; border: 1px solid #aaa; opacity: 0.7;";
+	block.div.style.cssText = "background: #f5f5f5; border: 1px solid #aaa; opacity: 0.8;";
 	if (this.imageSrc && this.imageSrc.length > 0) {
 		var imgId = this.id + '_FrameDecorationImg';
 		block.image = OpenLayers.Util.createImage(imgId, null, this.imageSize,

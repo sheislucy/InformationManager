@@ -4,9 +4,18 @@ import java.io.Serializable;
 
 public class PolygonDomainBean implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private Integer id;
 	private int mapId;
 	private String description;
 	private String coordination;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public int getMapId() {
 		return mapId;

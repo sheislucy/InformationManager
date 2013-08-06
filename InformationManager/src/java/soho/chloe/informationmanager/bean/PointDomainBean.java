@@ -4,19 +4,21 @@ import java.io.Serializable;
 
 public class PointDomainBean implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private Integer id;
 	private int houseId;
 	private int mapId;
 	private String description;
 	private String coordination;
 
+	// foreign key
 	private String hostName;
+	private int hostId;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -58,6 +60,14 @@ public class PointDomainBean implements Serializable {
 
 	public void setHostName(String hostName) {
 		this.hostName = hostName;
+	}
+
+	public int getHostId() {
+		return hostId;
+	}
+
+	public void setHostId(int hostId) {
+		this.hostId = hostId;
 	}
 
 }
