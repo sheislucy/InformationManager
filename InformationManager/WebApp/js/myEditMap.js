@@ -30,7 +30,7 @@ var MapManager = function() {
  */
 MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 	if (this.map) {
-		this.map.destroy();
+		this.map = null;
 	}
 	this.map = new Map('explore-map', {
 		projection : "EPSG:3857",
@@ -463,14 +463,13 @@ var showMarker = function(evt) {
 			+ feature.data.description + "</textarea><br /><input type='button' value='保存' style='float: right;margin-right: 11px;' onclick=\"saveDescription(" 
 			+ feature.data.dbFeatureId + ", '"+ feature.geometry.CLASS_NAME + "')\"/><div class='clear'></div>";
 	}
-	var map = this.map;
 	
 	var popup = new MyMarker("myPopup", lonlat,
 			new OpenLayers.Size(70, 60), text, null, false, null, null);
 	popup.minSize = new OpenLayers.Size(80, 60);
 	popup.autoSize = true;
 	feature.popup = popup;
-	map.addPopup(popup);
+	this.map.addPopup(popup);
 	
 //	$.getJSON(web_context + '/map/' + "map03" + "/feature/"
 //			+ feature.data.dbFeatureId + "/marker",
@@ -596,6 +595,7 @@ function initAll(mapMeta){
 	$("#controlRadio").buttonset();
 	$("#shapeRadio").buttonset();
 	$("#polygonRadio").buttonset();
+	
 	$('[for=cursor]').click(function(){
 		if($(this).attr("aria-pressed") == "true"){
 			switchToUnEditMode();
@@ -656,6 +656,15 @@ function initAll(mapMeta){
 			$('#explore-map').html("");
 			selectCtrlr = mapManager.genMap(mapMeta, {"points": data.points, "lines": data.lines, "polygons": data.polygons});
 		}
+	});
+	
+	$("#refresh").button().removeClass("hide").click(function(){
+		$.getJSON(web_context + '/map/hotspots/' + $("#mapId").val(), function(data) {
+			if (data && data.status == 'SUCCESS') {
+				$('#explore-map').html("");
+				selectCtrlr = mapManager.genMap(mapMeta, {"points": data.points, "lines": data.lines, "polygons": data.polygons});
+			}
+		});
 	});
 	
 	

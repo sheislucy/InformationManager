@@ -44,7 +44,7 @@
 		});
 		$(":button").button();
 		$(":button").click(function() {
-			if(this.attributes.forwardType.value == "edit"){
+			if(this.attributes.forwardType && this.attributes.forwardType.value == "edit"){
 				window.open(this.attributes.dataUrl.value, "_blank");
 			}else{
 				$.ajax({

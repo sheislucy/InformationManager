@@ -26,9 +26,10 @@ public class MapController extends BaseController {
 	private MapService mapService;
 
 	@RequestMapping(value = "/inc/{mapId}", method = RequestMethod.GET)
-	public ModelAndView initMapIncPage(@PathVariable("mapId") String mapId) {
+	public ModelAndView initMapIncPage(@PathVariable("mapId") int mapId) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mapid", mapId);
+		mv.addObject("map", mapService.getMapById(mapId));
 		mv.setViewName("inc/map.inc");
 		return mv;
 	}

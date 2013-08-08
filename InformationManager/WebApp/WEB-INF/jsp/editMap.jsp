@@ -47,6 +47,9 @@
 			<p><span>任意多边形或线段时：[ctrl+z]撤销一步，[ctrl+y]前进一步，[esc]放弃当前绘制</span></p><br />
 			<p><span>普通鼠标选中热点时：[shift+del]删除</span></p>
 		</div>
+		<div>
+			<p><input name="refresh" id="refresh" type="button" value="刷新地图" class="hide" /></p>
+		</div>
 	</div>
 	<div id="map-wrapper">
 		<div id="explore-map" style="height: 600px">
@@ -90,7 +93,7 @@
 	<script type="text/javascript" src="/js/myEditMap.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			var map_height =$(window).innerHeight()-10;
+			var map_height = $(window).innerHeight()-10;
 			$('#explore-map').height(map_height);
 			$('#tool-bar').height(map_height);
 			var map_width = map_height / $("#mapHeight").val() * $("#mapWidth").val();
@@ -101,7 +104,7 @@
 				"mapId": $("#mapId").val(),
 				"mapName": $("#mapName").val(),
 				"mapImageUrl": $("#mapUrl").val()
-				});
+			});
 			
 		});
 	</script>
