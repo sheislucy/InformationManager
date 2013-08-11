@@ -69,25 +69,25 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	// }
 
 	public GridJsonResponseBean getPeopleList(
-			final GridPeopleRequestBean requestDTO) {
-		if (requestDTO.getRows() <= 0) {
-			requestDTO
+			final GridPeopleRequestBean requestBean) {
+		if (requestBean.getRows() <= 0) {
+			requestBean
 					.setRows(Integer.parseInt((String) MyPropertyPlaceholderConfigurer
 							.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
 		}
 		int totalCount = 0;
 		List<PeopleEntity> peopleList = new ArrayList<PeopleEntity>();
 
-		totalCount = (int) dao.count(buildSpecification(requestDTO));
-		peopleList.addAll(dao.findAll(buildSpecification(requestDTO),
-				buildPageRequest(requestDTO)).getContent());
+		totalCount = (int) dao.count(buildSpecification(requestBean));
+		peopleList.addAll(dao.findAll(buildSpecification(requestBean),
+				buildPageRequest(requestBean)).getContent());
 
-		int rowsInPage = requestDTO.getRows();
-		GridJsonResponseBean dto = new GridJsonResponseBean();
-		dto.setTotal(totalCount / rowsInPage + 1);
-		dto.setRecords(totalCount);
-		buildResponse(dto, peopleList);
-		return dto;
+		int rowsInPage = requestBean.getRows();
+		GridJsonResponseBean response = new GridJsonResponseBean();
+		response.setTotal(totalCount / rowsInPage + 1);
+		response.setRecords(totalCount);
+		buildResponse(response, peopleList);
+		return response;
 	}
 
 	private Specification<PeopleEntity> buildSpecification(
@@ -133,8 +133,9 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		return spec;
 	}
 
-	private void buildResponse(GridJsonResponseBean dto,
+	private void buildResponse(GridJsonResponseBean response,
 			List<PeopleEntity> entityList) {
+		response.getRows().clear();
 		for (PeopleEntity pe : entityList) {
 			PeopleDomainBean pd = new PeopleDomainBean();
 
@@ -186,39 +187,33 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 			pd.setWplace(pe.getWplace());
 			pd.setYearIncome(pe.getYearIncome());
 
-			dto.getRows().add(pd);
+			response.getRows().add(pd);
 		}
 	}
 
 	private PageRequest buildPageRequest(GridJsonRequestBean requestDTO) {
 		Sort sort = null;
-		if (StringUtils.isEmpty(requestDTO.getSidx())) {
+		if (StringUtils.isEmpty(requestDTO.getSidx())
+				&& StringUtils.isEmpty(requestDTO.getSord())) {
 			sort = new Sort(Direction.DESC, "pid");
-		} else if (StringUtils.isEmpty(requestDTO.getSord())
-				|| InformationManagerConstants.SORT_ASC
-						.equalsIgnoreCase(requestDTO.getSord())) {
-			sort = new Sort(Direction.ASC,
-					replaceSortColumnName(requestDTO.getSidx()));
+		} else if (StringUtils.isEmpty(requestDTO.getSidx())) {
+			if (requestDTO.getSord().equalsIgnoreCase(Direction.DESC.name())) {
+				sort = new Sort(Direction.DESC, "pid");
+			} else {
+				sort = new Sort(Direction.ASC, "pid");
+			}
+		} else if (StringUtils.isEmpty(requestDTO.getSord())) {
+			sort = new Sort(Direction.DESC, requestDTO.getSidx());
 		} else {
-			sort = new Sort(Direction.DESC,
-					replaceSortColumnName(requestDTO.getSidx()));
+			if (requestDTO.getSord().equalsIgnoreCase(Direction.DESC.name())) {
+				sort = new Sort(Direction.DESC, requestDTO.getSidx());
+			} else {
+				sort = new Sort(Direction.ASC, requestDTO.getSidx());
+			}
 		}
+
 		return new PageRequest(requestDTO.getPage() - 1, requestDTO.getRows(),
 				sort);
-	}
-
-	private String replaceSortColumnName(String origin) {
-		String replaced = null;
-		if ("sortText".equalsIgnoreCase(origin)) {
-			replaced = "psortId";
-		} else if ("socialText".equalsIgnoreCase(origin)) {
-			replaced = "psocialId";
-		} else if ("hostName".equalsIgnoreCase(origin)) {
-			replaced = "hostId";
-		} else {
-			replaced = origin;
-		}
-		return replaced;
 	}
 
 }

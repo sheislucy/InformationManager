@@ -1,12 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<link type="text/css" rel="stylesheet" href="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/css/jquery-ui-1.10.3.custom.min.css" />
-<link type="text/css" rel="stylesheet" href="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/css/ui.jqgrid.css" />
-<link type="text/css" rel="stylesheet" href="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/css/common.css" />
-<link type="text/css" rel="stylesheet" href="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/css/houseDetail.css" />
+<link type="text/css" rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
+<link type="text/css" rel="stylesheet" href="css/ui.jqgrid.css" />
+<link type="text/css" rel="stylesheet" href="css/common.css" />
+<link type="text/css" rel="stylesheet" href="css/houseDetail.css" />
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>修改户籍信息</title>
 </head>
 <body>
 
@@ -65,13 +68,13 @@
 		<div id="thumbnails"></div>
 	</div>
 </div>
-<script type="text/javascript" src="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/js/jquery-ui-1.10.3.custom.min.js"></script>
-<script type="text/javascript" src="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/js/jquery.jqGrid.src.js"></script>
-<script type="text/javascript" src="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/js/common.js"></script>
-<script type="text/javascript" src="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/js/swfupload.js"></script>
-<script type="text/javascript" src="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/js/handlers.js"></script>
-<script type="text/javascript" src="G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/js/editHouseDetail.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="js/jquery.jqGrid.src.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/swfupload.js"></script>
+<script type="text/javascript" src="js/handlers.js"></script>
+<script type="text/javascript" src="js/editHouseDetail.js"></script>
 <script type="text/javascript">
 $(function(){
 	new MemberGrid();

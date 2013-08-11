@@ -44,9 +44,11 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 		numZoomLevels : 6,
 		layers: 'basic'
 	};
+	
+	//bounds use the original height/width, THIS SHOULD BE A STATIC AND FIXED VALUE!!
 	var graphic1 = new Image(mapMeta.mapName,
 			web_context + mapMeta.mapImageUrl, new OpenLayers.Bounds(0, 0,
-					mapMeta.view_width, mapMeta.view_height),
+					$("#mapWidth").val(), $("#mapHeight").val()),
 			new OpenLayers.Size(mapMeta.view_width, mapMeta.view_height),
 			options);
 
@@ -121,7 +123,8 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 				strokeOpacity : 0.6,
 				strokeColor : "#00ffa5",
 				fillColor : "#defaf9",
-				fillOpacity : 0.4
+				fillOpacity : 0.4,
+				cursor : "pointer"
 			}
 		}), new Rule({
 			filter : new Filter.Comparison({
@@ -132,7 +135,8 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 			symbolizer : {
 				strokeWidth : 5,
 				strokeOpacity : 0.6,
-				strokeColor : "#d21838"
+				strokeColor : "#d21838",
+				cursor : "pointer"
 			}
 		}) ]
 	});
@@ -453,9 +457,9 @@ var showMarker = function(evt) {
 	var text = "";
 	if (feature.geometry instanceof Geometry.Point) {
 		lonlat = OpenLayers.LonLat.fromString(feature.geometry.toShortString());
-		text = "户主：<a href='' style='margin-left: 5px;' target='_blank'>" + feature.data.hostName +"</a><br /><span style='position: absolute;'>备注：</span><textarea id='marker-description' style='margin-left: 45px;'>"
+		text = "<div style='min-width: 220px; min-height: 100px;'>户主：<a href='' style='margin-left: 5px;' target='_blank'>" + feature.data.hostName +"</a><br /><span style='position: absolute;'>备注：</span><textarea cols='20' rows='3' id='marker-description' style='margin-left: 45px;'>"
 			+ feature.data.description + "</textarea><br /><input type='button' value='保存' style='float: right;margin-right: 11px;' onclick=\"saveDescription(" 
-			+ feature.data.dbFeatureId + ", '"+ feature.geometry.CLASS_NAME + "')\"/><div class='clear'></div>";
+			+ feature.data.dbFeatureId + ", '"+ feature.geometry.CLASS_NAME + "')\"/><div class='clear'></div></div>";
 	} else {
 		lonlat = new OpenLayers.LonLat(mouseLonlatOnClick.lon,
 				mouseLonlatOnClick.lat);

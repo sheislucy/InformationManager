@@ -46,8 +46,8 @@ public class PeopleEntity implements Serializable {
 	private String incomeSource;
 	private Integer political;
 
-	@Column(name = "hostid")
-	private Integer hostId;
+	@Column(name = "relationid")
+	private Integer relationId;
 
 	@Column(name = "villageid")
 	private Integer villageId;
@@ -120,7 +120,7 @@ public class PeopleEntity implements Serializable {
 	private PositionType positionType;
 
 	@ManyToOne
-	@JoinColumn(name = "hostid", insertable = false, updatable = false)
+	@JoinColumn(name = "relationid", insertable = false, updatable = false)
 	private RelationType relationType;
 
 	@ManyToOne
@@ -255,12 +255,12 @@ public class PeopleEntity implements Serializable {
 		this.political = political;
 	}
 
-	public Integer getHostId() {
-		return hostId;
+	public Integer getRelationId() {
+		return relationId;
 	}
 
-	public void setHostId(Integer hostId) {
-		this.hostId = hostId;
+	public void setRelationId(Integer relationId) {
+		this.relationId = relationId;
 	}
 
 	public Integer getVillageId() {

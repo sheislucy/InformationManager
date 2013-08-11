@@ -9,10 +9,10 @@
 				dataUrl="/people/inc" />
 		</p>
 		<p>
-			<input class="mapButton" type="button" value="户籍信息浏览" dataUrl="/map/inc/03" dataParent="p"/>
+			<input class="mapButton" type="button" value="户籍信息浏览" dataUrl="/house/inc" />
 		</p>
 	</div>
-	<h3>统计数据</h3>
+	<h3>综合查询</h3>
 	<div>
 		<p>
 			<input class="peopleButton" type="button" value="地区人口增长统计(3D饼图)"

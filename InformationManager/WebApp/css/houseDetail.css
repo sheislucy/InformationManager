@@ -1,0 +1,86 @@
+@CHARSET "UTF-8";
+
+body{
+	background: #fff;
+}
+
+input[type="text"], select{
+	margin-top: 2px;
+	margin-bottom: 2px;
+	border: 1px solid #a7d0f2;
+}
+
+input[type="text"]{
+	height: 18px;
+	width: 150px;
+}
+
+select{
+	height: 22px;
+}
+
+input[type="text"]:focus{
+	border: 1px solid #f7c687;/*#f7c687*/
+}
+
+.form-wrapper {
+	font-size: 13px;
+	margin: 20px auto;
+	width: 1010px;
+	background: #fff;
+}
+
+.detail-information label{
+	display: inline-block;
+	width: 52px;
+	margin-left: 20px;
+	margin-right: 5px;
+}
+
+.detail-information, .member-information, .piture-information{
+	margin-bottom: 30px;
+	border: 1px solid #a7d0f2;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.left-column{
+	width: 450px;
+	margin-left: 20px;
+	float: left;
+}
+
+.left-column input[type="button"]{
+	top: -2px;
+	line-height: 12px;
+}
+
+.result-table{
+	margin-top: 10px;
+}
+
+.right-column{
+	width: 500px;
+	height: 240px;
+	border: 1px solid #a7d0f2;
+	overflow: auto;
+	float: right;
+	margin-right: 20px;
+}
+
+.right-column span{
+	display: inline-block;
+}
+
+.right-column ul{
+	margin: 15px;
+}
+
+.right-column ul li{
+	display: block;
+	line-height: 30px;
+}
+
+.right-column ul li a.ui-icon{
+	margin-top: 4px;
+}

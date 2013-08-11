@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import soho.chloe.informationmanager.bean.GridJsonResponseBean;
 import soho.chloe.informationmanager.bean.GridPeopleRequestBean;
 import soho.chloe.informationmanager.service.PeopleService;
-import soho.chloe.informationmanager.utils.JsonStatus;
 
 /**
  * @author sony
@@ -37,9 +36,9 @@ public class PeopleController extends BaseController {
 
 	@RequestMapping(value = "/people.json", method = RequestMethod.POST)
 	public @ResponseBody
-	GridJsonResponseBean getPeopleList(@RequestBody GridPeopleRequestBean requestDTO) {
-		GridJsonResponseBean dto = service.getPeopleList(requestDTO);
-		return dto;
+	GridJsonResponseBean getPeoplePagingList(@RequestBody GridPeopleRequestBean requestBean) {
+		GridJsonResponseBean response = service.getPeopleList(requestBean);
+		return response;
 	}
 
 	@RequestMapping(value = "/houseMembers/{pid}", method = RequestMethod.GET)

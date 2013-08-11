@@ -35,11 +35,11 @@
 
 	<logger name="org.springframework.http">
 		<level value="warn" />
-	</logger> -->
+	</logger>
 
 	<logger name="org.springframework.web">
 		<level value="debug" />
-	</logger> 
+	</logger>  -->
 	
 	<!-- <logger name="org.springframework.data">
 		<level value="debug" />

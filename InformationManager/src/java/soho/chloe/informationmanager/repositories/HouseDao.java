@@ -11,4 +11,6 @@ public interface HouseDao extends JpaRepository<HouseEntity, Integer> {
 	
 	@Query("FROM HouseEntity h WHERE NOT EXISTS( SELECT gp.houseId FROM GeoPointEntity gp WHERE h.id = gp.houseId )") 
 	List<HouseEntity> getUnmarkedHouse();
+	
+	long count();
 }

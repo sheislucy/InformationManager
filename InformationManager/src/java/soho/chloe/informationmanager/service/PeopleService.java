@@ -11,7 +11,7 @@ import soho.chloe.informationmanager.bean.GridPeopleRequestBean;
  * 
  */
 public interface PeopleService {
-	public GridJsonResponseBean getPeopleList(GridPeopleRequestBean requestDTO);
+	public GridJsonResponseBean getPeopleList(GridPeopleRequestBean requestBean);
 
 //	public PeopleResponseDTO getHouseMembers(HouseMemberRequestDTO requestDTO);
 }

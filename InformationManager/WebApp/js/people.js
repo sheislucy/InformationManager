@@ -82,7 +82,7 @@ var People = function() {
 				editable : true
 			}, {
 				name : 'cardId',
-				index : 'cardId',
+				index : 'cardid',
 				// width : 140,
 				align : "right",
 				editable : true
@@ -130,15 +130,13 @@ var People = function() {
 				editable : true,
 			}, {
 				name : 'yearIncome',
-				index : 'yearIncome',
+				index : 'yearincome',
 				// width : 100,
-				sortable : false,
 				editable : true
 			}, {
 				name : 'incomeSource',
-				index : 'incomeSource',
+				index : 'incomesource',
 				// width : 100,
-				sortable : false,
 				editable : true
 			}, {
 				name : 'social',
@@ -148,18 +146,17 @@ var People = function() {
 				editable : true
 			}, {
 				name : 'relation',
-				index : 'relation',
+				index : 'relationid',
 				// width : 30,
 				sortable : false,
 				editable : true
 			}, {
 				name : 'lastUpdateTime',
-				index : 'lastUpdateTime',
+				index : 'lastupdatetime',
 				// width : 100,
-				sortable : false,
 				editable : true
 			} ],
-			rowNum : $("#initPageSize").attr("value"),
+			rowNum : $("#initPageSize").val(),
 			rowList : optionalPageList,
 			pager : '#pager-people',
 			sortname : 'pid',

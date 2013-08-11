@@ -38,9 +38,9 @@ var House = function() {
 
 	this.getHouseList = function() {
 		var optionalPageList = $("#optionalPageSize").attr("value").split(",");
-		var table = jQuery("#jqGrid-people");
+		var table = jQuery("#jqGrid-house");
 		table.jqGrid({
-			url : '/people/people.json',
+			url : '/house/house.json',
 			datatype : "json",
 			mtype : "post",
 			// postData : postDataParam,
@@ -50,119 +50,123 @@ var House = function() {
 			},
 			shrinkToFit : true,
 			autowidth : true,
-			colNames : [ '序号', 'id', '姓名', '性别','流动性', '身份证号', '生日', '电话', '手机', '教育程度', '地址',
-					'从事职业', '工作地点', '年收入', '收入来源', '政治面貌', '和户主的关系',
-					'上次修改时间' ],
+			colNames : [ '序号', 'id', '户主姓名', '坐落地址','使用性质', '建筑结构', '层数', '是否合法', '地类', '占地面积', '建筑面积',
+					'建筑年代', '产权', '房产证号', '土地证号', '批文号', '宗地号', '上次修改时间' ],
 			colModel : [ {
 				name : 'no',
 				index : '',
 				width : 50,
 				sortable : true
 			}, {
-				name : 'pid',
-				index : 'pid',
+				name : 'id',
+				index : 'id',
 				//width : 60,
 				sortable : false,
 				hidden : true
 			}, {
 				name : 'name',
-				index : 'name',
+				index : 'pid',
 				width : 100,
 				editable : true
 			}, {
-				name : 'gender',
-				index : 'gender',
+				name : 'address',
+				index : 'address',
+				width : 300,
+				editable : true,
+				sortable : false,
+			},{
+				name : 'useType',
+				index : 'usetype',
+				width : 60,
+				align : "right",
+				editable : true
+			}, {
+				name : 'buildStruct',
+				index : 'buildstruct',
+				width : 60,
+				align : "right",
+				editable : true
+			},{
+				name : 'floorCount',
+				index : 'floorcount',
+				width : 40,
+				align : "right",
+				editable : true
+			},{
+				name : 'isLegal',
+				index : 'islegal',
+				width : 40,
+				align : "right",
+				editable : true,
+				formatter: function( cellvalue, options, rowObject ){
+					if(cellvalue == "true"){
+						return "合法";
+					}else{
+						return "非法";
+					}
+				}
+			},{
+				name : 'landClass',
+				index : 'landclass',
+				width : 60,
+				align : "right",
+				editable : true
+			}, {
+				name : 'landArea',
+				index : 'landarea',
+				width : 60,
+				align : "right",
+				editable : true
+			}, {
+				name : 'buildingArea',
+				index : 'buildingarea',
 				width : 60,
 				editable : true
-			},{
-				name : 'ptype',
-				index : 'ptype',
-				// width : 60,
-				align : "right",
+			}, {
+				name : 'buildingAge',
+				index : 'buildingage',
+				width : 60,
 				editable : true
 			}, {
-				name : 'cardId',
-				index : 'cardId',
-				// width : 140,
-				align : "right",
-				editable : true
-			},{
-				name : 'birthday',
-				index : 'birthday',
-				// width : 140,
-				align : "right",
-				editable : true
-			},{
-				name : 'tel',
-				index : 'tel',
-				// width : 140,
-				align : "right",
-				editable : true
-			},{
-				name : 'phone',
-				index : 'phone',
-				// width : 140,
-				align : "right",
-				editable : true
-			}, {
-				name : 'education',
-				index : 'education',
-				// width : 40,
-				align : "right",
-				editable : true
-			}, {
-				name : 'addr',
-				index : 'addr',
-				// width : 130,
-				sortable : false,
-				editable : true
-			}, {
-				name : 'job',
-				index : 'job',
-				// width : 60,
-				sortable : false,
-				editable : true
-			}, {
-				name : 'wplace',
-				index : 'wplace',
-				// width : 150,
+				name : 'property',
+				index : 'property',
+				width : 60,
 				sortable : false,
 				editable : true,
 			}, {
-				name : 'yearIncome',
-				index : 'yearIncome',
-				// width : 100,
+				name : 'propertyNo',
+				index : 'propertyno',
+				width : 60,
 				sortable : false,
 				editable : true
 			}, {
-				name : 'incomeSource',
-				index : 'incomeSource',
-				// width : 100,
+				name : 'landNo',
+				index : 'landno',
+				width : 60,
 				sortable : false,
 				editable : true
 			}, {
-				name : 'social',
-				index : 'social',
-				// width : 50,
+				name : 'approvalsNo',
+				index : 'approvalsno',
+				width : 60,
 				sortable : false,
 				editable : true
 			}, {
-				name : 'relation',
-				index : 'relation',
-				// width : 30,
+				name : 'parcelNo',
+				index : 'parcelno',
+				width : 60,
 				sortable : false,
 				editable : true
 			}, {
 				name : 'lastUpdateTime',
-				index : 'lastUpdateTime',
+				index : 'lastupdatetime',
 				// width : 100,
-				sortable : false,
 				editable : true
 			} ],
 			rowNum : $("#initPageSize").attr("value"),
 			rowList : optionalPageList,
-			pager : '#pager-people',
-			sortname : 'pid',
+			pager : '#pager-house',
+			sortname : 'id',
 			height : 'auto',
 			viewrecords : true,
 			sortorder : "desc",
@@ -185,13 +189,25 @@ var House = function() {
 				repeatitems : false
 			},
 			// editurl : "server.php",
-			caption : "人员信息表"
+			caption : "户籍信息表"
 		});
-		table.jqGrid('navGrid', "#pager-people", {
-		// edit : false,
-		// add : false,
-		// del : false
-		});
+		table.jqGrid('navGrid', "#pager-house", {edit : false, add : false, del : false})
+			 .jqGrid('navButtonAdd', "#pager-house", {
+				 	caption:"新增", 
+				 	buttonicon:"ui-icon-add", 
+				 	onClickButton: function(){ 
+				 		window.open(""); //TODO
+				 	}, 
+				 	position:"last"
+			 })
+			 .jqGrid('navButtonAdd', "#pager-house", {
+				 	caption:"修改", 
+				 	buttonicon:"ui-icon-edit", 
+				 	onClickButton: function(){ 
+				 		window.open(""); //TODO
+				 	}, 
+				 	position:"last"
+			 });
 		table.jqGrid("setGridParam", {
 			onSelectRow : function(rowid, status) {
 				openHouseMembers(table.jqGrid('getRowData', rowid).pid);
@@ -200,7 +216,7 @@ var House = function() {
 	};
 
 	this.refreshGrid = function(postDataParam) {
-		$("#jqGrid-people").jqGrid('setGridParam', {
+		$("#jqGrid-house").jqGrid('setGridParam', {
 			postData : postDataParam
 		}).trigger("reloadGrid");
 	};
