@@ -4,10 +4,12 @@
 package soho.chloe.informationmanager.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -98,16 +100,19 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (!StringUtils.isEmpty(requestDTO.getSearchName())) {
+				if (!StringUtils.isEmpty(requestDTO.getName())) {
 					predicates.add(cb.like(root.<String> get("name"), "%"
-							+ requestDTO.getSearchName() + "%"));
+							+ requestDTO.getName() + "%"));
 				}
 
-				if ("male".equalsIgnoreCase(requestDTO.getSearchGender())) {
-					predicates.add(cb.equal(root.<String> get("gender"), 1));
-				} else if ("female".equalsIgnoreCase(requestDTO
-						.getSearchGender())) {
-					predicates.add(cb.equal(root.<String> get("gender"), 0));
+				if (!StringUtils.isEmpty(requestDTO.getGender())) {
+					predicates.add(cb.equal(root.<Boolean> get("gender"),
+							requestDTO.getGender()));
+				}
+
+				if (!StringUtils.isEmpty(requestDTO.getAgeLow())) {
+					Double ageLow = Double.parseDouble(requestDTO.getAgeLow());
+//TODO					predicates.add(cb.lessThanOrEqualTo(root.<Date>get("birthday"), param)); 
 				}
 
 				// look up for all host

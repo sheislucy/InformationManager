@@ -1,42 +1,81 @@
 package soho.chloe.informationmanager.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GridPeopleRequestBean extends GridJsonRequestBean {
 	private static final long serialVersionUID = 1L;
-	private String searchName = null;
-	private String searchGender = null;
-	private String searchAgeRule = null;
-	private String searchAge = null;
+	private String name = null;
+	private String gender = null;
+	private String ageLow = null;
+	private String ageUp = null;
+	private String incomeLow = null;
+	private String incomeUp = null;
+	private List<Integer> political = new ArrayList<Integer>();
+	private List<Integer> education = new ArrayList<Integer>();
 
-	public String getSearchName() {
-		return searchName;
+	public String getName() {
+		return name;
 	}
 
-	public void setSearchName(String searchName) {
-		this.searchName = searchName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getSearchGender() {
-		return searchGender;
+	public String getGender() {
+		return gender;
 	}
 
-	public void setSearchGender(String searchGender) {
-		this.searchGender = searchGender;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
-	public String getSearchAgeRule() {
-		return searchAgeRule;
+	public String getAgeLow() {
+		return ageLow;
 	}
 
-	public void setSearchAgeRule(String searchAgeRule) {
-		this.searchAgeRule = searchAgeRule;
+	public void setAgeLow(String ageLow) {
+		this.ageLow = ageLow;
 	}
 
-	public String getSearchAge() {
-		return searchAge;
+	public String getAgeUp() {
+		return ageUp;
 	}
 
-	public void setSearchAge(String searchAge) {
-		this.searchAge = searchAge;
+	public void setAgeUp(String ageUp) {
+		this.ageUp = ageUp;
+	}
+
+	public String getIncomeLow() {
+		return incomeLow;
+	}
+
+	public void setIncomeLow(String incomeLow) {
+		this.incomeLow = incomeLow;
+	}
+
+	public String getIncomeUp() {
+		return incomeUp;
+	}
+
+	public void setIncomeUp(String incomeUp) {
+		this.incomeUp = incomeUp;
+	}
+
+	public List<Integer> getPolitical() {
+		return political;
+	}
+
+	public void setPolitical(List<Integer> political) {
+		this.political = political;
+	}
+
+	public List<Integer> getEducation() {
+		return education;
+	}
+
+	public void setEducation(List<Integer> education) {
+		this.education = education;
 	}
 
 }

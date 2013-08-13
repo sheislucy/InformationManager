@@ -23,6 +23,8 @@ import soho.chloe.informationmanager.service.PeopleService;
 @Controller
 @RequestMapping("/people")
 public class PeopleController extends BaseController {
+	@Autowired
+	private PeopleService service;
 
 	@RequestMapping(value = "/inc", method = RequestMethod.GET)
 	public ModelAndView initPeopleIncPage() {
@@ -30,44 +32,42 @@ public class PeopleController extends BaseController {
 		mv.setViewName("inc/people.inc");
 		return mv;
 	}
-	
-	@Autowired
-	private PeopleService service;
 
 	@RequestMapping(value = "/people.json", method = RequestMethod.POST)
 	public @ResponseBody
-	GridJsonResponseBean getPeoplePagingList(@RequestBody GridPeopleRequestBean requestBean) {
+	GridJsonResponseBean getPeoplePagingList(
+			@RequestBody GridPeopleRequestBean requestBean) {
 		GridJsonResponseBean response = service.getPeopleList(requestBean);
 		return response;
 	}
-
+	
 	@RequestMapping(value = "/houseMembers/{pid}", method = RequestMethod.GET)
 	public ModelAndView getHouseMembers(@PathVariable("pid") String pid) {
-		//TODO fake pid, real one hasn't been passed in
-//		PeopleResponseDTO dto = service
-//				.getHouseMembers(new HouseMemberRequestDTO());
-//		dto.setStatus(JsonStatus.SUCCESS);
+		// TODO fake pid, real one hasn't been passed in
+		// PeopleResponseDTO dto = service
+		// .getHouseMembers(new HouseMemberRequestDTO());
+		// dto.setStatus(JsonStatus.SUCCESS);
 		ModelAndView mv = new ModelAndView();
-//		mv.addObject("response", dto);
+		// mv.addObject("response", dto);
 		mv.setViewName("houseDetail");
 		return mv;
 	}
 
-//	@RequestMapping(value = "/update.json", method = RequestMethod.PUT)
-//	public @ResponseBody
-//	JsonResponseDTO updatePeople() {
-//		return null;
-//	}
-//
-//	@RequestMapping(value = "/add.json", method = RequestMethod.POST)
-//	public @ResponseBody
-//	JsonResponseDTO addPeople() {
-//		return null;
-//	}
-//
-//	@RequestMapping(value = "/delete.json", method = RequestMethod.DELETE)
-//	public @ResponseBody
-//	JsonResponseDTO deletePeople() {
-//		return null;
-//	}
+	// @RequestMapping(value = "/update.json", method = RequestMethod.PUT)
+	// public @ResponseBody
+	// JsonResponseDTO updatePeople() {
+	// return null;
+	// }
+	//
+	// @RequestMapping(value = "/add.json", method = RequestMethod.POST)
+	// public @ResponseBody
+	// JsonResponseDTO addPeople() {
+	// return null;
+	// }
+	//
+	// @RequestMapping(value = "/delete.json", method = RequestMethod.DELETE)
+	// public @ResponseBody
+	// JsonResponseDTO deletePeople() {
+	// return null;
+	// }
 }
