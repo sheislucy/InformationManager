@@ -48,6 +48,9 @@ AjaxLoading = function() {
 		$(document.body).ajaxStop(function() {
 			AjaxLoading.hideLoadingOverlay();
 		});
+		$.ajaxSetup({
+			cache: false
+		});
 	});
 };
 

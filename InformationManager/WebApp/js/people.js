@@ -1,11 +1,16 @@
 $.extend($.jgrid.defaults, {
 	datatype : 'json',
 	ajaxGridOptions : {
-		contentType : "application/json"
-	},
-	ajaxRowOptions : {
 		contentType : "application/json",
-
+		cache: false
+	},
+	ajaxOptions : {
+		contentType : "application/json",
+		cache: false
+	},
+	ajaxSelectOptions: {
+		contentType : "application/json",
+		cache: false
 	},
 	serializeGridData : function(data) {
 		delete data.oper;
@@ -15,7 +20,8 @@ $.extend($.jgrid.defaults, {
 $.extend($.jgrid.edit, {
 	ajaxEditOptions : {
 		contentType : "application/json",
-		type : "PUT"
+		type : "PUT",
+		cache: false
 	},
 	serializeEditData : function(data) {
 		delete data.oper;
@@ -25,7 +31,8 @@ $.extend($.jgrid.edit, {
 
 $.extend($.jgrid.del, {
 	ajaxDelOptions : {
-		contentType : "application/json"
+		contentType : "application/json",
+		cache: false
 	},
 	mtype : "DELETE",
 	serializeDelData : function(data) {
@@ -40,10 +47,13 @@ var People = function() {
 		var optionalPageList = $("#optionalPageSize").attr("value").split(",");
 		var table = jQuery("#jqGrid-people");
 		table.jqGrid({
-			url : '/people/people.json',
+			url : '/people/people.json?' + Math.random(),
 			datatype : "json",
 			mtype : "post",
-			// postData : postDataParam,
+//			postData : postDataParam,
+			ajaxOptions: {
+				cache: false
+			},
 			prmNames : {
 				search : null,
 				nd : null
@@ -139,8 +149,8 @@ var People = function() {
 				// width : 100,
 				editable : true
 			}, {
-				name : 'social',
-				index : 'social',
+				name : 'political',
+				index : 'political',
 				// width : 50,
 				sortable : false,
 				editable : true
@@ -154,7 +164,8 @@ var People = function() {
 				name : 'lastUpdateTime',
 				index : 'lastupdatetime',
 				// width : 100,
-				editable : true
+				editable : true,
+				hidden : true
 			} ],
 			rowNum : $("#initPageSize").val(),
 			rowList : optionalPageList,
@@ -198,7 +209,11 @@ var People = function() {
 
 	this.refreshGrid = function(postDataParam) {
 		$("#jqGrid-people").jqGrid('setGridParam', {
-			postData : postDataParam
+			postData : postDataParam,
+			url: '/people/people.json?' + Math.random(),
+			ajaxGridOptions: {
+				cache: false
+			}
 		}).trigger("reloadGrid");
 	};
 

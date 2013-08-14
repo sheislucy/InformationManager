@@ -4,12 +4,12 @@
 package soho.chloe.informationmanager.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -93,40 +93,67 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	}
 
 	private Specification<PeopleEntity> buildSpecification(
-			final GridPeopleRequestBean requestDTO) {
+			final GridPeopleRequestBean requestBean) {
 		Specification<PeopleEntity> spec = new Specification<PeopleEntity>() {
 			@Override
 			public Predicate toPredicate(Root<PeopleEntity> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (!StringUtils.isEmpty(requestDTO.getName())) {
+				if (!StringUtils.isEmpty(requestBean.getName())) {
 					predicates.add(cb.like(root.<String> get("name"), "%"
-							+ requestDTO.getName() + "%"));
+							+ requestBean.getName() + "%"));
 				}
 
-				if (!StringUtils.isEmpty(requestDTO.getGender())) {
+				if (!StringUtils.isEmpty(requestBean.getGender())) {
 					predicates.add(cb.equal(root.<Boolean> get("gender"),
-							requestDTO.getGender()));
+							Boolean.valueOf(requestBean.getGender())));
 				}
 
-				if (!StringUtils.isEmpty(requestDTO.getAgeLow())) {
-					Double ageLow = Double.parseDouble(requestDTO.getAgeLow());
-//TODO					predicates.add(cb.lessThanOrEqualTo(root.<Date>get("birthday"), param)); 
+				Calendar calendar = Calendar.getInstance();
+				if (!StringUtils.isEmpty(requestBean.getAgeUp())) {
+					Integer ageLow = Integer.parseInt(requestBean.getAgeUp());
+					calendar.setTime(new Date());
+					calendar.add(Calendar.YEAR, -ageLow);
+					Date startDate = (Date) calendar.getTime().clone();
+					predicates.add(cb.greaterThanOrEqualTo(
+							root.<Date> get("birthday"), startDate));
+					System.out.println("startDate: "+startDate);
 				}
 
-				// look up for all host
-				// predicates.add(cb.equal(root.<String> get("pid"),
-				// root.<String> get("hostId")));
+				if (!StringUtils.isEmpty(requestBean.getAgeLow())) {
+					Integer ageUp = Integer.parseInt(requestBean.getAgeLow());
+					calendar.setTime(new Date());
+					calendar.add(Calendar.YEAR, -ageUp);
+					Date endDate = (Date) calendar.getTime().clone();
+					predicates.add(cb.lessThanOrEqualTo(
+							root.<Date> get("birthday"), endDate));
+					System.out.println("endDate: "+endDate);
+				}
 
-				// if ("lt".equalsIgnoreCase(requestDTO.getSearchAgeRule())) {
-				// Path<String> genderPath = root.get("idcard");
-				// cb.substring(genderPath, 6, 8);
-				// cb.
-				// predicates.add(cb.substring(genderPath, 6, 8));
-				// } else if
-				// ("gt".equalsIgnoreCase(requestDTO.getSearchAgeRule())) {
-				// }
+				if (!StringUtils.isEmpty(requestBean.getIncomeLow())) {
+					Integer incomeLow = Integer.parseInt(requestBean
+							.getIncomeLow());
+					predicates.add(cb.greaterThanOrEqualTo(
+							root.<Integer> get("yearIncome"), incomeLow));
+				}
+
+				if (!StringUtils.isEmpty(requestBean.getIncomeUp())) {
+					Integer incomeUp = Integer.parseInt(requestBean
+							.getIncomeUp());
+					predicates.add(cb.lessThanOrEqualTo(
+							root.<Integer> get("yearIncome"), incomeUp));
+				}
+
+				if (!requestBean.getPolitical().isEmpty()) {
+					predicates.add(root.<Integer> get("political").in(
+							requestBean.getPolitical()));
+				}
+
+				if (!requestBean.getEducation().isEmpty()) {
+					predicates.add(root.<Integer> get("education").in(
+							requestBean.getEducation()));
+				}
 
 				if (predicates.size() > 0) {
 					return cb.and(predicates.toArray(new Predicate[predicates
@@ -137,7 +164,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		};
 		return spec;
 	}
-
+	
 	private void buildResponse(GridJsonResponseBean response,
 			List<PeopleEntity> entityList) {
 		response.getRows().clear();

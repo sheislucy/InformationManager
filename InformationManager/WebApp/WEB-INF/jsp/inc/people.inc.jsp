@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link type="text/css" rel="stylesheet" href="css/people.css" />
 <script type="text/javascript" src="js/grid.locale-cn.js"></script>
-<script type="text/javascript" src="js/jquery.jqGrid.src.js"></script>
+<script type="text/javascript" src="js/jquery.jqGrid.4.5.2.min.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/people.js"></script>
 <div id="search-criteria">
@@ -16,20 +16,20 @@
 		</div>
 		<div id="gender" class="fl ui-state-active ui-corner-all">
 			<span>性别</span>
-			<input type="radio" id="male" name="gender" value="1" /><label for="male">男</label>
-			<input type="radio" id="female" name="gender" value="0" /><label for="female">女</label>
-			<input type="radio" id="none" name="gender" value="" checked /><label for="none">不限</label>
+			<input type="radio" id="male" name="gender" value="true" /><label for="male">男</label>
+			<input type="radio" id="female" name="gender" value="false" /><label for="female">女</label>
+			<input type="radio" id="none" name="gender" value="" checked="checked" /><label for="none">不限</label>
 		</div>
 		<div id="age-limit" class="fl ui-state-active ui-corner-all">
 			<span>年龄范围</span>
-			<label for="age-low-limit">下限</label><input name="ageLowLimit" type="text" id="age-low-limit" value="" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" />
-			<label for="age-upper-limit">上限</label><input name="ageUpperLimit" type="text" id="age-upper-limit" value="" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" />
+			<label for="age-low-limit">下限</label><input name="ageLowLimit" type="text" id="age-low-limit" value="" onKeyUp="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+			<label for="age-upper-limit">上限</label><input name="ageUpperLimit" type="text" id="age-upper-limit" value="" onKeyUp="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
 		</div>
 		<div class="clear"></div>
 		<div id="income-limit" class="fl ui-state-active ui-corner-all">
 			<span>收入范围</span>
-			<label for="incoming-low-limit">下限</label><input name="incomingLowLimit" type="text" id="incoming-low-limit" value="" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" />
-			<label for="incoming-upper-limit">上限</label><input name="incomingUpperLimit" type="text" id="incoming-upper-limit" value="" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" />
+			<label for="incoming-low-limit">下限</label><input name="incomingLowLimit" type="text" id="incoming-low-limit" value="" onKeyUp="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+			<label for="incoming-upper-limit">上限</label><input name="incomingUpperLimit" type="text" id="incoming-upper-limit" value="" onKeyUp="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
 		</div>
 		<div id="political" class="fl ui-state-active ui-corner-all">
 			<span>政治面貌</span>
@@ -68,15 +68,15 @@
 				function() {
 					var political = [];
 					var education = [];
-					$("input=[name='political'][checked]").each(function(){
+					$("input=[name='political']:checked").each(function(){
 						political.push($(this).val());
 					});
-					$("input=[name='education'][checked]").each(function(){
+					$("input=[name='education']:checked").each(function(){
 						education.push($(this).val());
 					});
 					var postDataParam = {
 						"name" : $("#search-name").val(),
-						"gender" : $("input[name='gender'][checked]").val(),
+						"gender" : $("input[name='gender']:checked").val(),
 						"ageLow" : $("#age-low-limit").val(),
 						"ageUp" : $("#age-upper-limit").val(),
 						"incomeLow": $("#incoming-low-limit").val(),
