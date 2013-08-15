@@ -38,7 +38,7 @@ var MemberGrid = function(){
 var FileUpload = function(){
 	this.swfu = new SWFUpload({
 		// Backend Settings
-		upload_url: "",
+		upload_url: "/",
 		post_params: {},
 
 		// File Upload Settings
@@ -60,19 +60,19 @@ var FileUpload = function(){
 		upload_complete_handler : uploadComplete,
 
 		// Button Settings
-//		button_image_url : "images/SmallSpyGlassWithTransperancy_17x18.png",
+		button_image_url : "/images/material/upload-button4.png",
 		button_placeholder_id : "spanButtonPlaceholder",
-		button_width: 180,
-		button_height: 18,
+		button_width: 160,
+		button_height: 40,
 		button_text : '<span class="button">选择图片 <span class="buttonSmall">(最大2 MB)</span></span>',
 		button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 13px; } .buttonSmall { font-size: 12px; }',
-		button_text_top_padding: 0,
-		button_text_left_padding: 18,
-		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+		button_text_top_padding: 10,
+		button_text_left_padding: 23,
+//		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
 		button_cursor: SWFUpload.CURSOR.HAND,
 		
 		// Flash Settings
-		flash_url : "G:/workspace_info/lucy/git/InformationManager/InformationManager/WebApp/js/swfupload.swf",
+		flash_url : "/js/swfupload.swf",
 
 		custom_settings : {
 			upload_target : "divFileProgressContainer"

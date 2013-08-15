@@ -204,7 +204,10 @@ var House = function() {
 				 	caption:"修改", 
 				 	buttonicon:"ui-icon-edit", 
 				 	onClickButton: function(){ 
-				 		window.open(""); //TODO
+				 		var selectedRowId = table.jqGrid('getGridParam', 'selrow');
+				 		if(selectedRowId != null ){
+				 			window.open("/house/editHouse/" + table.jqGrid ('getCell', selectedRowId, 'id')); //TODO
+				 		}
 				 	}, 
 				 	position:"last"
 			 });
