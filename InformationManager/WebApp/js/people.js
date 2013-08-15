@@ -47,7 +47,7 @@ var People = function() {
 		var optionalPageList = $("#optionalPageSize").attr("value").split(",");
 		var table = jQuery("#jqGrid-people");
 		table.jqGrid({
-			url : '/people/people.json?' + Math.random(),
+			url : '/people/people.json?',
 			datatype : "json",
 			mtype : "post",
 //			postData : postDataParam,
@@ -55,8 +55,7 @@ var People = function() {
 				cache: false
 			},
 			prmNames : {
-				search : null,
-				nd : null
+				search : null
 			},
 			shrinkToFit : true,
 			autowidth : true,
@@ -210,10 +209,10 @@ var People = function() {
 	this.refreshGrid = function(postDataParam) {
 		$("#jqGrid-people").jqGrid('setGridParam', {
 			postData : postDataParam,
-			url: '/people/people.json?' + Math.random(),
 			ajaxGridOptions: {
 				cache: false
-			}
+			},
+			page: 1
 		}).trigger("reloadGrid");
 	};
 

@@ -3,6 +3,9 @@ package soho.chloe.informationmanager.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GridPeopleRequestBean extends GridJsonRequestBean {
 	private static final long serialVersionUID = 1L;
 	private String name = null;

@@ -36,7 +36,7 @@
 		<label for="isdangerous">是否危房</label><select name="isdangerous" id="isdangerous" ><option>是</option><option>否</option></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<label for="islegal">是否合法</label><select name="islegal" id="islegal" ><option>是</option><option>否</option></select>
 	</div>
-	<!-- <div class="member-information">
+	<div class="member-information">
 		<div class="left-column">
 			<input type="text" name="memberName" id="property" placeholder="请输入人员姓名" />
 			<input type="button" id="search-button" value="查询" />
@@ -56,7 +56,7 @@
 			</ul>
 		</div>
 		<div class="clear"></div>
-	</div> -->
+	</div>
 	<div class="piture-information">
 		<form>
 			<div class="upload-button">
