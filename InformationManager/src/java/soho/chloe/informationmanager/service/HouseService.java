@@ -11,7 +11,7 @@ import soho.chloe.informationmanager.bean.HouseMiniDomainBean;
 import soho.chloe.informationmanager.bean.HousePictureDomainBean;
 
 public interface HouseService {
-	public List<HouseMiniDomainBean> getUnmarkedMiniHouseList();
+	public List<HouseMiniDomainBean> getMiniHostBeanListUnmarkedOnMap();
 
 	public GridJsonResponseBean getHouseWithoutPicturesList(
 			GridJsonRequestBean requestBean);
@@ -24,4 +24,10 @@ public interface HouseService {
 	public HouseDomainBean getOneHouseDetail(Integer houseId);
 
 	public void saveTextDetail(HouseDomainBean house);
+
+	public void deleteHouse(int houseId);
+
+	public int createNewHouse(int hostId);
+	
+	public void deletePicture(int pictureId);
 }

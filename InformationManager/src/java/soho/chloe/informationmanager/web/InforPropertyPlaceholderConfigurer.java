@@ -11,7 +11,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 import soho.chloe.informationmanager.utils.InformationManagerConstants;
 
-public class ChloePropertyPlaceholderConfigurer extends
+public class InforPropertyPlaceholderConfigurer extends
 		PropertyPlaceholderConfigurer {
 	private static Map<String, Object> ctxPropertiesMap = new HashMap<String, Object>();
 
@@ -30,17 +30,29 @@ public class ChloePropertyPlaceholderConfigurer extends
 	}
 
 	private void checkUploadDir() {
-		File testImage = new File(
-				(String) ChloePropertyPlaceholderConfigurer
+		File testHouseImage = new File(
+				(String) InforPropertyPlaceholderConfigurer
 						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_DIR));
-		if (!testImage.exists()) {
-			testImage.mkdirs();
+		if (!testHouseImage.exists()) {
+			testHouseImage.mkdirs();
 		}
-		File testImageThumbnail = new File(
-				(String) ChloePropertyPlaceholderConfigurer
+		File testHouseImageThumbnail = new File(
+				(String) InforPropertyPlaceholderConfigurer
 						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR));
-		if (!testImageThumbnail.exists()) {
-			testImageThumbnail.mkdirs();
+		if (!testHouseImageThumbnail.exists()) {
+			testHouseImageThumbnail.mkdirs();
+		}
+		File testPeopleImage = new File(
+				(String) InforPropertyPlaceholderConfigurer
+						.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE));
+		if (!testPeopleImage.exists()) {
+			testPeopleImage.mkdirs();
+		}
+		File testPeopleImageThumbnail = new File(
+				(String) InforPropertyPlaceholderConfigurer
+						.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE_THUMBNAIL));
+		if (!testPeopleImageThumbnail.exists()) {
+			testPeopleImageThumbnail.mkdirs();
 		}
 	}
 

@@ -15,7 +15,7 @@
 <body>
 	<div id="delete-confirm-dialog" title="确认删除该热点?" class="hide"></div>
 	<div id="drag-confirm-dialog" title="确认拖拽至该位置?" class="hide"></div>
-	<div class="left-right-corner">
+	<div class="left-bottom-corner">
 		<div id="success-tip" class="ui-tooltip ui-widget-content hide">
 			<div class="ui-tooltip-content">保存成功</div>
 		</div>

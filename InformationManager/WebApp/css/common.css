@@ -162,8 +162,17 @@ a:active {
 	margin-bottom: 30px;
 }
 
-.left-right-corner{
+.left-bottom-corner{
 	left: 30px;
+	bottom: 0px;
+	position: fixed;
+	width: 100px;
+	height: 60px;
+	z-index: 9999;
+}
+
+.right-bottom-corner{
+	right: 30px;
 	bottom: 0px;
 	position: fixed;
 	width: 100px;

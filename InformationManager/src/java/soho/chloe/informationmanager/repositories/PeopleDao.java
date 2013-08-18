@@ -37,7 +37,7 @@ public interface PeopleDao extends JpaRepository<PeopleEntity, Integer> {
 
 	@Query("SELECT COUNT (*) FROM  PeopleEntity p WHERE p.name LIKE ?1 AND p.houseId IS NULL")
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	public long countByNameLike(String name);
+	public long countByNameLikeAndHouseIdIsNull(String name);
 
 	@Modifying
 	@Query("UPDATE PeopleEntity p SET p.houseId =  NULL, p.relationId = NULL WHERE p.houseId = ?1")
@@ -47,4 +47,7 @@ public interface PeopleDao extends JpaRepository<PeopleEntity, Integer> {
 	@Query("UPDATE PeopleEntity p SET p.houseId =  ?2, p.relationId = ?3 WHERE p.pid = ?1")
 	public void updateSpecificHouseMembers(Integer pid, Integer houseId,
 			Integer relationId);
+
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public List<PeopleEntity> findByHouseIdIsNull();
 }

@@ -102,7 +102,7 @@
 			<div id="thumbnails">
 				<c:forEach var="picture" items="${house.pictures}">
 					<div class="thumbnail-single">
-						<img src="../thumbnail?file=${picture.localFileName}" /><br />
+						<img src="../thumbnail?file=${picture.localFileName}" ><br />
 						<textarea rows="3" cols="40">${picture.description}</textarea>
 						<input type="hidden" name="pictureId" id="pictureId" value="${picture.id}" />
 						<input type="button" name="save-desc" id="save-desc" value="保存注释" />
@@ -116,7 +116,7 @@
 </div>
 <input id="house-id" value="${houseId}" type="hidden"/>
 <div class="hide thumbnail-single" id="thumbnail-example">
-	<img /><br />
+	<img ><br />
 	<textarea rows="3" cols="40"></textarea>
 	<input type="hidden" name="pictureId" id="pictureId" value="" />
 	<input type="button" name="save-button" id="save-picture" value="保存注释" />
@@ -139,7 +139,7 @@
 	<a id="delete-a" class="ui-state-error fl ui-icon ui-icon-closethick"></a><div class="clear"></div>
 </div>
 
-<div class="left-right-corner">
+<div class="left-bottom-corner">
 	<div id="success-tip" class="ui-tooltip ui-widget-content hide">
 		<div class="ui-tooltip-content">保存成功</div>
 	</div>
@@ -152,13 +152,16 @@
 	<p><span class="bold">原因</span></p>
 </div>
 
+<div id="duplicate-validation-dialog" title="请不要重复添加成员" class="hide">
+</div>
+
 <script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui-1.10.3.custom.min.js"></script>
 <script type="text/javascript" src="/js/grid.locale-cn.js"></script>
 <script type="text/javascript" src="/js/jquery.jqGrid.src.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/swfupload.js"></script>
-<script type="text/javascript" src="/js/handlers.js"></script>
+<script type="text/javascript" src="/js/house-handlers.js"></script>
 <script type="text/javascript" src="/js/editHouseDetail.js"></script>
 <script type="text/javascript">
 $(function(){

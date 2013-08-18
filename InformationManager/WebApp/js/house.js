@@ -160,8 +160,8 @@ var House = function() {
 			}, {
 				name : 'lastUpdateTime',
 				index : 'lastupdatetime',
-				// width : 100,
-				editable : true
+				editable : true,
+				hidden : true
 			} ],
 			rowNum : $("#initPageSize").attr("value"),
 			rowList : optionalPageList,
@@ -177,26 +177,21 @@ var House = function() {
 						no : (table.getGridParam('page') - 1)
 								* table.getGridParam('rowNum') + i + 1
 					});
-					// if (table.jqGrid('getRowData', ids[i]).hostId == table
-					// .jqGrid('getRowData', ids[i]).pid) {
-					// $('#' + $.jgrid.jqID(ids[i])).addClass("hostRow");
-					// }
 				}
 			},
-//			multiselect : true,
 			jsonReader : {
-//				root : "peopleList",
 				repeatitems : false
 			},
-			// editurl : "server.php",
 			caption : "户籍信息表"
 		});
-		table.jqGrid('navGrid', "#pager-house", {edit : false, add : false, del : false})
+		table.jqGrid('navGrid', "#pager-house", {edit : false, add : false, del : false, search:false})
 			 .jqGrid('navButtonAdd', "#pager-house", {
 				 	caption:"新增", 
 				 	buttonicon:"ui-icon-add", 
 				 	onClickButton: function(){ 
-				 		window.open(""); //TODO
+				 		$("#new-house-dialog").dialog("open");
+				 		
+				 		
 				 	}, 
 				 	position:"last"
 			 })
@@ -210,9 +205,136 @@ var House = function() {
 				 		}
 				 	}, 
 				 	position:"last"
+			 })
+			 .jqGrid('navButtonAdd', "#pager-house", {
+				 	caption:"删除", 
+				 	buttonicon:"ui-icon-del", 
+				 	onClickButton: function(){ 
+				 		var selectedRowId = table.jqGrid('getGridParam', 'selrow');
+				 		if(selectedRowId != null ){
+				 			$( "#delete-validation-dialog" ).dialog("open");
+				 		}
+				 	}, 
+				 	position:"last"
 			 });
 	};
-
+	
+	this.refreshGrid = function() {
+		$("#jqGrid-house").jqGrid('setGridParam', {
+			ajaxGridOptions: {
+				cache: false
+			},
+			page: 1
+		}).trigger("reloadGrid");
+	};
+	
 };
 
-var house = new House();
+function init(){
+	var house = new House();
+	house.getHouseList();
+	window.setTimeout(adjustCenterSize(),200);
+	$( "#delete-validation-dialog" ).dialog({
+		autoOpen: false,
+		height: 120,
+		width: 200,
+		modal: true,
+		buttons: {
+			"确定": function(){
+				$( this ).dialog( "close" );
+				var table = $("#jqGrid-house");
+				var data = {
+					"id": table.jqGrid ('getCell', table.jqGrid('getGridParam', 'selrow'), 'id')
+				};
+				jQuery.ajax({
+					url: "/house/delete",
+					type: "POST",
+					contentType: "application/json; charset=UTF-8",
+					data: JSON.stringify(data),
+					dataType: "json",
+					success: function(response){
+						if(response.status == "SUCCESS"){
+							$("#success-tip").fadeIn("slow").delay(2000);
+							$("#success-tip").hide('explode');
+							table.trigger("reloadGrid");
+						}else{
+							$("#failure-tip").fadeIn("slow").delay(2000);
+							$("#failure-tip").hide('explode');
+						}
+					},
+					error: function(){
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					}
+				});
+			},
+			"取消": function(){
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			$( this ).dialog( "close" );
+		}
+	});
+	$("#new-house-dialog").dialog({
+		autoOpen: false,
+		height: 180,
+		width: 250,
+		modal: true,
+		buttons: {
+			"确定": function(){
+				var data = {
+					"pid": $("#host-input").val()
+				};
+				jQuery.ajax({
+					url:"/house/create",
+					type: "POST",
+					contentType: "application/json; charset=UTF-8",
+					data: JSON.stringify(data),
+					dataType: "json",
+					success: function(response){
+						$("#new-house-dialog").dialog( "close" );
+						if(response.status == "SUCCESS"){
+							$("#jqGrid-house").trigger("reloadGrid");
+							$("#success-tip").fadeIn("slow").delay(2000);
+							$("#success-tip").hide('explode');
+							$("#edit-house-link").attr("href", "/house/editHouse/" + response.id);
+							$("#edit-house-link").click();
+							window.open("/house/editHouse/" + response.id);
+						}else{
+							$("#failure-tip").fadeIn("slow").delay(2000);
+							$("#failure-tip").hide('explode');
+						}
+					},
+					error: function(){
+						$("#new-house-dialog").dialog( "close" );
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					}
+				});
+			},
+			"取消": function(){
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			$( this ).dialog( "close" );
+			$("#host-input").val( "" );
+			$(".token-input-list-facebook").remove();
+		},
+		open: function(){
+			jQuery.getJSON("/people/miniPeopleList/nohouse", function(data){
+				$("#host-input").tokenInput(data, {
+					theme: "facebook",
+	                preventDuplicates: true,
+	                zindex: 10099,
+	                tokenLimit: 1,
+	                hintText: "输入人员姓名来查找",
+	                noResultsText: "找不到姓名中包含该字的无户人员",
+	                searchingText: "查找中..."
+	            });
+			});
+		}
+	});
+	
+}

@@ -25,12 +25,14 @@ import soho.chloe.informationmanager.bean.PeopleDomainBean;
 import soho.chloe.informationmanager.entity.HouseEntity;
 import soho.chloe.informationmanager.entity.HousePictureEntity;
 import soho.chloe.informationmanager.entity.PeopleEntity;
+import soho.chloe.informationmanager.enums.RelationEnum;
 import soho.chloe.informationmanager.repositories.HouseDao;
 import soho.chloe.informationmanager.repositories.HousePictureDao;
+import soho.chloe.informationmanager.repositories.PeopleDao;
 import soho.chloe.informationmanager.service.BaseService;
 import soho.chloe.informationmanager.service.HouseService;
 import soho.chloe.informationmanager.utils.InformationManagerConstants;
-import soho.chloe.informationmanager.web.ChloePropertyPlaceholderConfigurer;
+import soho.chloe.informationmanager.web.InforPropertyPlaceholderConfigurer;
 
 @Service
 public class HouseServiceImpl extends BaseService implements HouseService {
@@ -39,10 +41,13 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 	private HouseDao houseDao;
 
 	@Autowired
+	private PeopleDao peopleDao;
+
+	@Autowired
 	private HousePictureDao housePictureDao;
 
 	@Override
-	public List<HouseMiniDomainBean> getUnmarkedMiniHouseList() {
+	public List<HouseMiniDomainBean> getMiniHostBeanListUnmarkedOnMap() {
 		return buildHouseMiniDomainBean(houseDao.getUnmarkedHouse());
 	}
 
@@ -52,7 +57,7 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 		if (requestBean.getRows() <= 0) {
 			requestBean
 					.setRows(Integer
-							.parseInt((String) ChloePropertyPlaceholderConfigurer
+							.parseInt((String) InforPropertyPlaceholderConfigurer
 									.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
 		}
 		int totalCount = 0;
@@ -88,7 +93,7 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 				.of(originalFile)
 				.size(320, 240)
 				.outputFormat("png")
-				.toFile(ChloePropertyPlaceholderConfigurer
+				.toFile(InforPropertyPlaceholderConfigurer
 						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR)
 						+ fileName + "_thumbnail");
 	}
@@ -127,6 +132,28 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 		entity.setIsDangerous(house.getIsDangerous());
 		entity.setIsLegal(house.getIsLegal());
 		houseDao.save(entity);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public void deleteHouse(int houseId) {
+		peopleDao.clearSpecificHouseMembers(houseId);
+		houseDao.delete(houseId);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public int createNewHouse(int hostId) {
+		HouseEntity houseEntity = houseDao.save(new HouseEntity());
+		peopleDao.updateSpecificHouseMembers(hostId, houseEntity.getId(),
+				RelationEnum.HOST.getCode());
+		return houseEntity.getId();
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public void deletePicture(int pictureId) {
+		housePictureDao.delete(pictureId);
 	}
 
 	private HousePictureDomainBean buildHousePictureDomainBean(

@@ -8,7 +8,7 @@
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
 		<config>WebApp/WEB-INF/config/app-config.xml</config>
-		<config>WebApp/WEB-INF/config/information-Servlet.xml</config>
+		<config>WebApp/WEB-INF/config/information-servlet.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

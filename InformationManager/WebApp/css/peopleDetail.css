@@ -1,0 +1,55 @@
+@CHARSET "UTF-8";
+
+input[type="text"],select {
+	margin-top: 2px;
+	margin-bottom: 2px;
+	border: 1px solid #a7d0f2;
+	margin-right: 15px;
+}
+
+input[type="text"] {
+	height: 18px;
+}
+
+.detail-information input[type="text"],#memberName {
+	width: 150px;
+}
+
+select {
+	height: 22px;
+	margin-left: -4px;
+}
+
+input[type="text"]:focus {
+	border: 1px solid #f7c687; /*#f7c687*/
+}
+
+.form-wrapper {
+	font-size: 13px;
+	margin: 20px auto;
+	width: 1030px;
+	background: #fff;
+}
+
+.grey {
+	background: #f6f6f6;
+	border: 10px solid #eee;
+}
+
+.detail-information, .dropdown-information {
+	/* margin-bottom: 30px; */
+	border: 1px solid #a7d0f2;
+	padding: 20px;
+	background: #fff;
+	position: relative;
+}
+.detail-information label, .dropdown-information label{
+	display: inline-block;
+	width: 60px;
+}
+.left-column{
+	width: 750px;
+}
+.right-column{
+	width: 200px;
+}

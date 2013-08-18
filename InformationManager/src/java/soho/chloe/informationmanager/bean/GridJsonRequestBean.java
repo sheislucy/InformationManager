@@ -2,12 +2,15 @@ package soho.chloe.informationmanager.bean;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * Request bean used for jgGrid request
  * 
  * @author lucy
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GridJsonRequestBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int page;

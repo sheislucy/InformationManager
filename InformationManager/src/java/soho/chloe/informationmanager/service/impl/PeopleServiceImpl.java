@@ -3,6 +3,8 @@
  */
 package soho.chloe.informationmanager.service.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +14,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +39,7 @@ import soho.chloe.informationmanager.service.BaseService;
 import soho.chloe.informationmanager.service.PeopleService;
 import soho.chloe.informationmanager.utils.InformationManagerConstants;
 import soho.chloe.informationmanager.utils.JsonStatus;
-import soho.chloe.informationmanager.web.ChloePropertyPlaceholderConfigurer;
+import soho.chloe.informationmanager.web.InforPropertyPlaceholderConfigurer;
 
 /**
  * @author sony
@@ -47,34 +51,6 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	@Autowired
 	private PeopleDao dao;
 
-	// public PeopleResponseDTO getHouseMembers(HouseMemberRequestDTO
-	// requestDTO) {
-	//
-	// final HouseMemberRequestDTO dtoTemp = requestDTO;
-	// List<PeopleEntity> memberList = dao
-	// .findAll(buildSpecificationForHouse(dtoTemp));
-	// PeopleResponseDTO dto = new PeopleResponseDTO();
-	// dto.setPeopleList(buildResponse(memberList));
-	// return dto;
-	// }
-	//
-	// private Specification<PeopleEntity> buildSpecificationForHouse(
-	// final HouseMemberRequestDTO requestDTO) {
-	// Specification<PeopleEntity> spec = new Specification<PeopleEntity>() {
-	// @Override
-	// public Predicate toPredicate(Root<PeopleEntity> root,
-	// CriteriaQuery<?> query, CriteriaBuilder cb) {
-	// List<Predicate> predicates = new ArrayList<Predicate>();
-	// predicates.add(cb.equal(root.<String> get("hostId"), 227));
-	// predicates.add(cb.equal(root.<String> get("pid"), 227));
-	// return cb
-	// .or(predicates.toArray(new Predicate[predicates.size()]));
-	// }
-	//
-	// };
-	// return spec;
-	// }
-
 	@Override
 	public GridJsonResponseBean searchPeopleForHouse(
 			GridPeopleRequestBean requestBean) {
@@ -82,7 +58,8 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 				requestBean.getRows(), new Sort(Direction.ASC, "pid"));
 		List<PeopleEntity> entityList = dao.findByNameLikeAndHouseIdIsNull(
 				requestBean.getName() + "%", page);
-		int total = (int) dao.countByNameLike(requestBean.getName() + "%");
+		int total = (int) dao.countByNameLikeAndHouseIdIsNull(requestBean
+				.getName() + "%");
 		GridJsonResponseBean responseBean = new GridJsonResponseBean();
 		for (PeopleEntity entity : entityList) {
 			responseBean.getRows().add(buildPeopleMiniDomainBean(entity));
@@ -99,7 +76,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		if (requestBean.getRows() <= 0) {
 			requestBean
 					.setRows(Integer
-							.parseInt((String) ChloePropertyPlaceholderConfigurer
+							.parseInt((String) InforPropertyPlaceholderConfigurer
 									.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
 		}
 		int totalCount = 0;
@@ -166,6 +143,41 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 			result.getErrorList().add("各成员未指定同一户");
 		}
 		return result;
+	}
+
+	@Override
+	public List<PeopleMiniDomainBean> getMiniPeopleBeanListWithNoHouse() {
+		List<PeopleEntity> entityList = dao.findByHouseIdIsNull();
+		List<PeopleMiniDomainBean> beanList = new ArrayList<PeopleMiniDomainBean>();
+		for (PeopleEntity entity : entityList) {
+			beanList.add(buildPeopleMiniDomainBean(entity));
+		}
+		return beanList;
+	}
+
+	@Override
+	public PeopleDomainBean getPeople(int pid) {
+		return buildPeopleDomainBean(dao.findOne(pid));
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public void updatePeoplePicture(int pid, String fileName){
+		PeopleEntity entity = dao.findOne(pid);
+		entity.setPicture(fileName);
+		dao.save(entity);
+	}
+	
+	@Override
+	public void savePeoplePictureThumbnail(File originalFile, String fileName)
+			throws IOException {
+		Thumbnails
+				.of(originalFile)
+				.size(120, 160)
+				.outputFormat("png")
+				.toFile(InforPropertyPlaceholderConfigurer
+						.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE_THUMBNAIL)
+						+ fileName + "_thumbnail");
 	}
 
 	private PeopleMiniDomainBean buildPeopleMiniDomainBean(PeopleEntity entity) {
@@ -257,59 +269,72 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 			List<PeopleEntity> entityList) {
 		response.getRows().clear();
 		for (PeopleEntity pe : entityList) {
-			PeopleDomainBean pd = new PeopleDomainBean();
-
-			pd.setAddr(pe.getAddr());
-			pd.setArmy(pe.getArmy());
-			pd.setBirthday(pe.getBirthday());
-			pd.setCardId(pe.getCardId());
-			pd.setCompanyName(pe.getCompanyName());
-			pd.setCurrentAddress(pe.getCurrentAddress());
-			pd.setDiffCond(pe.getDiffCond());
-			pd.setEducation(pe.getEducationType() != null ? pe
-					.getEducationType().getTypeName() : null);
-			pd.setEthnic(pe.getEthnic());
-			pd.setGender((pe.getGender() != null && pe.getGender() == 1) ? "男"
-					: "女");
-			pd.setHealth(pe.getHealth());
-			pd.setHeight(pe.getHeight());
-			pd.setRelation(pe.getRelationType() != null ? pe.getRelationType()
-					.getRelationName() : null);
-			pd.setIncomeSource(pe.getIncomeSource());
-			pd.setIsaddsafe(pe.getIsaddsafe());
-			pd.setIsCorps(pe.getIsCorps());
-			pd.setIsLowSafe(pe.getIsLowSafe());
-			pd.setIsOut(pe.getIsOut());
-			pd.setIsOverSea(pe.getIsOverSea());
-			pd.setJob(pe.getJob());
-			pd.setLastUpdateTime(pe.getLastUpdateTime());
-			pd.setMarriage(pe.getMarriageType() != null ? pe.getMarriageType()
-					.getTypeName() : null);
-			pd.setMemo(pe.getMemo());
-			pd.setName(pe.getName());
-			pd.setPhone(pe.getPhone());
-			pd.setPid(pe.getPid());
-			pd.setPolitical(pe.getPoliticalType() != null ? pe
-					.getPoliticalType().getPolitical() : null);
-			pd.setPosition(pe.getPositionType() != null ? pe.getPositionType()
-					.getPosition() : null);
-			pd.setPtype(pe.getMobilityType() != null ? pe.getMobilityType()
-					.getTypeName() : null);
-			pd.setRelation(pe.getRelationType() != null ? pe.getRelationType()
-					.getRelationName() : null);
-			pd.setResident(pe.getResidentType() != null ? pe.getResidentType()
-					.getTypeName() : null);
-			pd.setSname(pe.getSname());
-			pd.setSocial(pe.getSocialType() != null ? pe.getSocialType()
-					.getSocial() : null);
-			pd.setSpec(pe.getSpec());
-			pd.setTel(pe.getTel());
-			// pd.setVillage(pe.getVillageId());
-			pd.setWplace(pe.getWplace());
-			pd.setYearIncome(pe.getYearIncome());
-
-			response.getRows().add(pd);
+			response.getRows().add(buildPeopleDomainBean(pe));
 		}
+	}
+
+	private PeopleDomainBean buildPeopleDomainBean(PeopleEntity pe) {
+		PeopleDomainBean pd = new PeopleDomainBean();
+
+		pd.setAddr(pe.getAddr());
+		pd.setArmy(pe.getArmy());
+		pd.setBirthday(pe.getBirthday());
+		pd.setCardId(pe.getCardId());
+		pd.setCompanyName(pe.getCompanyName());
+		pd.setCurrentAddress(pe.getCurrentAddress());
+		pd.setDiffCond(pe.getDiffCond());
+		pd.setEducationId(pe.getEducation());
+		pd.setEducation(pe.getEducationType() != null ? pe.getEducationType()
+				.getTypeName() : null);
+		pd.setEthnic(pe.getEthnic());
+		pd.setGenderId(pe.getGender());
+		pd.setGender((pe.getGender() != null && pe.getGender() == 1) ? "男"
+				: "女");
+		pd.setHealth(pe.getHealth());
+		pd.setHeight(pe.getHeight());
+		pd.setRelationId(pe.getRelationId());
+		pd.setRelation(pe.getRelationType() != null ? pe.getRelationType()
+				.getRelationName() : null);
+		pd.setIncomeSource(pe.getIncomeSource());
+		pd.setIsaddsafe(pe.getIsaddsafe());
+		pd.setIsCorps(pe.getIsCorps());
+		pd.setIsLowSafe(pe.getIsLowSafe());
+		pd.setIsOut(pe.getIsOut());
+		pd.setIsOverSea(pe.getIsOverSea());
+		pd.setJob(pe.getJob());
+		pd.setLastUpdateTime(pe.getLastUpdateTime());
+		pd.setMarriageId(pe.getMarriageId());
+		pd.setMarriage(pe.getMarriageType() != null ? pe.getMarriageType()
+				.getTypeName() : null);
+		pd.setMemo(pe.getMemo());
+		pd.setName(pe.getName());
+		pd.setPhone(pe.getPhone());
+		pd.setPid(pe.getPid());
+		pd.setPoliticalId(pe.getPolitical());
+		pd.setPolitical(pe.getPoliticalType() != null ? pe.getPoliticalType()
+				.getPolitical() : null);
+		pd.setPositionId(pe.getPosition());
+		pd.setPosition(pe.getPositionType() != null ? pe.getPositionType()
+				.getPosition() : null);
+		pd.setPtype(pe.getMobilityType() != null ? pe.getMobilityType()
+				.getTypeName() : null);
+		pd.setRelationId(pe.getRelationId());
+		pd.setRelation(pe.getRelationType() != null ? pe.getRelationType()
+				.getRelationName() : null);
+		pd.setResidentId(pe.getResidentId());
+		pd.setResident(pe.getResidentType() != null ? pe.getResidentType()
+				.getTypeName() : null);
+		pd.setSname(pe.getSname());
+		pd.setSocialId(pe.getSocial());
+		pd.setSocial(pe.getSocialType() != null ? pe.getSocialType()
+				.getSocial() : null);
+		pd.setSpec(pe.getSpec());
+		pd.setTel(pe.getTel());
+		// pd.setVillage(pe.getVillageId());
+		pd.setWplace(pe.getWplace());
+		pd.setYearIncome(pe.getYearIncome());
+		pd.setPicture(pe.getPicture());
+		return pd;
 	}
 
 	private PageRequest buildPageRequest(GridJsonRequestBean requestBean) {

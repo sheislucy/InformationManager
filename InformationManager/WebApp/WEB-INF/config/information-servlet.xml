@@ -39,7 +39,7 @@
 	</bean>
 
 	<bean
-		class="soho.chloe.informationmanager.web.ChloePropertyPlaceholderConfigurer">
+		class="soho.chloe.informationmanager.web.InforPropertyPlaceholderConfigurer">
 		<property name="properties" ref="properties" />
 	</bean>
 	

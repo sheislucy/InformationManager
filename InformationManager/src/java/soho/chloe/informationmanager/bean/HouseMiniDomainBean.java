@@ -1,8 +1,6 @@
 package soho.chloe.informationmanager.bean;
 
-import java.io.Serializable;
-
-public class HouseMiniDomainBean implements Serializable {
+public class HouseMiniDomainBean extends JsonResultBean {
 	private static final long serialVersionUID = 1L;
 	private int id; // house id
 	private String name; // host name

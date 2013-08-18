@@ -728,7 +728,7 @@ function initAll(mapMeta){
 			$(".token-input-list-facebook").remove();
 		},
 		open: function(){
-			jQuery.getJSON("/house/miniList/unmarked", function(data){
+			jQuery.getJSON("/house/miniHostList/unmarked", function(data){
 				$("#host-input").tokenInput(data, {
 					theme: "facebook",
 	                preventDuplicates: true,

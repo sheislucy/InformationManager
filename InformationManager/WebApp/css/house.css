@@ -1,0 +1,59 @@
+@CHARSET "UTF-8";
+
+.h40 {
+	height: 40px;
+}
+
+.w50 {
+	width: 50px;
+}
+
+.hostRow {
+	background: #FF78FF;
+}
+
+#search-result {
+	margin-top: 5px;
+}
+
+#composite-search{
+	padding: 0.4em;
+}
+
+#gender,#name,#age-limit,#income-limit,#education,#political {
+	padding: 0 5px;
+	margin-right: 10px;
+	text-align: center;
+	line-height: 30px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+#composite-search .submit{
+	padding: 8px 20px;
+	margin-top: 5px;
+}
+
+#composite-search .submit a{
+	text-decoration: none;
+}
+
+#composite-search .submit:hover{
+	border: 1px solid #c8ac98;
+	background: #a7d0f2 url(images/ui-bg_gloss-wave_75_a7d0f2_500x100.png) 50% 50% repeat-x;
+	font-weight: normal;
+	color: #212121;
+	cursor: pointer;
+}
+
+#composite-search .submit:active{
+	border: 1px solid #c8ac98;
+	background: #f7c687 url(images/ui-bg_glass_65_f7c687_1x400.png) 50% 50% repeat-x;
+	font-weight: normal;
+	color: #212121;
+	cursor: pointer;
+}
+
+#host-input{
+	width: 120px;
+}

@@ -186,11 +186,39 @@ var People = function() {
 			},
 			caption : "人员信息表"
 		});
-		table.jqGrid('navGrid', "#pager-people", {
-		// edit : false,
-		// add : false,
-		// del : false
-		});
+		table.jqGrid('navGrid', "#pager-people", {edit : false, add : false, del : false, search:false})
+			.jqGrid('navButtonAdd', "#pager-people", {
+				 	caption:"新增", 
+				 	buttonicon:"ui-icon-add", 
+				 	onClickButton: function(){ 
+				 		$("#new-house-dialog").dialog("open");
+				 		
+				 		
+				 	}, 
+				 	position:"last"
+			 })
+			 .jqGrid('navButtonAdd', "#pager-people", {
+				 	caption:"修改", 
+				 	buttonicon:"ui-icon-edit", 
+				 	onClickButton: function(){ 
+				 		var selectedRowId = table.jqGrid('getGridParam', 'selrow');
+				 		if(selectedRowId != null ){
+				 			window.open("/people/editPeople/" + table.jqGrid ('getCell', selectedRowId, 'pid'));
+				 		}
+				 	}, 
+				 	position:"last"
+			 })
+			 .jqGrid('navButtonAdd', "#pager-people", {
+				 	caption:"删除", 
+				 	buttonicon:"ui-icon-del", 
+				 	onClickButton: function(){ 
+				 		var selectedRowId = table.jqGrid('getGridParam', 'selrow');
+				 		if(selectedRowId != null ){
+				 			$( "#delete-validation-dialog" ).dialog("open");
+				 		}
+				 	}, 
+				 	position:"last"
+			 });
 		table.jqGrid("setGridParam", {
 			onSelectRow : function(rowid, status) {
 				openHouseMembers(table.jqGrid('getRowData', rowid).pid);

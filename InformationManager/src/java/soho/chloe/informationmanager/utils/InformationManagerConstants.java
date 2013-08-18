@@ -10,4 +10,6 @@ public class InformationManagerConstants {
 	public static final String HOUSE_IMAGE_DIR = "houseImage";
 	public static final String HOUSE_IMAGE_THUMBNAIL_DIR = "houseImageThumbnail";
 
+	public static final String PEOPLE_IMAGE = "peopleImage";
+	public static final String PEOPLE_IMAGE_THUMBNAIL = "peopleImageThumbnail";
 }

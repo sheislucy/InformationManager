@@ -11,6 +11,7 @@ public class PeopleDomainBean extends PeopleMiniDomainBean {
 
 	private String ptype;// 常住/外出/暂住
 	private String sname;
+	private Integer educationId;
 	private String education;
 	private String addr;
 	private String job;
@@ -18,18 +19,25 @@ public class PeopleDomainBean extends PeopleMiniDomainBean {
 	private String phone;
 	private String wplace;
 	private String spec;
+	private String picture;
 	private String incomeSource;
+	private Integer politicalId;
 	private String political;
+	private Integer relationId;
 	private String relation;// 和户主关系
 	private String village;
 	private String ethnic;
 	private String army;
+	private Integer marriageId;
 	private String marriage;
+	private Integer residentId;
 	private String resident;// 户口性质：农/非农
 	private String health;
 	private Integer yearIncome;
 	private String memo;
+	private Integer positionId;
 	private String position;// 职务
+	private Integer socialId;
 	private String social;// 社会身份
 	private Boolean isLowSafe;
 	private Boolean isaddsafe;
@@ -297,6 +305,70 @@ public class PeopleDomainBean extends PeopleMiniDomainBean {
 
 	public void setLastUpdateTime(Date lastUpdateTime) {
 		this.lastUpdateTime = lastUpdateTime;
+	}
+
+	public Integer getEducationId() {
+		return educationId;
+	}
+
+	public void setEducationId(Integer educationId) {
+		this.educationId = educationId;
+	}
+
+	public Integer getRelationId() {
+		return relationId;
+	}
+
+	public void setRelationId(Integer relationId) {
+		this.relationId = relationId;
+	}
+
+	public Integer getResidentId() {
+		return residentId;
+	}
+
+	public void setResidentId(Integer residentId) {
+		this.residentId = residentId;
+	}
+
+	public Integer getPositionId() {
+		return positionId;
+	}
+
+	public void setPositionId(Integer positionId) {
+		this.positionId = positionId;
+	}
+
+	public Integer getSocialId() {
+		return socialId;
+	}
+
+	public void setSocialId(Integer socialId) {
+		this.socialId = socialId;
+	}
+
+	public Integer getMarriageId() {
+		return marriageId;
+	}
+
+	public void setMarriageId(Integer marriageId) {
+		this.marriageId = marriageId;
+	}
+
+	public Integer getPoliticalId() {
+		return politicalId;
+	}
+
+	public void setPoliticalId(Integer politicalId) {
+		this.politicalId = politicalId;
+	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 
 }

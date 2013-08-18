@@ -41,6 +41,7 @@ public class PeopleEntity implements Serializable {
 	private String phone;
 	private String wplace;
 	private String spec;
+	private String picture;
 
 	@Column(name = "houseid")
 	private Integer houseId;
@@ -496,6 +497,14 @@ public class PeopleEntity implements Serializable {
 
 	public void setHouseId(Integer houseId) {
 		this.houseId = houseId;
+	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 
 }

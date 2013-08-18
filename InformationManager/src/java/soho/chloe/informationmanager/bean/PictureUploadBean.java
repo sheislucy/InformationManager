@@ -1,6 +1,6 @@
 package soho.chloe.informationmanager.bean;
 
-public class HousePictureUploadBean extends JsonResultBean {
+public class PictureUploadBean extends JsonResultBean {
 	private static final long serialVersionUID = 1L;
 	private Integer pictureId;
 	private String fileName;

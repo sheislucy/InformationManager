@@ -12,6 +12,7 @@ public class PeopleMiniDomainBean implements Serializable {
 	private Integer pid;
 	private String name;
 	private String cardId;
+	private Integer genderId;
 	private String gender;
 	private Date birthday;
 	private Integer houseId;
@@ -63,6 +64,21 @@ public class PeopleMiniDomainBean implements Serializable {
 
 	public void setHouseId(Integer houseId) {
 		this.houseId = houseId;
+	}
+
+	public Integer getGenderId() {
+		return genderId;
+	}
+
+	public void setGenderId(Integer genderId) {
+		this.genderId = genderId;
+	}
+
+	public int getId() {
+		return pid;
+	}
+
+	public void setId(int id) {
 	}
 
 }

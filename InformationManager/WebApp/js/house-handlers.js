@@ -156,6 +156,32 @@ function addImage(src, pictureId) {
 	
 	var newImg = imgWrapper.find("img")[0];
 	imgWrapper.find("#pictureId").val(pictureId);
+	imgWrapper.find("#delete-picture").click(function(){
+		var data = {
+				"pictureId": $(this).siblings("#pictureId").val()
+			};
+			$(this).parent("div").remove();
+			jQuery.ajax({
+				url:"/house/deletePicture",
+				type: "POST",
+				contentType: "application/json; charset=UTF-8",
+				data: JSON.stringify(data),
+				dataType: "json",
+				success: function(response){
+					if(response && response.status == "SUCCESS"){
+						$("#success-tip").fadeIn("slow").delay(2000);
+						$("#success-tip").hide('explode');
+					} else{
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					}
+				},
+				error: function(){
+					$("#failure-tip").fadeIn("slow").delay(2000);
+					$("#failure-tip").hide('explode');
+				}
+			});
+	});
 	$("#thumbnails").prepend(imgWrapper);
 	
 	if (newImg.filters) {

@@ -28,13 +28,13 @@ import soho.chloe.informationmanager.bean.GridJsonResponseBean;
 import soho.chloe.informationmanager.bean.HouseDomainBean;
 import soho.chloe.informationmanager.bean.HouseMiniDomainBean;
 import soho.chloe.informationmanager.bean.HousePictureDomainBean;
-import soho.chloe.informationmanager.bean.HousePictureUploadBean;
+import soho.chloe.informationmanager.bean.PictureUploadBean;
 import soho.chloe.informationmanager.bean.JsonResultBean;
-import soho.chloe.informationmanager.bean.PeopleDomainBean;
+import soho.chloe.informationmanager.bean.PeopleMiniDomainBean;
 import soho.chloe.informationmanager.service.HouseService;
 import soho.chloe.informationmanager.utils.InformationManagerConstants;
 import soho.chloe.informationmanager.utils.JsonStatus;
-import soho.chloe.informationmanager.web.ChloePropertyPlaceholderConfigurer;
+import soho.chloe.informationmanager.web.InforPropertyPlaceholderConfigurer;
 
 @Controller
 @RequestMapping("/house")
@@ -43,10 +43,10 @@ public class HouseController extends BaseController {
 	@Autowired
 	private HouseService houseService;
 
-	@RequestMapping(value = "/miniList/unmarked")
+	@RequestMapping(value = "/miniHostList/unmarked")
 	public @ResponseBody
-	List<HouseMiniDomainBean> getMiniHouseBeanList() {
-		return houseService.getUnmarkedMiniHouseList();
+	List<HouseMiniDomainBean> getMiniHostBeanListUnmarkedOnMap() {
+		return houseService.getMiniHostBeanListUnmarkedOnMap();
 	}
 
 	@RequestMapping(value = "/house.json")
@@ -73,14 +73,14 @@ public class HouseController extends BaseController {
 
 	@RequestMapping(value = "/uploadPicture", method = RequestMethod.POST)
 	public @ResponseBody
-	HousePictureUploadBean uploadHousePhotos(
+	PictureUploadBean uploadHousePhotos(
 			@RequestParam("Filedata") MultipartFile multipartFile,
 			@RequestParam("Filename") String fileName,
 			@RequestParam("houseId") Integer houseId)
 			throws IllegalStateException, IOException {
 
 		StringBuffer pathDir = new StringBuffer()
-				.append(ChloePropertyPlaceholderConfigurer
+				.append(InforPropertyPlaceholderConfigurer
 						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_DIR));
 
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd-HH");
@@ -99,7 +99,7 @@ public class HouseController extends BaseController {
 		bean.setLocalFileName(newName);
 		houseService.saveHousePictureThumbnail(file, newName);
 		Integer thumbnailId = houseService.savePictureOfHouse(bean);
-		HousePictureUploadBean jsonResult = new HousePictureUploadBean();
+		PictureUploadBean jsonResult = new PictureUploadBean();
 		jsonResult.setStatus(JsonStatus.SUCCESS);
 		jsonResult.setFileName(newName);
 		jsonResult.setPictureId(thumbnailId);
@@ -110,7 +110,7 @@ public class HouseController extends BaseController {
 	public void download(@RequestParam("file") String fileName,
 			HttpServletResponse response) throws Exception {
 		String path = new StringBuffer()
-				.append(ChloePropertyPlaceholderConfigurer
+				.append(InforPropertyPlaceholderConfigurer
 						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR))
 				.append(fileName).append("_thumbnail.png").toString();
 		File thumbnail = new File(path);
@@ -138,4 +138,30 @@ public class HouseController extends BaseController {
 		return result;
 	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public @ResponseBody
+	JsonResultBean deleteHouse(@RequestBody HouseMiniDomainBean house) {
+		houseService.deleteHouse(house.getId());
+		JsonResultBean result = new JsonResultBean();
+		result.setStatus(JsonStatus.SUCCESS);
+		return result;
+	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public @ResponseBody
+	HouseMiniDomainBean createHouse(@RequestBody PeopleMiniDomainBean host) {
+		HouseMiniDomainBean result = new HouseMiniDomainBean();
+		result.setId(houseService.createNewHouse(host.getPid()));
+		result.setStatus(JsonStatus.SUCCESS);
+		return result;
+	}
+	
+	@RequestMapping(value = "/deletePicture", method = RequestMethod.POST)
+	public @ResponseBody
+	JsonResultBean deletePicture(@RequestBody HousePictureDomainBean picture) {
+		houseService.deletePicture(picture.getId());
+		JsonResultBean result = new JsonResultBean();
+		result.setStatus(JsonStatus.SUCCESS);
+		return result;
+	}
 }

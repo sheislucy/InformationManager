@@ -238,7 +238,6 @@ function init(){
 		});
 	});
 	$(".save-member").click(function(){
-		$(".reason-item").remove();
 		var data = [];
 		if(validateRelation(data)){
 			jQuery.ajax({
@@ -247,9 +246,18 @@ function init(){
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(data),
 				dataType: "json",
-				success: function(){
-					$("#success-tip").fadeIn("slow").delay(2000);
-					$("#success-tip").hide('explode');
+				success: function(response){
+					if(response && response.status == "SUCCESS"){
+						$("#success-tip").fadeIn("slow").delay(2000);
+						$("#success-tip").hide('explode');
+					} else{
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+						for( var errorMsg in response.errorList ){
+							$("#save-validation-dialog").append("<p class='reason-item'>" + errorMsg + "</p>");
+						}
+						$("#save-validation-dialog").dialog("open");
+					}
 				},
 				error: function(){
 					$("#failure-tip").fadeIn("slow").delay(2000);
@@ -270,36 +278,69 @@ function init(){
 		var table = $("#jqGrid-member");
 		var selectedRowId = table.jqGrid('getGridParam', 'selrow');
  		if(selectedRowId != null ){
- 			var newMember = $("<li></li>");
- 			var memberCloned = $(".member-single").clone(true, true);
- 			var deleteAHref =  $(".member-single").find("a").clone(true, true);
- 			deleteAHref.click(function(){
- 				$(this).parent("li").remove();
+ 			var duplicate = false;
+ 			$("#member-list > li").each(function(){
+ 				if(table.jqGrid ('getCell', selectedRowId, 'pid') == $(this).find("input[name='pid']").val()){
+ 					$("#duplicate-validation-dialog").dialog("open");//.delay(3000).dialog("close");
+ 					duplicate = true;
+ 				}
  			});
- 			memberCloned.find("#pid").val(table.jqGrid ('getCell', selectedRowId, 'pid'));
- 			memberCloned.find("#member-name").html("[" + table.jqGrid ('getCell', selectedRowId, 'name') 
- 					+ "] ");
- 			memberCloned.find("#text-info").html(table.jqGrid ('getCell', selectedRowId, 'birthday') + "&nbsp;&nbsp;&nbsp;&nbsp;与户主关系");
- 			newMember.append(memberCloned.find("#pid"))
- 					.append(memberCloned.find("#member-name"))
- 					.append(memberCloned.find("#text-info"))
- 					.append(memberCloned.find("#relation-select"))
- 					.append(deleteAHref)
- 					.append(memberCloned.find("div"));
- 			$("#member-list").append(newMember);
+ 			if(!duplicate){
+ 				var newMember = $("<li></li>");
+ 				var memberCloned = $(".member-single").clone(true, true);
+ 				var deleteAHref =  $(".member-single").find("a").clone(true, true);
+ 				deleteAHref.click(function(){
+ 					$(this).parent("li").remove();
+ 				});
+ 				memberCloned.find("#pid").val(table.jqGrid ('getCell', selectedRowId, 'pid'));
+ 				memberCloned.find("#member-name").html("[" + table.jqGrid ('getCell', selectedRowId, 'name') 
+ 						+ "] ");
+ 				memberCloned.find("#text-info").html(table.jqGrid ('getCell', selectedRowId, 'birthday') + "&nbsp;&nbsp;&nbsp;&nbsp;与户主关系");
+ 				newMember.append(memberCloned.find("#pid"))
+ 				.append(memberCloned.find("#member-name"))
+ 				.append(memberCloned.find("#text-info"))
+ 				.append(memberCloned.find("#relation-select"))
+ 				.append(deleteAHref)
+ 				.append(memberCloned.find("div"));
+ 				$("#member-list").append(newMember);
 // 			table.jqGrid('delRowData', selectedRowId);
+ 			}
  		}
 	});
-	$("#delete-a").click(function(){
+	$("#member-list > li > #delete-a").click(function(){
 		$(this).parent("li").remove();
+	});
+	$("#thumbnails > .thumbnail-single > #delete-picture").click(function(){
+		var data = {
+			"pictureId": $(this).siblings("#pictureId").val()
+		};
+		$(this).parent("div").remove();
+		jQuery.ajax({
+			url:"/house/deletePicture",
+			type: "POST",
+			contentType: "application/json; charset=UTF-8",
+			data: JSON.stringify(data),
+			dataType: "json",
+			success: function(response){
+				if(response && response.status == "SUCCESS"){
+					$("#success-tip").fadeIn("slow").delay(2000);
+					$("#success-tip").hide('explode');
+				} else{
+					$("#failure-tip").fadeIn("slow").delay(2000);
+					$("#failure-tip").hide('explode');
+				}
+			},
+			error: function(){
+				$("#failure-tip").fadeIn("slow").delay(2000);
+				$("#failure-tip").hide('explode');
+			}
+		});
 	});
 	$( "#save-validation-dialog" ).dialog({
 		autoOpen: false,
 		height: 150,
 		width: 200,
 		modal: true,
-//		dialogClass: "no-close",
-//		closeOnEscape: false,
 		buttons: {
 			"确定": function() {
 				$( this ).dialog( "close" );
@@ -307,7 +348,22 @@ function init(){
 		},
 		close: function() {
 			$( this ).dialog( "close" );
+			$(".reason-item").remove();
 		}
 	});
-	
+	$("#duplicate-validation-dialog").dialog({
+		autoOpen: false,
+		height: 80,
+		width: 200,
+		modal: true,
+		buttons: {
+			"确定": function() {
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			$( this ).dialog( "close" );
+			$(".reason-item").remove();
+		}
+	});
 }
