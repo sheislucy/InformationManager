@@ -152,33 +152,6 @@ function uploadError(file, errorCode, message) {
 
 
 function addImage(src) {
-	$("#delete-picture").click(function(){
-		var data = {
-				"pid": $(this).siblings("#pid").val()
-			};
-			$("#thumbnails").hide();
-			jQuery.ajax({
-				url:"/people/deletePicture",
-				type: "POST",
-				contentType: "application/json; charset=UTF-8",
-				data: JSON.stringify(data),
-				dataType: "json",
-				success: function(response){
-					if(response && response.status == "SUCCESS"){
-						$("#success-tip").fadeIn("slow").delay(2000);
-						$("#success-tip").hide('explode');
-						$(".upload-pic-button").show();
-					} else{
-						$("#failure-tip").fadeIn("slow").delay(2000);
-						$("#failure-tip").hide('explode');
-					}
-				},
-				error: function(){
-					$("#failure-tip").fadeIn("slow").delay(2000);
-					$("#failure-tip").hide('explode');
-				}
-			});
-	});
 	var newImg = $("#thumbnail-img")[0];
 	$("#thumbnails").prepend(newImg);
 	

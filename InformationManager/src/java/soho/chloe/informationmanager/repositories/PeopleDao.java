@@ -50,4 +50,8 @@ public interface PeopleDao extends JpaRepository<PeopleEntity, Integer> {
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public List<PeopleEntity> findByHouseIdIsNull();
+	
+	@Modifying
+	@Query("UPDATE PeopleEntity p SET p.picture = NULL WHERE p.pid = ?1")
+	public void deletePicture(Integer pid);
 }

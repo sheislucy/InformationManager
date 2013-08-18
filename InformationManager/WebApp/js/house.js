@@ -292,14 +292,15 @@ function init(){
 					contentType: "application/json; charset=UTF-8",
 					data: JSON.stringify(data),
 					dataType: "json",
+					async: false,
 					success: function(response){
 						$("#new-house-dialog").dialog( "close" );
 						if(response.status == "SUCCESS"){
 							$("#jqGrid-house").trigger("reloadGrid");
 							$("#success-tip").fadeIn("slow").delay(2000);
 							$("#success-tip").hide('explode');
-							$("#edit-house-link").attr("href", "/house/editHouse/" + response.id);
-							$("#edit-house-link").click();
+//							$("#edit-house-link").attr("href", "/house/editHouse/" + response.id);
+//							$("#edit-house-link").click();
 							window.open("/house/editHouse/" + response.id);
 						}else{
 							$("#failure-tip").fadeIn("slow").delay(2000);

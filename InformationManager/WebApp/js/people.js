@@ -191,9 +191,7 @@ var People = function() {
 				 	caption:"新增", 
 				 	buttonicon:"ui-icon-add", 
 				 	onClickButton: function(){ 
-				 		$("#new-house-dialog").dialog("open");
-				 		
-				 		
+				 		$("#new-people-dialog").dialog("open");
 				 	}, 
 				 	position:"last"
 			 })
@@ -219,11 +217,6 @@ var People = function() {
 				 	}, 
 				 	position:"last"
 			 });
-		table.jqGrid("setGridParam", {
-			onSelectRow : function(rowid, status) {
-				openHouseMembers(table.jqGrid('getRowData', rowid).pid);
-			}
-		});
 	};
 
 	this.refreshGrid = function(postDataParam) {
@@ -235,10 +228,146 @@ var People = function() {
 			page: 1
 		}).trigger("reloadGrid");
 	};
-
-	function openHouseMembers(pid) {
-//		window.open("/people/houseMembers/" + pid);
-	}
 };
 
 var people = new People();
+
+function init(){
+	people.getPeopleList();
+	$("#submit").click(
+			function() {
+				var political = [];
+				var education = [];
+				$("input=[name='political']:checked").each(function(){
+					political.push($(this).val());
+				});
+				$("input=[name='education']:checked").each(function(){
+					education.push($(this).val());
+				});
+				var postDataParam = {
+					"name" : $("#search-name").val(),
+					"gender" : $("input[name='gender']:checked").val(),
+					"ageLow" : $("#age-low-limit").val(),
+					"ageUp" : $("#age-upper-limit").val(),
+					"incomeLow": $("#incoming-low-limit").val(),
+					"incomeUp": $("#incoming-upper-limit").val(),
+					"political": political,
+					"education": education
+				};
+				people.refreshGrid(postDataParam);
+			});
+	$(":button").button();
+	$("#search-criteria").tabs();
+	window.setTimeout(adjustCenterSize(),200);
+	
+	$("#new-people-dialog").dialog({
+		autoOpen: false,
+		height: 150,
+		width: 220,
+		modal: true,
+		buttons: {
+			"确定": function(){
+				var data = {
+					"name": $("#newPeopleName").val()
+				};
+				jQuery.ajax({
+					url:"/people/create",
+					type: "POST",
+					contentType: "application/json; charset=UTF-8",
+					data: JSON.stringify(data),
+					dataType: "json",
+					async: false,
+					success: function(response){
+						$("#new-people-dialog").dialog( "close" );
+						if(response.status == "SUCCESS"){
+							$("#jqGrid-people").trigger("reloadGrid");
+							$("#success-tip").fadeIn("slow").delay(2000);
+							$("#success-tip").hide('explode');
+							window.open("/people/editPeople/" + response.pid);
+//							$("#edit-people-link").attr("href", "/people/editPeople/" + response.pid);
+//							$("#edit-people-link").click();
+						}else{
+							$("#failure-tip").fadeIn("slow").delay(2000);
+							$("#failure-tip").hide('explode');
+						}
+					},
+					error: function(){
+						$("#new-people-dialog").dialog( "close" );
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					}
+				});
+			},
+			"取消": function(){
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			$( this ).dialog( "close" );
+			$("#newPeopleName").val( "" );
+		}
+	});
+	
+	$( "#delete-validation-dialog" ).dialog({
+		autoOpen: false,
+		height: 120,
+		width: 200,
+		modal: true,
+		buttons: {
+			"确定": function(){
+				$( this ).dialog( "close" );
+				var table = $("#jqGrid-people");
+				var data = {
+					"pid": table.jqGrid ('getCell', table.jqGrid('getGridParam', 'selrow'), 'pid')
+				};
+				jQuery.ajax({
+					url: "/people/delete",
+					type: "POST",
+					contentType: "application/json; charset=UTF-8",
+					data: JSON.stringify(data),
+					dataType: "json",
+					success: function(response){
+						if(response.status == "SUCCESS"){
+							$("#success-tip").fadeIn("slow").delay(2000);
+							$("#success-tip").hide('explode');
+							table.trigger("reloadGrid");
+						}else{
+							for(var i in response.errorList){
+								$("#delete-error-dialog").append("<p class='reason-item'>"+response.errorList[i]+"</p>");
+							}
+							$("#delete-error-dialog").dialog("open");
+							$("#failure-tip").fadeIn("slow").delay(2000);
+							$("#failure-tip").hide('explode');
+						}
+					},
+					error: function(){
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					}
+				});
+			},
+			"取消": function(){
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			$( this ).dialog( "close" );
+		}
+	});
+	
+	$("#delete-error-dialog").dialog({
+		autoOpen: false,
+		height: 150,
+		width: 200,
+		modal: true,
+		buttons: {
+			"确定": function() {
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			$( this ).dialog( "close" );
+			$(".reason-item").remove();
+		}
+	});
+}

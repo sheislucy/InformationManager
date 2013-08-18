@@ -253,8 +253,8 @@ function init(){
 					} else{
 						$("#failure-tip").fadeIn("slow").delay(2000);
 						$("#failure-tip").hide('explode');
-						for( var errorMsg in response.errorList ){
-							$("#save-validation-dialog").append("<p class='reason-item'>" + errorMsg + "</p>");
+						for( var i in response.errorList ){
+							$("#save-validation-dialog").append("<p class='reason-item'>" +  response.errorList[i] + "</p>");
 						}
 						$("#save-validation-dialog").dialog("open");
 					}

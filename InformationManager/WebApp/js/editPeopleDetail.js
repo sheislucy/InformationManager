@@ -42,7 +42,7 @@ var FileUpload = function(){
 		},
 		
 		// Debug Settings
-		debug: true
+		debug: false
 	});
 };
 
@@ -52,5 +52,116 @@ function init(){
 	$( "#birthday" ).datepicker({ 
 		altFormat: "yy-mm-dd",
 		altField: "#birthday"
+	});
+	
+	$(".save-detail").click(function(){
+		var postData = {
+				"pid": $("#pid").val(),
+				"cardId": $("#cardid").val(),
+				"sname": $("#sname").val(),
+				"birthday": $("#birthday").val(),
+				"addr": $("#addr").val(),
+				"job": $("#job").val(),
+				"tel": $("#tel").val(),
+				"phone": $("#phone").val(),
+				"wplace": $("#wplace").val(),
+				"spec": $("#spec").val(),
+				"incomeSource": $("#incomesource").val(),
+				"ethnic": $("#ethnic").val(),
+				"army": $("#army").val(),
+				"health": $("#health").val(),
+				"yearIncome": $("#yearincome").val(),
+				"diffCond": $("#diffcond").val(),
+				"companyName": $("#companyname").val(),
+				"currentAddress": $("#currentaddress").val()
+			};
+			jQuery.ajax({
+				url: "/people/saveTextDetail",
+				type: "POST",
+				contentType: "application/json; charset=UTF-8",
+				data: JSON.stringify(postData),
+				dataType: "json",
+				success: function(data){
+					if(data.status == "SUCCESS"){
+						$("#success-tip").fadeIn("slow").delay(2000);
+						$("#success-tip").hide('explode');
+					} else {
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					}
+				},
+				error: function(){
+					$("#failure-tip").fadeIn("slow").delay(2000);
+					$("#failure-tip").hide('explode');
+				}
+			});
+	});
+	
+	$(".save-dropdown").click(function(){
+		var postData = {
+				"pid": $("#pid").val(),
+				"genderId":  $("select[name='genderId'] > option:selected").val()==""?null:$("select[name='genderId'] > option:selected").val(),
+				"educationId":  $("select[name='educationId'] > option:selected").val()==""?null:$("select[name='educationId'] > option:selected").val(),
+				"politicalId":  $("select[name='politicalId'] > option:selected").val()==""?null:$("select[name='politicalId'] > option:selected").val(),
+				"marriageid":  $("select[name='marriageid'] > option:selected").val()==""?null:$("select[name='marriageid'] > option:selected").val(),
+				"positionId":  $("select[name='positionId'] > option:selected").val()==""?null:$("select[name='positionId'] > option:selected").val(),
+				"residentId":  $("select[name='residentId'] > option:selected").val()==""?null:$("select[name='residentId'] > option:selected").val(),
+				"isLowSafe":  $("select[name='isLowSafe'] > option:selected").val()==""?null:$("select[name='isLowSafe'] > option:selected").val(),
+				"isaddsafe":  $("select[name='isaddsafe'] > option:selected").val()==""?null:$("select[name='isaddsafe'] > option:selected").val(),
+				"isCorps":  $("select[name='isCorps'] > option:selected").val()==""?null:$("select[name='isCorps'] > option:selected").val(),
+				"isOut":  $("select[name='isOut'] > option:selected").val()==""?null:$("select[name='isOut'] > option:selected").val(),
+				"isOverSea":  $("select[name='isOverSea'] > option:selected").val()==""?null:$("select[name='isOverSea'] > option:selected").val()
+			};
+			jQuery.ajax({
+				url: "/people/saveSelectDetail",
+				type: "POST",
+				contentType: "application/json; charset=UTF-8",
+				data: JSON.stringify(postData),
+				dataType: "json",
+				success: function(data){
+					if(data.status == "SUCCESS"){
+						$("#success-tip").fadeIn("slow").delay(2000);
+						$("#success-tip").hide('explode');
+					} else {
+						$("#failure-tip").fadeIn("slow").delay(2000);
+						$("#failure-tip").hide('explode');
+					}
+				},
+				error: function(){
+					$("#failure-tip").fadeIn("slow").delay(2000);
+					$("#failure-tip").hide('explode');
+				}
+			});
+	});
+	
+	$("#delete-picture").click(function(){
+		var data = {
+			"pid": $("#pid").val()
+		};
+		$("#thumbnails").hide();
+		jQuery.ajax({
+			url:"/people/deletePicture",
+			type: "POST",
+			contentType: "application/json; charset=UTF-8",
+			data: JSON.stringify(data),
+			dataType: "json",
+			success: function(response){
+				if(response && response.status == "SUCCESS"){
+					$("#success-tip").fadeIn("slow").delay(2000);
+					$("#success-tip").hide('explode');
+					$(".upload-pic-button").show();
+					$("#divFileProgressContainer").html("");
+					$("#divFileProgressContainer").show();
+					$("#thumbnails").hide();
+				} else{
+					$("#failure-tip").fadeIn("slow").delay(2000);
+					$("#failure-tip").hide('explode');
+				}
+			},
+			error: function(){
+				$("#failure-tip").fadeIn("slow").delay(2000);
+				$("#failure-tip").hide('explode');
+			}
+		});
 	});
 }

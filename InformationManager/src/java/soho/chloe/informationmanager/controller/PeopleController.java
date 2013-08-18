@@ -28,7 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import soho.chloe.informationmanager.bean.GridJsonResponseBean;
 import soho.chloe.informationmanager.bean.GridPeopleRequestBean;
-import soho.chloe.informationmanager.bean.HouseMemberValidationResultBean;
+import soho.chloe.informationmanager.bean.ValidationResultBean;
+import soho.chloe.informationmanager.bean.JsonResultBean;
 import soho.chloe.informationmanager.bean.PeopleDomainBean;
 import soho.chloe.informationmanager.bean.PeopleMiniDomainBean;
 import soho.chloe.informationmanager.bean.PictureUploadBean;
@@ -83,7 +84,7 @@ public class PeopleController extends BaseController {
 
 	@RequestMapping(value = "/saveMemberDetail", method = RequestMethod.POST)
 	public @ResponseBody
-	HouseMemberValidationResultBean saveMemberDetail(
+	ValidationResultBean saveMemberDetail(
 			@RequestBody List<PeopleDomainBean> memberList) {
 		return service.saveMemberRelation(memberList);
 	}
@@ -131,7 +132,7 @@ public class PeopleController extends BaseController {
 		jsonResult.setFileName(newName);
 		return jsonResult;
 	}
-	
+
 	@RequestMapping(value = "/thumbnail", method = RequestMethod.GET)
 	public void download(@RequestParam("file") String fileName,
 			HttpServletResponse response) throws Exception {
@@ -155,15 +156,45 @@ public class PeopleController extends BaseController {
 		bos.close();
 	}
 
-	// @RequestMapping(value = "/add.json", method = RequestMethod.POST)
-	// public @ResponseBody
-	// JsonResponseDTO addPeople() {
-	// return null;
-	// }
-	//
-	// @RequestMapping(value = "/delete.json", method = RequestMethod.DELETE)
-	// public @ResponseBody
-	// JsonResponseDTO deletePeople() {
-	// return null;
-	// }
+	@RequestMapping(value = "/deletePicture", method = RequestMethod.POST)
+	public @ResponseBody
+	JsonResultBean deletePicture(@RequestBody PeopleMiniDomainBean people) {
+		service.deletePicture(people.getPid());
+		JsonResultBean result = new JsonResultBean();
+		result.setStatus(JsonStatus.SUCCESS);
+		return result;
+	}
+
+	@RequestMapping(value = "/saveTextDetail", method = RequestMethod.POST)
+	public @ResponseBody
+	JsonResultBean saveTextDetail(@RequestBody PeopleDomainBean people) {
+		service.saveTextDetail(people);
+		JsonResultBean result = new JsonResultBean();
+		result.setStatus(JsonStatus.SUCCESS);
+		return result;
+	}
+
+	@RequestMapping(value = "/saveSelectDetail", method = RequestMethod.POST)
+	public @ResponseBody
+	JsonResultBean saveSelectDetail(@RequestBody PeopleDomainBean people) {
+		service.saveTextDetail(people);
+		JsonResultBean result = new JsonResultBean();
+		result.setStatus(JsonStatus.SUCCESS);
+		return result;
+	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public @ResponseBody
+	PeopleMiniDomainBean createPeople(@RequestBody PeopleMiniDomainBean people) {
+		PeopleMiniDomainBean result = new PeopleMiniDomainBean();
+		result.setPid(service.createPeople(people.getName()));
+		result.setStatus(JsonStatus.SUCCESS);
+		return result;
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public @ResponseBody
+	ValidationResultBean deletePeople(@RequestBody PeopleMiniDomainBean people) {
+		return service.deletePeople(people.getPid());
+	}
 }

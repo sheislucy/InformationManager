@@ -54,7 +54,7 @@
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="education">教育程度</label>
 					<select name="educationId" id="education" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.educationId eq 1}">selected="selected"</c:if> value="1" >未受教育</option>
 						<option <c:if test="${people.educationId eq 2}">selected="selected"</c:if> value="2">小学</option>
 						<option <c:if test="${people.educationId eq 3}">selected="selected"</c:if> value="3">初中</option>
@@ -67,7 +67,7 @@
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="political">政治面貌</label>
 					<select name="politicalId" id="political" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.politicalId eq 1}">selected="selected"</c:if> value="1" >群众</option>
 						<option <c:if test="${people.politicalId eq 2}">selected="selected"</c:if> value="2">团员</option>
 						<option <c:if test="${people.politicalId eq 3}">selected="selected"</c:if> value="3">党员</option>
@@ -75,7 +75,7 @@
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="marriageid">婚姻状况</label>
 					<select name="marriageId" id="marriageid" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.marriageId eq 10}">selected="selected"</c:if> value="10" >未婚</option>
 						<option <c:if test="${people.marriageId eq 11}">selected="selected"</c:if> value="11">已婚</option>
 						<option <c:if test="${people.marriageId eq 12}">selected="selected"</c:if> value="12">离异</option>
@@ -84,7 +84,7 @@
 				<br />
 				<label for="position">职务</label>
 					<select name="positionId" id="position" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.positionId eq 1}">selected="selected"</c:if> value="1" >村党支部书记</option>
 						<option <c:if test="${people.positionId eq 2}">selected="selected"</c:if> value="2">村党支部委员</option>
 						<option <c:if test="${people.positionId eq 3}">selected="selected"</c:if> value="3">村委主任</option>
@@ -103,48 +103,54 @@
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="residentid">户口性质</label>
 					<select name="residentId" id="residentid" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.residentId eq 14}">selected="selected"</c:if> value="14" >农业人口</option>
 						<option <c:if test="${people.residentId eq 15}">selected="selected"</c:if> value="15">非农业人口</option>
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="islowsafe">是否低保</label>
 					<select name="isLowSafe" id="islowsafe" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.isLowSafe}">selected="selected"</c:if> value="true" >是</option>
 						<option <c:if test="${!people.isLowSafe}">selected="selected"</c:if> value="false">否</option>
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<br />
 				<label for="isaddsafe">是否参保</label>
 					<select name="isaddsafe" id="isaddsafe" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.isaddsafe}">selected="selected"</c:if> value="true" >是</option>
 						<option <c:if test="${!people.isaddsafe}">selected="selected"</c:if> value="false">否</option>
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="iscorps">是否军属</label>
 					<select name="isCorps" id="iscorps" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.isCorps}">selected="selected"</c:if> value="true" >是</option>
 						<option <c:if test="${!people.isCorps}">selected="selected"</c:if> value="false">否</option>
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="isout">是否外出</label>
 					<select name="isOut" id="isout" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.isOut}">selected="selected"</c:if> value="true" >是</option>
 						<option <c:if test="${!people.isOut}">selected="selected"</c:if> value="false">否</option>
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="isoversea">是否华侨</label>
 					<select name="isOverSea" id="isoversea" >
-						<option>请选择</option>
+						<option value="">请选择</option>
 						<option <c:if test="${people.isOverSea}">selected="selected"</c:if> value="true" >是</option>
 						<option <c:if test="${!people.isOverSea}">selected="selected"</c:if> value="false">否</option>
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="button" class="save-detail" value="保存本栏" />
+				<input type="button" class="save-dropdown" value="保存本栏" />
 			</div>
 			<div class="right-column fl" id="right-column">
 			<c:choose>
 				<c:when test="${!empty people.picture}">
-					<img id="thumbnail-img" src="../thumbnail?file=${people.picture}" ><br />
-					<input type="button" name="delete-picture" id="delete-picture" value="删除这张图片" />
+					<div class="upload-pic-button" class="hide">
+						<span id="spanButtonPlaceholder"></span>
+					</div>
+					<div id="divFileProgressContainer" class="hide"></div>
+					<div id="thumbnails" class="hide">
+						<img id="thumbnail-img" src="../thumbnail?file=${people.picture}" ><br />
+						<input type="button" name="delete-picture" id="delete-picture" value="删除这张图片" />
+					</div>
 				</c:when>
 				<c:otherwise>
 					<div class="upload-pic-button">
@@ -163,6 +169,14 @@
 	</div>
 </div>
 
+<div class="left-bottom-corner">
+	<div id="success-tip" class="ui-tooltip ui-widget-content hide">
+		<div class="ui-tooltip-content">保存成功</div>
+	</div>
+	<div id="failure-tip" class="ui-tooltip ui-widget-content hide">
+		<div class="ui-tooltip-content">保存失败</div>
+	</div>
+</div>
 <input type="hidden" id="pid" value="${people.pid}" />
 
 <script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script>
@@ -173,6 +187,7 @@
 <script type="text/javascript" src="/js/editPeopleDetail.js"></script>
 <script type="text/javascript">
 $(function(){
+	$("input[type='button']").button();
 	init();
 });
 </script>

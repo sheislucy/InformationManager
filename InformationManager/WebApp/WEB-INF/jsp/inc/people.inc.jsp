@@ -2,10 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link type="text/css" rel="stylesheet" href="css/people.css" />
-<script type="text/javascript" src="js/grid.locale-cn.js"></script>
-<script type="text/javascript" src="js/jquery.jqGrid.4.5.2.min.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/people.js"></script>
+
 <div id="search-criteria">
 	<ul>
 		<li><a href="#composite-search">查询条件</a></li>
@@ -61,33 +58,23 @@
 	<table id="jqGrid-people"></table>
 	<div id="pager-people"></div>
 </div>
+
+<div id="delete-validation-dialog" title="确认删除该人员？" class="hide"></div>
+<div id="delete-error-dialog" title="删除失败" class="hide">
+	<p><span class="bold">原因</span></p>
+</div>
+<div id="new-people-dialog" title="新增人员" class="hide">
+	<label for="newPeopleName">请输入新成员姓名</label>
+	<input type="text" name="newPeopleName" id="newPeopleName" class="text ui-widget-content" />
+</div>
+<a class="hide" href="" id="edit-people-link" target="_blank"></a>
+
+<script type="text/javascript" src="js/grid.locale-cn.js"></script>
+<script type="text/javascript" src="js/jquery.jqGrid.4.5.2.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/people.js"></script>
 <script type="text/javascript">
 	$(function() {
-		people.getPeopleList();
-		$("#submit").click(
-				function() {
-					var political = [];
-					var education = [];
-					$("input=[name='political']:checked").each(function(){
-						political.push($(this).val());
-					});
-					$("input=[name='education']:checked").each(function(){
-						education.push($(this).val());
-					});
-					var postDataParam = {
-						"name" : $("#search-name").val(),
-						"gender" : $("input[name='gender']:checked").val(),
-						"ageLow" : $("#age-low-limit").val(),
-						"ageUp" : $("#age-upper-limit").val(),
-						"incomeLow": $("#incoming-low-limit").val(),
-						"incomeUp": $("#incoming-upper-limit").val(),
-						"political": political,
-						"education": education
-					};
-					people.refreshGrid(postDataParam);
-				});
-		$(":button").button();
-		$("#search-criteria").tabs();
-		window.setTimeout(adjustCenterSize(),200);
+		init();
 	});
 </script>

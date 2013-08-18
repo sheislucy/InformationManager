@@ -1,13 +1,12 @@
 package soho.chloe.informationmanager.bean;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import soho.chloe.informationmanager.web.CustomDateSerializer;
 
-public class PeopleMiniDomainBean implements Serializable {
+public class PeopleMiniDomainBean extends JsonResultBean {
 	private static final long serialVersionUID = 1L;
 	private Integer pid;
 	private String name;

@@ -30,10 +30,11 @@ import org.springframework.util.StringUtils;
 import soho.chloe.informationmanager.bean.GridJsonRequestBean;
 import soho.chloe.informationmanager.bean.GridJsonResponseBean;
 import soho.chloe.informationmanager.bean.GridPeopleRequestBean;
-import soho.chloe.informationmanager.bean.HouseMemberValidationResultBean;
+import soho.chloe.informationmanager.bean.ValidationResultBean;
 import soho.chloe.informationmanager.bean.PeopleDomainBean;
 import soho.chloe.informationmanager.bean.PeopleMiniDomainBean;
 import soho.chloe.informationmanager.entity.PeopleEntity;
+import soho.chloe.informationmanager.enums.RelationEnum;
 import soho.chloe.informationmanager.repositories.PeopleDao;
 import soho.chloe.informationmanager.service.BaseService;
 import soho.chloe.informationmanager.service.PeopleService;
@@ -96,9 +97,9 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public HouseMemberValidationResultBean saveMemberRelation(
+	public ValidationResultBean saveMemberRelation(
 			List<PeopleDomainBean> memberList) {
-		HouseMemberValidationResultBean result = new HouseMemberValidationResultBean();
+		ValidationResultBean result = new ValidationResultBean();
 		int hostCount = 0;
 		int spouseCount = 0;
 		boolean sameHouse = true;
@@ -159,15 +160,15 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	public PeopleDomainBean getPeople(int pid) {
 		return buildPeopleDomainBean(dao.findOne(pid));
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public void updatePeoplePicture(int pid, String fileName){
+	public void updatePeoplePicture(int pid, String fileName) {
 		PeopleEntity entity = dao.findOne(pid);
 		entity.setPicture(fileName);
 		dao.save(entity);
 	}
-	
+
 	@Override
 	public void savePeoplePictureThumbnail(File originalFile, String fileName)
 			throws IOException {
@@ -180,12 +181,91 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 						+ fileName + "_thumbnail");
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public void deletePicture(int pid) {
+		dao.deletePicture(pid);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public void saveTextDetail(PeopleDomainBean people) {
+		PeopleEntity entity = dao.findOne(people.getPid());
+		entity.setCardId(people.getCardId());
+		entity.setSname(people.getSname());
+		entity.setPolitical(people.getPoliticalId());
+		entity.setBirthday(people.getBirthday());
+		entity.setAddr(people.getAddr());
+		entity.setResidentId(people.getResidentId());
+		entity.setJob(people.getJob());
+		entity.setTel(people.getTel());
+		entity.setPhone(people.getPhone());
+		entity.setWplace(people.getWplace());
+		entity.setSpec(people.getSpec());
+		entity.setIncomeSource(people.getIncomeSource());
+		entity.setEthnic(people.getEthnic());
+		entity.setArmy(people.getArmy());
+		entity.setHealth(people.getHealth());
+		entity.setDiffCond(people.getDiffCond());
+		entity.setCompanyName(people.getCompanyName());
+		entity.setCurrentAddress(people.getCurrentAddress());
+		dao.save(entity);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public void saveSelectDetail(PeopleDomainBean people) {
+		PeopleEntity entity = dao.findOne(people.getPid());
+		entity.setGender(people.getGenderId());
+		entity.setEducation(people.getEducationId());
+		entity.setPolitical(people.getPoliticalId());
+		entity.setMarriageId(people.getMarriageId());
+		entity.setPosition(people.getPositionId());
+		entity.setResidentId(people.getResidentId());
+		entity.setIsLowSafe(people.getIsLowSafe());
+		entity.setIsaddsafe(people.getIsaddsafe());
+		entity.setIsCorps(people.getIsCorps());
+		entity.setIsOut(people.getIsOut());
+		entity.setIsOverSea(people.getIsOverSea());
+		dao.save(entity);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public int createPeople(String name) {
+		PeopleEntity entity = new PeopleEntity();
+		entity.setName(name);
+		entity = dao.save(entity);
+		return entity.getPid();
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public ValidationResultBean deletePeople(int pid) {
+		PeopleEntity people = dao.findOne(pid);
+		ValidationResultBean result = new ValidationResultBean();
+		if (people.getRelationId() != null
+				&& people.getRelationId() == RelationEnum.HOST.getCode()) {
+			result.getErrorList().add("该人员是户主，请先解散他的家庭再将他删除");
+			result.setStatus(JsonStatus.ERROR);
+		} else {
+			dao.delete(pid);
+			result.setStatus(JsonStatus.SUCCESS);
+		}
+		return result;
+	}
+
 	private PeopleMiniDomainBean buildPeopleMiniDomainBean(PeopleEntity entity) {
 		PeopleMiniDomainBean bean = new PeopleMiniDomainBean();
 		bean.setBirthday(entity.getBirthday());
 		bean.setCardId(entity.getCardId());
-		bean.setGender((entity.getGender() != null && entity.getGender() == 1) ? "男"
-				: "女");
+		if (entity.getGender() == null) {
+			bean.setGender("未知");
+		} else if (entity.getGender() == 1) {
+			bean.setGender("男");
+		} else {
+			bean.setGender("女");
+		}
 		bean.setHouseId(entity.getHouseId());
 		bean.setName(entity.getName());
 		bean.setPid(entity.getPid());
@@ -288,8 +368,13 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 				.getTypeName() : null);
 		pd.setEthnic(pe.getEthnic());
 		pd.setGenderId(pe.getGender());
-		pd.setGender((pe.getGender() != null && pe.getGender() == 1) ? "男"
-				: "女");
+		if (pe.getGender() == null) {
+			pd.setGender("未知");
+		} else if (pe.getGender() == 1) {
+			pd.setGender("男");
+		} else {
+			pd.setGender("女");
+		}
 		pd.setHealth(pe.getHealth());
 		pd.setHeight(pe.getHeight());
 		pd.setRelationId(pe.getRelationId());
