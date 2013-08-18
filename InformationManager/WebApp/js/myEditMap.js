@@ -59,7 +59,8 @@ MapManager.prototype.genMap = function(mapMeta, hotspotMeta) {
 				styleClass : "pointDefault",
 				dbFeatureId : hotspotMeta.points[i].id,
 				hostName: hotspotMeta.points[i].hostName + " - 户主id: " + hotspotMeta.points[i].hostId,
-				description: hotspotMeta.points[i].description
+				description: hotspotMeta.points[i].description,
+				houseId: hotspotMeta.points[i].houseId
 			});
 			pointFeatures.push(feature);
 		}
@@ -457,7 +458,7 @@ var showMarker = function(evt) {
 	var text = "";
 	if (feature.geometry instanceof Geometry.Point) {
 		lonlat = OpenLayers.LonLat.fromString(feature.geometry.toShortString());
-		text = "<div style='min-width: 220px; min-height: 100px;'>户主：<a href='' style='margin-left: 5px;' target='_blank'>" + feature.data.hostName +"</a><br /><span style='position: absolute;'>备注：</span><textarea cols='20' rows='3' id='marker-description' style='margin-left: 45px;'>"
+		text = "<div style='min-width: 220px; min-height: 100px;'>户主：<a href='/house/editHouse/" + feature.data.houseId + "' style='margin-left: 5px;' target='_blank'>" + feature.data.hostName +"</a><br /><span style='position: absolute;'>备注：</span><textarea cols='20' rows='3' id='marker-description' style='margin-left: 45px;'>"
 			+ feature.data.description + "</textarea><br /><input type='button' value='保存' style='float: right;margin-right: 11px;' onclick=\"saveDescription(" 
 			+ feature.data.dbFeatureId + ", '"+ feature.geometry.CLASS_NAME + "')\"/><div class='clear'></div></div>";
 	} else {
@@ -698,6 +699,7 @@ function initAll(mapMeta){
 							if(data && data.status == "SUCCESS"){
 								$("#success-tip").fadeIn("slow").delay(2000);
 								selectCtrlr.handlers.feature.lastFeature.data.hostName = $("#host-input").tokenInput("get")[0].name;
+								selectCtrlr.handlers.feature.lastFeature.data.houseId = requestData.houseId;
 								selectCtrlr.handlers.feature.lastFeature.data.description = requestData.description;
 								$("#success-tip").hide('explode');
 							}else{

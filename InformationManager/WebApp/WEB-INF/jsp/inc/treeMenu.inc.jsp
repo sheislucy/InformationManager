@@ -11,6 +11,9 @@
 		<p>
 			<input class="mapButton" type="button" value="户籍信息浏览" dataUrl="/house/inc" />
 		</p>
+		<p>
+			<input class="mapButton" type="button" value="地图浏览" dataUrl="/map/inc/4" />
+		</p>
 	</div>
 	<h3>综合查询</h3>
 	<div>
@@ -35,6 +38,10 @@
 				<input class="fr mr10" type="button" value="编辑" forwardType="edit" dataUrl="/map/edit/${map.id}"/>
 			</p>
 		</c:forEach>
+		<p>
+			<input class="fl" type="button" value="地图浏览" dataUrl="/map/inc/4"/>
+			<input class="fr mr10" type="button" value="编辑" forwardType="edit" dataUrl="/map/edit/4"/>
+		</p>
 	</div>
 </div>
 <script>

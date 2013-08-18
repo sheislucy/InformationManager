@@ -11,7 +11,7 @@
 	<div id="search-tab-1">
 	</div>
 </div>
-<div id="search-result">
+<div id="search-result-house">
 	<table id="jqGrid-house"></table>
 	<div id="pager-house"></div>
 </div>
@@ -43,5 +43,6 @@
 		init();
 		$(":button").button();
 		$("#search-criteria").tabs();
+		adjustCenterSize();
 	});
 </script>

@@ -1,8 +1,12 @@
 function adjustCenterSize(){
 //	$("#jqGrid-people").setGridWidth($(".ui-layout-center")[0].clientWidth - 15);
 	$("#jqGrid-people").setGridWidth($("#search-criteria").width());
-	$("#search-result").height($(".ui-layout-center")[0].clientHeight - $("#search-criteria").height() - 60);
+	$("#search-result-people").height($(".ui-layout-center")[0].clientHeight - $("#search-criteria").height() - 60);
 	$("#jqGrid-people").setGridHeight($(".ui-layout-center")[0].clientHeight - $("#search-criteria").height() - 113);
+	
+	$("#jqGrid-house").setGridWidth($("#search-criteria").width());
+	$("#search-result-house").height($(".ui-layout-center")[0].clientHeight - $("#search-criteria").height() - 60);
+	$("#jqGrid-house").setGridHeight($(".ui-layout-center")[0].clientHeight - $("#search-criteria").height() - 113);
 }
 
 function adjustAccordionSize(){

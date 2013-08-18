@@ -54,7 +54,7 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<div id="search-result">
+<div id="search-result-people">
 	<table id="jqGrid-people"></table>
 	<div id="pager-people"></div>
 </div>
