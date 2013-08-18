@@ -50,7 +50,6 @@ var People = function() {
 			url : '/people/people.json?',
 			datatype : "json",
 			mtype : "post",
-//			postData : postDataParam,
 			ajaxOptions: {
 				cache: false
 			},
@@ -180,18 +179,11 @@ var People = function() {
 						no : (table.getGridParam('page') - 1)
 								* table.getGridParam('rowNum') + i + 1
 					});
-					// if (table.jqGrid('getRowData', ids[i]).hostId == table
-					// .jqGrid('getRowData', ids[i]).pid) {
-					// $('#' + $.jgrid.jqID(ids[i])).addClass("hostRow");
-					// }
 				}
 			},
-//			multiselect : true,
 			jsonReader : {
-//				root : "peopleList",
 				repeatitems : false
 			},
-			// editurl : "server.php",
 			caption : "人员信息表"
 		});
 		table.jqGrid('navGrid', "#pager-people", {

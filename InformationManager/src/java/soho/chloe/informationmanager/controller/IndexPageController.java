@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import soho.chloe.informationmanager.service.MapService;
 import soho.chloe.informationmanager.utils.InformationManagerConstants;
-import soho.chloe.informationmanager.web.MyPropertyPlaceholderConfigurer;
+import soho.chloe.informationmanager.web.ChloePropertyPlaceholderConfigurer;
 
 @Controller
 public class IndexPageController extends BaseController {
@@ -22,11 +22,11 @@ public class IndexPageController extends BaseController {
 		mv.addObject("mapList", mapService.getAllMaps());
 		mv.addObject(
 				"defaultPageSize",
-				(String) MyPropertyPlaceholderConfigurer
+				(String) ChloePropertyPlaceholderConfigurer
 						.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE));
 		mv.addObject(
 				"optionalPageSize",
-				(String) MyPropertyPlaceholderConfigurer
+				(String) ChloePropertyPlaceholderConfigurer
 						.getContextProperty(InformationManagerConstants.OPTIONAL_PAGE_SIZE));
 		mv.setViewName("index");
 		return mv;

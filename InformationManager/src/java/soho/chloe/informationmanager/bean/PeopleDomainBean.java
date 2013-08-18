@@ -1,22 +1,16 @@
 package soho.chloe.informationmanager.bean;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import soho.chloe.informationmanager.web.CustomDateSerializer;
 
-public class PeopleDomainBean implements Serializable {
+public class PeopleDomainBean extends PeopleMiniDomainBean {
 	private static final long serialVersionUID = 1L;
-	private Integer pid;
-	private String ptype;// 常住/外出/暂住
 
-	private String cardId;
-	private String name;
+	private String ptype;// 常住/外出/暂住
 	private String sname;
-	private Date birthday;
-	private String gender;
 	private String education;
 	private String addr;
 	private String job;
@@ -48,14 +42,6 @@ public class PeopleDomainBean implements Serializable {
 	private String currentAddress;
 	private Date lastUpdateTime;
 
-	public Integer getPid() {
-		return pid;
-	}
-
-	public void setPid(Integer pid) {
-		this.pid = pid;
-	}
-
 	public String getPtype() {
 		return ptype;
 	}
@@ -64,45 +50,12 @@ public class PeopleDomainBean implements Serializable {
 		this.ptype = ptype;
 	}
 
-	public String getCardId() {
-		return cardId;
-	}
-
-	public void setCardId(String cardId) {
-		this.cardId = cardId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getSname() {
 		return sname;
 	}
 
 	public void setSname(String sname) {
 		this.sname = sname;
-	}
-
-	@JsonSerialize(using = CustomDateSerializer.class)
-	public Date getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
 	}
 
 	public String getEducation() {

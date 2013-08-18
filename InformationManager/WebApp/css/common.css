@@ -158,6 +158,10 @@ a:active {
 	margin-right: 10px;
 }
 
+.mb30{
+	margin-bottom: 30px;
+}
+
 .left-right-corner{
 	left: 30px;
 	bottom: 0px;
@@ -165,6 +169,10 @@ a:active {
 	width: 100px;
 	height: 60px;
 	z-index: 9999;
+}
+
+.bold{
+	font-weight: bold;
 }
 
 /* .composite-search p{

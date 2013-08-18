@@ -2,14 +2,16 @@ package soho.chloe.informationmanager.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -23,7 +25,6 @@ public class HouseEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private int pid;
 
 	@Column(name = "usetype")
 	private String useType;
@@ -33,7 +34,7 @@ public class HouseEntity implements Serializable {
 	private String buildStruct;
 
 	@Column(name = "floorcount")
-	private String floorCount;
+	private Integer floorCount;
 
 	@Column(name = "islegal")
 	private Boolean isLegal;
@@ -45,7 +46,7 @@ public class HouseEntity implements Serializable {
 	private String landArea;
 
 	@Column(name = "buildingarea")
-	private Double buildingArea;
+	private String buildingArea;
 
 	@Column(name = "buildingage")
 	private Integer buildingAge;
@@ -75,10 +76,10 @@ public class HouseEntity implements Serializable {
 
 	@Column(name = "lastupdatetime")
 	private Date lastUpdateTime;
-	
-	@OneToOne
-	@JoinColumn(name = "pid", insertable = false, updatable = false)
-	private PeopleEntity host;
+
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "houseId")
+	private Set<PeopleEntity> houseMembers;
 
 	public int getId() {
 		return id;
@@ -86,14 +87,6 @@ public class HouseEntity implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getPid() {
-		return pid;
-	}
-
-	public void setPid(int pid) {
-		this.pid = pid;
 	}
 
 	public String getUseType() {
@@ -120,11 +113,11 @@ public class HouseEntity implements Serializable {
 		this.buildStruct = buildStruct;
 	}
 
-	public String getFloorCount() {
+	public Integer getFloorCount() {
 		return floorCount;
 	}
 
-	public void setFloorCount(String floorCount) {
+	public void setFloorCount(Integer floorCount) {
 		this.floorCount = floorCount;
 	}
 
@@ -152,11 +145,11 @@ public class HouseEntity implements Serializable {
 		this.landArea = landArea;
 	}
 
-	public Double getBuildingArea() {
+	public String getBuildingArea() {
 		return buildingArea;
 	}
 
-	public void setBuildingArea(Double buildingArea) {
+	public void setBuildingArea(String buildingArea) {
 		this.buildingArea = buildingArea;
 	}
 
@@ -240,11 +233,12 @@ public class HouseEntity implements Serializable {
 		this.lastUpdateTime = lastUpdateTime;
 	}
 
-	public PeopleEntity getHost() {
-		return host;
+	public Set<PeopleEntity> getHouseMembers() {
+		return houseMembers;
 	}
 
-	public void setHost(PeopleEntity host) {
-		this.host = host;
+	public void setHouseMembers(Set<PeopleEntity> houseMembers) {
+		this.houseMembers = houseMembers;
 	}
+
 }

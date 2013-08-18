@@ -1,16 +1,3 @@
-function preLoad() {
-	if (!this.support.loading) {
-		alert("You need the Flash Player to use SWFUpload.");
-		return false;
-	} else if (!this.support.imageResize) {
-		alert("You need Flash Player 10 to upload resized images.");
-		return false;
-	}
-}
-function loadFailed() {
-	alert("Something went wrong while loading SWFUpload. If this were a real application we'd clean up and then give you an alternative");
-}
-
 function fileQueueError(file, errorCode, message) {
 	try {
 		var imageName = "error.gif";
@@ -38,7 +25,7 @@ function fileQueueError(file, errorCode, message) {
 			break;
 		}
 
-		addImage("images/" + imageName);
+		addImage("../../images/material/" + imageName, pictureId);
 
 	} catch (ex) {
 		this.debug(ex);
@@ -49,7 +36,7 @@ function fileQueueError(file, errorCode, message) {
 function fileDialogComplete(numFilesSelected, numFilesQueued) {
 	try {
 		if (numFilesQueued > 0) {
-			this.startResizedUpload(this.getFile(0).ID, 100, 100, SWFUpload.RESIZE_ENCODING.JPEG, 100);
+			this.startUpload();
 		}
 	} catch (ex) {
 		this.debug(ex);
@@ -63,8 +50,13 @@ function uploadProgress(file, bytesLoaded) {
 
 		var progress = new FileProgress(file,  this.customSettings.upload_target);
 		progress.setProgress(percent);
-		progress.setStatus("Uploading...");
-		progress.toggleCancel(true, this);
+		if (percent === 100) {
+			progress.setStatus("缩略图生成中...");
+			progress.toggleCancel(false, this);
+		} else {
+			progress.setStatus("上传中...");
+			progress.toggleCancel(true, this);
+		}
 	} catch (ex) {
 		this.debug(ex);
 	}
@@ -74,19 +66,26 @@ function uploadSuccess(file, serverData) {
 	try {
 		var progress = new FileProgress(file,  this.customSettings.upload_target);
 
-		if (serverData.substring(0, 7) === "FILEID:") {
-			addImage("thumbnail.php?id=" + serverData.substring(7));
+		var jsonData;
+		try{
+			jsonData= JSON.parse(serverData);
+			if (jsonData.status == "SUCCESS") {
+				addImage("../thumbnail?file=" + jsonData.fileName, jsonData.pictureId);
 
-			progress.setStatus("Upload Complete.");
-			progress.toggleCancel(false);
-		} else {
-			addImage("images/error.gif");
-			progress.setStatus("Error.");
+				progress.setStatus("缩略图生成完毕.");
+				progress.toggleCancel(false);
+			}else{
+				addImage("../../images/material/error.gif", "");
+				progress.setStatus("出错啦...");
+				progress.toggleCancel(false);
+				alert(serverData);
+			}
+		}catch(err){
+			addImage("../../images/material/error.gif", "");
+			progress.setStatus("出错啦...");
 			progress.toggleCancel(false);
 			alert(serverData);
-
 		}
-
 
 	} catch (ex) {
 		this.debug(ex);
@@ -97,11 +96,11 @@ function uploadComplete(file) {
 	try {
 		/*  I want the next upload to continue automatically so I'll call startUpload here */
 		if (this.getStats().files_queued > 0) {
-			this.startResizedUpload(this.getFile(0).ID, 100, 100, SWFUpload.RESIZE_ENCODING.JPEG, 100);
+			this.startUpload();
 		} else {
 			var progress = new FileProgress(file,  this.customSettings.upload_target);
 			progress.setComplete();
-			progress.setStatus("All images received.");
+			progress.setStatus("图片上传成功.");
 			progress.toggleCancel(false);
 		}
 	} catch (ex) {
@@ -118,7 +117,7 @@ function uploadError(file, errorCode, message) {
 			try {
 				progress = new FileProgress(file,  this.customSettings.upload_target);
 				progress.setCancelled();
-				progress.setStatus("Cancelled");
+				progress.setStatus("取消");
 				progress.toggleCancel(false);
 			}
 			catch (ex1) {
@@ -129,7 +128,7 @@ function uploadError(file, errorCode, message) {
 			try {
 				progress = new FileProgress(file,  this.customSettings.upload_target);
 				progress.setCancelled();
-				progress.setStatus("Stopped");
+				progress.setStatus("停止");
 				progress.toggleCancel(true);
 			}
 			catch (ex2) {
@@ -143,7 +142,7 @@ function uploadError(file, errorCode, message) {
 			break;
 		}
 
-		addImage("images/" + imageName);
+		addImage("../../images/material/" + imageName, "");
 
 	} catch (ex3) {
 		this.debug(ex3);
@@ -152,11 +151,13 @@ function uploadError(file, errorCode, message) {
 }
 
 
-function addImage(src) {
-	var newImg = document.createElement("img");
-	newImg.style.margin = "5px";
-
-	document.getElementById("thumbnails").appendChild(newImg);
+function addImage(src, pictureId) {
+	var imgWrapper = $("#thumbnail-example").clone();
+	
+	var newImg = imgWrapper.find("img")[0];
+	imgWrapper.find("#pictureId").val(pictureId);
+	$("#thumbnails").prepend(imgWrapper);
+	
 	if (newImg.filters) {
 		try {
 			newImg.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 0;
@@ -172,6 +173,7 @@ function addImage(src) {
 		fadeIn(newImg, 0);
 	};
 	newImg.src = src;
+	imgWrapper.show();
 }
 
 function fadeIn(element, opacity) {

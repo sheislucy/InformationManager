@@ -33,7 +33,7 @@ public class PeopleEntity implements Serializable {
 	private String name;
 	private String sname;
 	private Date birthday;
-	private Boolean gender;
+	private Integer gender;
 	private Integer education;
 	private String addr;
 	private String job;
@@ -41,6 +41,9 @@ public class PeopleEntity implements Serializable {
 	private String phone;
 	private String wplace;
 	private String spec;
+
+	@Column(name = "houseid")
+	private Integer houseId;
 
 	@Column(name = "incomesource")
 	private String incomeSource;
@@ -152,7 +155,7 @@ public class PeopleEntity implements Serializable {
 	}
 
 	public String getName() {
-		return name;
+		return name.trim();
 	}
 
 	public void setName(String name) {
@@ -175,11 +178,11 @@ public class PeopleEntity implements Serializable {
 		this.birthday = birthday;
 	}
 
-	public Boolean getGender() {
+	public Integer getGender() {
 		return gender;
 	}
 
-	public void setGender(Boolean gender) {
+	public void setGender(Integer gender) {
 		this.gender = gender;
 	}
 
@@ -485,6 +488,14 @@ public class PeopleEntity implements Serializable {
 
 	public void setSocialType(SocialType socialType) {
 		this.socialType = socialType;
+	}
+
+	public Integer getHouseId() {
+		return houseId;
+	}
+
+	public void setHouseId(Integer houseId) {
+		this.houseId = houseId;
 	}
 
 }

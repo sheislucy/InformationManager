@@ -3,6 +3,8 @@
  */
 package soho.chloe.informationmanager.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import soho.chloe.informationmanager.bean.GridJsonResponseBean;
 import soho.chloe.informationmanager.bean.GridPeopleRequestBean;
+import soho.chloe.informationmanager.bean.HouseMemberValidationResultBean;
+import soho.chloe.informationmanager.bean.PeopleDomainBean;
 import soho.chloe.informationmanager.service.PeopleService;
 
 /**
@@ -40,7 +44,7 @@ public class PeopleController extends BaseController {
 		GridJsonResponseBean response = service.getPeopleList(requestBean);
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/houseMembers/{pid}", method = RequestMethod.GET)
 	public ModelAndView getHouseMembers(@PathVariable("pid") String pid) {
 		// TODO fake pid, real one hasn't been passed in
@@ -51,6 +55,20 @@ public class PeopleController extends BaseController {
 		// mv.addObject("response", dto);
 		mv.setViewName("houseDetail");
 		return mv;
+	}
+
+	@RequestMapping(value = "/searchPeopleForHouse", method = RequestMethod.POST)
+	public @ResponseBody
+	GridJsonResponseBean searchForHouseMember(
+			@RequestBody GridPeopleRequestBean requestBean) {
+		return service.searchPeopleForHouse(requestBean);
+	}
+
+	@RequestMapping(value = "/saveMemberDetail", method = RequestMethod.POST)
+	public @ResponseBody
+	HouseMemberValidationResultBean saveMemberDetail(
+			@RequestBody List<PeopleDomainBean> memberList) {
+		return service.saveMemberRelation(memberList);
 	}
 
 	// @RequestMapping(value = "/update.json", method = RequestMethod.PUT)

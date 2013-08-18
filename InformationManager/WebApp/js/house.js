@@ -206,27 +206,13 @@ var House = function() {
 				 	onClickButton: function(){ 
 				 		var selectedRowId = table.jqGrid('getGridParam', 'selrow');
 				 		if(selectedRowId != null ){
-				 			window.open("/house/editHouse/" + table.jqGrid ('getCell', selectedRowId, 'id')); //TODO
+				 			window.open("/house/editHouse/" + table.jqGrid ('getCell', selectedRowId, 'id'));
 				 		}
 				 	}, 
 				 	position:"last"
 			 });
-		table.jqGrid("setGridParam", {
-			onSelectRow : function(rowid, status) {
-				openHouseMembers(table.jqGrid('getRowData', rowid).pid);
-			}
-		});
 	};
 
-	this.refreshGrid = function(postDataParam) {
-		$("#jqGrid-house").jqGrid('setGridParam', {
-			postData : postDataParam
-		}).trigger("reloadGrid");
-	};
-
-	function openHouseMembers(pid) {
-//		window.open("/people/houseMembers/" + pid);
-	}
 };
 
 var house = new House();

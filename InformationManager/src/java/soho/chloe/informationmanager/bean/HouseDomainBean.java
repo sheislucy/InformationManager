@@ -1,22 +1,26 @@
 package soho.chloe.informationmanager.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import soho.chloe.informationmanager.web.CustomDateSerializer;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HouseDomainBean extends HouseMiniDomainBean {
 	private static final long serialVersionUID = 1L;
 	private int pid; // host pid
 	private String useType;
 	private String address;
 	private String buildStruct;
-	private String floorCount;
+	private Integer floorCount;
 	private Boolean isLegal;
 	private String landClass;
 	private String landArea;
-	private Double buildingArea;
+	private String buildingArea;
 	private Integer buildingAge;
 	private String property;
 	private String propertyNo;
@@ -27,6 +31,9 @@ public class HouseDomainBean extends HouseMiniDomainBean {
 	private Boolean hasWall;
 	private Boolean isDangerous;
 	private Date lastUpdateTime;
+
+	private List<HousePictureDomainBean> pictures = new ArrayList<HousePictureDomainBean>();
+	private List<PeopleDomainBean> members = new ArrayList<PeopleDomainBean>();
 
 	public int getPid() {
 		return pid;
@@ -60,11 +67,11 @@ public class HouseDomainBean extends HouseMiniDomainBean {
 		this.buildStruct = buildStruct;
 	}
 
-	public String getFloorCount() {
+	public Integer getFloorCount() {
 		return floorCount;
 	}
 
-	public void setFloorCount(String floorCount) {
+	public void setFloorCount(Integer floorCount) {
 		this.floorCount = floorCount;
 	}
 
@@ -92,11 +99,11 @@ public class HouseDomainBean extends HouseMiniDomainBean {
 		this.landArea = landArea;
 	}
 
-	public Double getBuildingArea() {
+	public String getBuildingArea() {
 		return buildingArea;
 	}
 
-	public void setBuildingArea(Double buildingArea) {
+	public void setBuildingArea(String buildingArea) {
 		this.buildingArea = buildingArea;
 	}
 
@@ -179,6 +186,22 @@ public class HouseDomainBean extends HouseMiniDomainBean {
 
 	public void setLastUpdateTime(Date lastUpdateTime) {
 		this.lastUpdateTime = lastUpdateTime;
+	}
+
+	public List<HousePictureDomainBean> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(List<HousePictureDomainBean> pictures) {
+		this.pictures = pictures;
+	}
+
+	public List<PeopleDomainBean> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<PeopleDomainBean> members) {
+		this.members = members;
 	}
 
 }

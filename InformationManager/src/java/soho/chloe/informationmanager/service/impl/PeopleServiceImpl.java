@@ -19,18 +19,23 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import soho.chloe.informationmanager.bean.GridJsonRequestBean;
 import soho.chloe.informationmanager.bean.GridJsonResponseBean;
 import soho.chloe.informationmanager.bean.GridPeopleRequestBean;
+import soho.chloe.informationmanager.bean.HouseMemberValidationResultBean;
 import soho.chloe.informationmanager.bean.PeopleDomainBean;
+import soho.chloe.informationmanager.bean.PeopleMiniDomainBean;
 import soho.chloe.informationmanager.entity.PeopleEntity;
 import soho.chloe.informationmanager.repositories.PeopleDao;
 import soho.chloe.informationmanager.service.BaseService;
 import soho.chloe.informationmanager.service.PeopleService;
 import soho.chloe.informationmanager.utils.InformationManagerConstants;
-import soho.chloe.informationmanager.web.MyPropertyPlaceholderConfigurer;
+import soho.chloe.informationmanager.utils.JsonStatus;
+import soho.chloe.informationmanager.web.ChloePropertyPlaceholderConfigurer;
 
 /**
  * @author sony
@@ -70,12 +75,32 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	// return spec;
 	// }
 
+	@Override
+	public GridJsonResponseBean searchPeopleForHouse(
+			GridPeopleRequestBean requestBean) {
+		PageRequest page = new PageRequest(requestBean.getPage() - 1,
+				requestBean.getRows(), new Sort(Direction.ASC, "pid"));
+		List<PeopleEntity> entityList = dao.findByNameLikeAndHouseIdIsNull(
+				requestBean.getName() + "%", page);
+		int total = (int) dao.countByNameLike(requestBean.getName() + "%");
+		GridJsonResponseBean responseBean = new GridJsonResponseBean();
+		for (PeopleEntity entity : entityList) {
+			responseBean.getRows().add(buildPeopleMiniDomainBean(entity));
+		}
+		int rowsInPage = requestBean.getRows();
+		responseBean.setTotal(total / rowsInPage + 1);
+		responseBean.setRecords(total);
+		return responseBean;
+	}
+
+	@Override
 	public GridJsonResponseBean getPeopleList(
 			final GridPeopleRequestBean requestBean) {
 		if (requestBean.getRows() <= 0) {
 			requestBean
-					.setRows(Integer.parseInt((String) MyPropertyPlaceholderConfigurer
-							.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
+					.setRows(Integer
+							.parseInt((String) ChloePropertyPlaceholderConfigurer
+									.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
 		}
 		int totalCount = 0;
 		List<PeopleEntity> peopleList = new ArrayList<PeopleEntity>();
@@ -90,6 +115,69 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		response.setRecords(totalCount);
 		buildResponse(response, peopleList);
 		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public HouseMemberValidationResultBean saveMemberRelation(
+			List<PeopleDomainBean> memberList) {
+		HouseMemberValidationResultBean result = new HouseMemberValidationResultBean();
+		int hostCount = 0;
+		int spouseCount = 0;
+		boolean sameHouse = true;
+		Integer houseId = null;
+		for (PeopleDomainBean people : memberList) {
+			int relation = Integer.parseInt(people.getRelation());
+			if (relation == 1) {
+				hostCount++;
+			} else if (relation == 2) {
+				spouseCount++;
+			}
+			if (houseId == null) {
+				houseId = people.getHouseId();
+			} else if (people.getHouseId() != people.getHouseId()) {
+				sameHouse = false;
+				break;
+			}
+		}
+		if (sameHouse && houseId != null) {
+			if (hostCount == 0) {
+				result.setStatus(JsonStatus.ERROR);
+				result.getErrorList().add("户主缺失");
+			} else if (hostCount > 1) {
+				result.setStatus(JsonStatus.ERROR);
+				result.getErrorList().add("户主多于一个");
+			}
+			if (spouseCount > 1) {
+				result.setStatus(JsonStatus.ERROR);
+				result.getErrorList().add("配偶多于一个");
+			}
+			if (result.getErrorList().isEmpty()) {
+				dao.clearSpecificHouseMembers(houseId);
+				for (PeopleDomainBean people : memberList) {
+					int relation = Integer.parseInt(people.getRelation());
+					dao.updateSpecificHouseMembers(people.getPid(),
+							people.getHouseId(), relation);
+				}
+				result.setStatus(JsonStatus.SUCCESS);
+			}
+		} else {
+			result.setStatus(JsonStatus.ERROR);
+			result.getErrorList().add("各成员未指定同一户");
+		}
+		return result;
+	}
+
+	private PeopleMiniDomainBean buildPeopleMiniDomainBean(PeopleEntity entity) {
+		PeopleMiniDomainBean bean = new PeopleMiniDomainBean();
+		bean.setBirthday(entity.getBirthday());
+		bean.setCardId(entity.getCardId());
+		bean.setGender((entity.getGender() != null && entity.getGender() == 1) ? "男"
+				: "女");
+		bean.setHouseId(entity.getHouseId());
+		bean.setName(entity.getName());
+		bean.setPid(entity.getPid());
+		return bean;
 	}
 
 	private Specification<PeopleEntity> buildSpecification(
@@ -118,7 +206,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 					Date startDate = (Date) calendar.getTime().clone();
 					predicates.add(cb.greaterThanOrEqualTo(
 							root.<Date> get("birthday"), startDate));
-					System.out.println("startDate: "+startDate);
+					System.out.println("startDate: " + startDate);
 				}
 
 				if (!StringUtils.isEmpty(requestBean.getAgeLow())) {
@@ -128,7 +216,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 					Date endDate = (Date) calendar.getTime().clone();
 					predicates.add(cb.lessThanOrEqualTo(
 							root.<Date> get("birthday"), endDate));
-					System.out.println("endDate: "+endDate);
+					System.out.println("endDate: " + endDate);
 				}
 
 				if (!StringUtils.isEmpty(requestBean.getIncomeLow())) {
@@ -164,7 +252,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		};
 		return spec;
 	}
-	
+
 	private void buildResponse(GridJsonResponseBean response,
 			List<PeopleEntity> entityList) {
 		response.getRows().clear();
@@ -181,7 +269,8 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 			pd.setEducation(pe.getEducationType() != null ? pe
 					.getEducationType().getTypeName() : null);
 			pd.setEthnic(pe.getEthnic());
-			pd.setGender(pe.getGender() ? "男" : "女");
+			pd.setGender((pe.getGender() != null && pe.getGender() == 1) ? "男"
+					: "女");
 			pd.setHealth(pe.getHealth());
 			pd.setHeight(pe.getHeight());
 			pd.setRelation(pe.getRelationType() != null ? pe.getRelationType()
@@ -223,29 +312,29 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		}
 	}
 
-	private PageRequest buildPageRequest(GridJsonRequestBean requestDTO) {
+	private PageRequest buildPageRequest(GridJsonRequestBean requestBean) {
 		Sort sort = null;
-		if (StringUtils.isEmpty(requestDTO.getSidx())
-				&& StringUtils.isEmpty(requestDTO.getSord())) {
+		if (StringUtils.isEmpty(requestBean.getSidx())
+				&& StringUtils.isEmpty(requestBean.getSord())) {
 			sort = new Sort(Direction.DESC, "pid");
-		} else if (StringUtils.isEmpty(requestDTO.getSidx())) {
-			if (requestDTO.getSord().equalsIgnoreCase(Direction.DESC.name())) {
+		} else if (StringUtils.isEmpty(requestBean.getSidx())) {
+			if (requestBean.getSord().equalsIgnoreCase(Direction.DESC.name())) {
 				sort = new Sort(Direction.DESC, "pid");
 			} else {
 				sort = new Sort(Direction.ASC, "pid");
 			}
-		} else if (StringUtils.isEmpty(requestDTO.getSord())) {
-			sort = new Sort(Direction.DESC, requestDTO.getSidx());
+		} else if (StringUtils.isEmpty(requestBean.getSord())) {
+			sort = new Sort(Direction.DESC, requestBean.getSidx());
 		} else {
-			if (requestDTO.getSord().equalsIgnoreCase(Direction.DESC.name())) {
-				sort = new Sort(Direction.DESC, requestDTO.getSidx());
+			if (requestBean.getSord().equalsIgnoreCase(Direction.DESC.name())) {
+				sort = new Sort(Direction.DESC, requestBean.getSidx());
 			} else {
-				sort = new Sort(Direction.ASC, requestDTO.getSidx());
+				sort = new Sort(Direction.ASC, requestBean.getSidx());
 			}
 		}
 
-		return new PageRequest(requestDTO.getPage() - 1, requestDTO.getRows(),
-				sort);
+		return new PageRequest(requestBean.getPage() - 1,
+				requestBean.getRows(), sort);
 	}
 
 }

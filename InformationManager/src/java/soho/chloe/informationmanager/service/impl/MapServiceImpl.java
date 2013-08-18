@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import soho.chloe.informationmanager.bean.LineDomainBean;
 import soho.chloe.informationmanager.bean.MapDomainBean;
@@ -14,6 +16,7 @@ import soho.chloe.informationmanager.entity.GeoLineEntity;
 import soho.chloe.informationmanager.entity.GeoPointEntity;
 import soho.chloe.informationmanager.entity.GeoPolygonEntity;
 import soho.chloe.informationmanager.entity.MapEntity;
+import soho.chloe.informationmanager.entity.PeopleEntity;
 import soho.chloe.informationmanager.repositories.GeoLineDao;
 import soho.chloe.informationmanager.repositories.GeoPointDao;
 import soho.chloe.informationmanager.repositories.GeoPolygonDao;
@@ -47,12 +50,14 @@ public class MapServiceImpl extends BaseService implements MapService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public void savePoint(PointDomainBean pointBean) {
 		if (pointBean.getId() != null) {
 			// update
 			GeoPointEntity pointEntity = pointDao.findOne(pointBean.getId());
 			if (pointEntity == null) {
-				//if can't find the one to be updated (multiple threads will cause this problem), force to insert one
+				// if can't find the one to be updated (multiple threads will
+				// cause this problem), force to insert one
 				pointEntity = new GeoPointEntity();
 				pointEntity.setId(pointBean.getId());
 			}
@@ -95,18 +100,21 @@ public class MapServiceImpl extends BaseService implements MapService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public void deletePoint(int featureId) {
 		pointDao.delete(featureId);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public void saveLine(LineDomainBean lineBean) {
 		if (lineBean.getId() != null) {
 			// update
 			GeoLineEntity entity = lineDao.findOne(lineBean.getId());
 			if (entity == null) {
 				if (entity == null) {
-					//if can't find the one to be updated (multiple threads will cause this problem), force to insert one
+					// if can't find the one to be updated (multiple threads
+					// will cause this problem), force to insert one
 					entity = new GeoLineEntity();
 					entity.setId(entity.getId());
 				}
@@ -134,18 +142,21 @@ public class MapServiceImpl extends BaseService implements MapService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public void deleteLine(int featureId) {
 		lineDao.delete(featureId);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public void savePolygon(PolygonDomainBean polygonBean) {
 		if (polygonBean.getId() != null) {
 			// update
 			GeoPolygonEntity entity = polygonDao.findOne(polygonBean.getId());
 			if (entity == null) {
 				if (entity == null) {
-					//if can't find the one to be updated (multiple threads will cause this problem), force to insert one
+					// if can't find the one to be updated (multiple threads
+					// will cause this problem), force to insert one
 					entity = new GeoPolygonEntity();
 					entity.setId(entity.getId());
 				}
@@ -173,6 +184,7 @@ public class MapServiceImpl extends BaseService implements MapService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public void deletePolygon(int featureId) {
 		polygonDao.delete(featureId);
 	}
@@ -229,8 +241,16 @@ public class MapServiceImpl extends BaseService implements MapService {
 		bean.setHouseId(entity.getHouseId());
 		bean.setMapId(entity.getMapId());
 		bean.setId(entity.getId());
-		bean.setHostName(entity.getHouse().getHost().getName());
-		bean.setHostId(entity.getHouse().getHost().getPid());
+		if (!entity.getHouse().getHouseMembers().isEmpty()) {
+			for (PeopleEntity people : entity.getHouse().getHouseMembers()) {
+				if (people.getRelationId() != null
+						&& people.getRelationId() == 1) {
+					bean.setHostName(people.getName());
+					bean.setHostId(people.getPid());
+					break;
+				}
+			}
+		}
 		return bean;
 	}
 
