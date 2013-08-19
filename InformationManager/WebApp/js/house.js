@@ -1,11 +1,10 @@
 $.extend($.jgrid.defaults, {
 	datatype : 'json',
 	ajaxGridOptions : {
-		contentType : "application/json"
+		contentType: "application/json; charset=UTF-8"
 	},
 	ajaxRowOptions : {
-		contentType : "application/json",
-
+		contentType: "application/json; charset=UTF-8"
 	},
 	serializeGridData : function(data) {
 		delete data.oper;
@@ -14,7 +13,7 @@ $.extend($.jgrid.defaults, {
 });
 $.extend($.jgrid.edit, {
 	ajaxEditOptions : {
-		contentType : "application/json",
+		contentType: "application/json; charset=UTF-8",
 		type : "PUT"
 	},
 	serializeEditData : function(data) {
@@ -25,7 +24,7 @@ $.extend($.jgrid.edit, {
 
 $.extend($.jgrid.del, {
 	ajaxDelOptions : {
-		contentType : "application/json"
+		contentType: "application/json; charset=UTF-8"
 	},
 	mtype : "DELETE",
 	serializeDelData : function(data) {
