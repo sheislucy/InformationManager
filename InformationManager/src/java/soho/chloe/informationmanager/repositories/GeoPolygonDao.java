@@ -10,7 +10,7 @@ import soho.chloe.informationmanager.entity.GeoPolygonEntity;
 
 /**
  * @author lucy
- *
+ * 
  */
 public interface GeoPolygonDao extends JpaRepository<GeoPolygonEntity, Integer> {
 	@Transactional(readOnly = true)

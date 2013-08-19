@@ -11,14 +11,11 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 import soho.chloe.informationmanager.utils.InformationManagerConstants;
 
-public class InforPropertyPlaceholderConfigurer extends
-		PropertyPlaceholderConfigurer {
+public class InforPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 	private static Map<String, Object> ctxPropertiesMap = new HashMap<String, Object>();
 
 	@Override
-	protected void processProperties(
-			ConfigurableListableBeanFactory beanFactoryToProcess,
-			Properties props) throws BeansException {
+	protected void processProperties(ConfigurableListableBeanFactory beanFactoryToProcess, Properties props) throws BeansException {
 		super.processProperties(beanFactoryToProcess, props);
 		for (Object key : props.keySet()) {
 			String keyStr = key.toString();
@@ -30,27 +27,21 @@ public class InforPropertyPlaceholderConfigurer extends
 	}
 
 	private void checkUploadDir() {
-		File testHouseImage = new File(
-				(String) InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_DIR));
+		File testHouseImage = new File((String) InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_DIR));
 		if (!testHouseImage.exists()) {
 			testHouseImage.mkdirs();
 		}
 		File testHouseImageThumbnail = new File(
-				(String) InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR));
+				(String) InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR));
 		if (!testHouseImageThumbnail.exists()) {
 			testHouseImageThumbnail.mkdirs();
 		}
-		File testPeopleImage = new File(
-				(String) InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE));
+		File testPeopleImage = new File((String) InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE));
 		if (!testPeopleImage.exists()) {
 			testPeopleImage.mkdirs();
 		}
 		File testPeopleImageThumbnail = new File(
-				(String) InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE_THUMBNAIL));
+				(String) InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE_THUMBNAIL));
 		if (!testPeopleImageThumbnail.exists()) {
 			testPeopleImageThumbnail.mkdirs();
 		}

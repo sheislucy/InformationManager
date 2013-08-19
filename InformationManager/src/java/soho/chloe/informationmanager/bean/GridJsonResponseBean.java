@@ -8,7 +8,7 @@ import java.util.List;
  * Request bean used for jgGrid response
  * 
  * @author lucy
- *
+ * 
  */
 public class GridJsonResponseBean implements Serializable {
 	private static final long serialVersionUID = 1L;

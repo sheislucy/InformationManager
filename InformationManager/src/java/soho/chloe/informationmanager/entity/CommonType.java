@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 /**
  * @author lucy
- *
+ * 
  */
 @Entity
 @Table(name = "type_common")

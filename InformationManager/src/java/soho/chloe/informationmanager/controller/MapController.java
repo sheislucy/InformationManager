@@ -89,7 +89,7 @@ public class MapController extends BaseController {
 		result.setStatus(JsonStatus.SUCCESS);
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/save/polygon", method = RequestMethod.POST)
 	public @ResponseBody
 	JsonResultBean savePolygon(@RequestBody PolygonDomainBean requestBean) {

@@ -57,8 +57,7 @@ public class PeopleController extends BaseController {
 
 	@RequestMapping(value = "/people.json", method = RequestMethod.POST)
 	public @ResponseBody
-	GridJsonResponseBean getPeoplePagingList(
-			@RequestBody GridPeopleRequestBean requestBean) {
+	GridJsonResponseBean getPeoplePagingList(@RequestBody GridPeopleRequestBean requestBean) {
 		GridJsonResponseBean response = service.getPeopleList(requestBean);
 		return response;
 	}
@@ -77,15 +76,13 @@ public class PeopleController extends BaseController {
 
 	@RequestMapping(value = "/searchPeopleForHouse", method = RequestMethod.POST)
 	public @ResponseBody
-	GridJsonResponseBean searchForHouseMember(
-			@RequestBody GridPeopleRequestBean requestBean) {
+	GridJsonResponseBean searchForHouseMember(@RequestBody GridPeopleRequestBean requestBean) {
 		return service.searchPeopleForHouse(requestBean);
 	}
 
 	@RequestMapping(value = "/saveMemberDetail", method = RequestMethod.POST)
 	public @ResponseBody
-	ValidationResultBean saveMemberDetail(
-			@RequestBody List<PeopleDomainBean> memberList) {
+	ValidationResultBean saveMemberDetail(@RequestBody List<PeopleDomainBean> memberList) {
 		return service.saveMemberRelation(memberList);
 	}
 
@@ -105,24 +102,18 @@ public class PeopleController extends BaseController {
 
 	@RequestMapping(value = "/uploadPicture", method = RequestMethod.POST)
 	public @ResponseBody
-	PictureUploadBean uploadHousePhotos(
-			@RequestParam("Filedata") MultipartFile multipartFile,
-			@RequestParam("Filename") String fileName,
-			@RequestParam("pid") Integer pid) throws IllegalStateException,
-			IOException {
+	PictureUploadBean uploadHousePhotos(@RequestParam("Filedata") MultipartFile multipartFile, @RequestParam("Filename") String fileName,
+			@RequestParam("pid") Integer pid) throws IllegalStateException, IOException {
 
-		StringBuffer pathDir = new StringBuffer()
-				.append(InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE));
+		StringBuffer pathDir = new StringBuffer().append(InforPropertyPlaceholderConfigurer
+				.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE));
 
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd-HH");
-		String newName = new StringBuffer().append(UUID.randomUUID())
-				.append(".").append(dateformat.format(new Date())).toString();// UUID.YYYY-MM-DD-HH
+		String newName = new StringBuffer().append(UUID.randomUUID()).append(".").append(dateformat.format(new Date())).toString();// UUID.YYYY-MM-DD-HH
 		// String originalName = multipartFile.getOriginalFilename();
 		String pathAndName = pathDir.append(newName).toString();// F:\\upload\\people\\pictures\\UUID.YYYY-MM-DD-HH
 		String[] nameExtPair = fileName.split(".");
-		String originalExtension = nameExtPair.length > 1 ? "."
-				+ nameExtPair[1] : ".png";
+		String originalExtension = nameExtPair.length > 1 ? "." + nameExtPair[1] : ".png";
 		File file = new File(pathAndName + originalExtension);
 		multipartFile.transferTo(file);
 		service.savePeoplePictureThumbnail(file, newName);
@@ -134,19 +125,15 @@ public class PeopleController extends BaseController {
 	}
 
 	@RequestMapping(value = "/thumbnail", method = RequestMethod.GET)
-	public void download(@RequestParam("file") String fileName,
-			HttpServletResponse response) throws Exception {
+	public void download(@RequestParam("file") String fileName, HttpServletResponse response) throws Exception {
 		String path = new StringBuffer()
-				.append(InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE_THUMBNAIL))
-				.append(fileName).append("_thumbnail.png").toString();
+				.append(InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE_THUMBNAIL)).append(fileName)
+				.append("_thumbnail.png").toString();
 		File thumbnail = new File(path);
 		response.setContentType("image/png; charset=UTF-8");
 		response.setHeader("Content-Length", String.valueOf(thumbnail.length()));
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
-				path));
-		BufferedOutputStream bos = new BufferedOutputStream(
-				response.getOutputStream());
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path));
+		BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
 		byte[] buff = new byte[1024 * 1024];
 		int bytesRead;
 		while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {

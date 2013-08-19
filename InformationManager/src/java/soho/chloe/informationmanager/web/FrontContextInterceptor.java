@@ -15,9 +15,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  */
 public class FrontContextInterceptor extends HandlerInterceptorAdapter {
 	@Override
-	public void postHandle(HttpServletRequest request,
-			HttpServletResponse response, Object handler,
-			ModelAndView modelAndView) {
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
 		modelAndView.addObject("appLocation", request.getContextPath());
 	}
 }

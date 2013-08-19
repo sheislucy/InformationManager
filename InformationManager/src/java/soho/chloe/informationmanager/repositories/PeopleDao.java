@@ -20,8 +20,7 @@ public interface PeopleDao extends JpaRepository<PeopleEntity, Integer> {
 	public Page<PeopleEntity> findAll(Pageable pageable);
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	public Page<PeopleEntity> findAll(Specification<PeopleEntity> spec,
-			Pageable pageable);
+	public Page<PeopleEntity> findAll(Specification<PeopleEntity> spec, Pageable pageable);
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public long count(Specification<PeopleEntity> spec);
@@ -32,8 +31,7 @@ public interface PeopleDao extends JpaRepository<PeopleEntity, Integer> {
 	public void delete(@Param("pid") Integer id);
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	public List<PeopleEntity> findByNameLikeAndHouseIdIsNull(String name,
-			Pageable page);
+	public List<PeopleEntity> findByNameLikeAndHouseIdIsNull(String name, Pageable page);
 
 	@Query("SELECT COUNT (*) FROM  PeopleEntity p WHERE p.name LIKE ?1 AND p.houseId IS NULL")
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -45,12 +43,11 @@ public interface PeopleDao extends JpaRepository<PeopleEntity, Integer> {
 
 	@Modifying
 	@Query("UPDATE PeopleEntity p SET p.houseId =  ?2, p.relationId = ?3 WHERE p.pid = ?1")
-	public void updateSpecificHouseMembers(Integer pid, Integer houseId,
-			Integer relationId);
+	public void updateSpecificHouseMembers(Integer pid, Integer houseId, Integer relationId);
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public List<PeopleEntity> findByHouseIdIsNull();
-	
+
 	@Modifying
 	@Query("UPDATE PeopleEntity p SET p.picture = NULL WHERE p.pid = ?1")
 	public void deletePicture(Integer pid);

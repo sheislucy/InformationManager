@@ -20,14 +20,9 @@ public class IndexPageController extends BaseController {
 	public ModelAndView goPeople() {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mapList", mapService.getAllMaps());
-		mv.addObject(
-				"defaultPageSize",
-				(String) InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE));
-		mv.addObject(
-				"optionalPageSize",
-				(String) InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.OPTIONAL_PAGE_SIZE));
+		mv.addObject("defaultPageSize", (String) InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE));
+		mv.addObject("optionalPageSize",
+				(String) InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.OPTIONAL_PAGE_SIZE));
 		mv.setViewName("index");
 		return mv;
 	}

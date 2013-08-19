@@ -20,11 +20,9 @@ import soho.chloe.informationmanager.bean.PeopleMiniDomainBean;
 public interface PeopleService {
 	public GridJsonResponseBean getPeopleList(GridPeopleRequestBean requestBean);
 
-	public GridJsonResponseBean searchPeopleForHouse(
-			GridPeopleRequestBean requestBean);
+	public GridJsonResponseBean searchPeopleForHouse(GridPeopleRequestBean requestBean);
 
-	public ValidationResultBean saveMemberRelation(
-			List<PeopleDomainBean> memberList);
+	public ValidationResultBean saveMemberRelation(List<PeopleDomainBean> memberList);
 
 	public List<PeopleMiniDomainBean> getMiniPeopleBeanListWithNoHouse();
 
@@ -32,16 +30,15 @@ public interface PeopleService {
 
 	public void updatePeoplePicture(int pid, String fileName);
 
-	public void savePeoplePictureThumbnail(File originalFile, String fileName)
-			throws IOException;
+	public void savePeoplePictureThumbnail(File originalFile, String fileName) throws IOException;
 
 	public void deletePicture(int pid);
-	
+
 	public void saveTextDetail(PeopleDomainBean people);
-	
+
 	public void saveSelectDetail(PeopleDomainBean people);
-	
+
 	public int createPeople(String name);
-	
+
 	public ValidationResultBean deletePeople(int pid);
 }

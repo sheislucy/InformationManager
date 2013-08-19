@@ -53,14 +53,11 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	private PeopleDao dao;
 
 	@Override
-	public GridJsonResponseBean searchPeopleForHouse(
-			GridPeopleRequestBean requestBean) {
-		PageRequest page = new PageRequest(requestBean.getPage() - 1,
-				requestBean.getRows(), new Sort(Direction.ASC, "pid"));
-		List<PeopleEntity> entityList = dao.findByNameLikeAndHouseIdIsNull(
-				requestBean.getName() + "%", page);
-		int total = (int) dao.countByNameLikeAndHouseIdIsNull(requestBean
-				.getName() + "%");
+	public GridJsonResponseBean searchPeopleForHouse(GridPeopleRequestBean requestBean) {
+		PageRequest page = new PageRequest(requestBean.getPage() - 1, requestBean.getRows(), new Sort(Direction.ASC,
+				"pid"));
+		List<PeopleEntity> entityList = dao.findByNameLikeAndHouseIdIsNull(requestBean.getName() + "%", page);
+		int total = (int) dao.countByNameLikeAndHouseIdIsNull(requestBean.getName() + "%");
 		GridJsonResponseBean responseBean = new GridJsonResponseBean();
 		for (PeopleEntity entity : entityList) {
 			responseBean.getRows().add(buildPeopleMiniDomainBean(entity));
@@ -72,20 +69,16 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	}
 
 	@Override
-	public GridJsonResponseBean getPeopleList(
-			final GridPeopleRequestBean requestBean) {
+	public GridJsonResponseBean getPeopleList(final GridPeopleRequestBean requestBean) {
 		if (requestBean.getRows() <= 0) {
-			requestBean
-					.setRows(Integer
-							.parseInt((String) InforPropertyPlaceholderConfigurer
-									.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
+			requestBean.setRows(Integer.parseInt((String) InforPropertyPlaceholderConfigurer
+					.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
 		}
 		int totalCount = 0;
 		List<PeopleEntity> peopleList = new ArrayList<PeopleEntity>();
 
 		totalCount = (int) dao.count(buildSpecification(requestBean));
-		peopleList.addAll(dao.findAll(buildSpecification(requestBean),
-				buildPageRequest(requestBean)).getContent());
+		peopleList.addAll(dao.findAll(buildSpecification(requestBean), buildPageRequest(requestBean)).getContent());
 
 		int rowsInPage = requestBean.getRows();
 		GridJsonResponseBean response = new GridJsonResponseBean();
@@ -97,8 +90,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public ValidationResultBean saveMemberRelation(
-			List<PeopleDomainBean> memberList) {
+	public ValidationResultBean saveMemberRelation(List<PeopleDomainBean> memberList) {
 		ValidationResultBean result = new ValidationResultBean();
 		int hostCount = 0;
 		int spouseCount = 0;
@@ -134,8 +126,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 				dao.clearSpecificHouseMembers(houseId);
 				for (PeopleDomainBean people : memberList) {
 					int relation = Integer.parseInt(people.getRelation());
-					dao.updateSpecificHouseMembers(people.getPid(),
-							people.getHouseId(), relation);
+					dao.updateSpecificHouseMembers(people.getPid(), people.getHouseId(), relation);
 				}
 				result.setStatus(JsonStatus.SUCCESS);
 			}
@@ -170,15 +161,15 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	}
 
 	@Override
-	public void savePeoplePictureThumbnail(File originalFile, String fileName)
-			throws IOException {
+	public void savePeoplePictureThumbnail(File originalFile, String fileName) throws IOException {
 		Thumbnails
 				.of(originalFile)
 				.size(120, 160)
 				.outputFormat("png")
 				.toFile(InforPropertyPlaceholderConfigurer
 						.getContextProperty(InformationManagerConstants.PEOPLE_IMAGE_THUMBNAIL)
-						+ fileName + "_thumbnail");
+						+ fileName
+						+ "_thumbnail");
 	}
 
 	@Override
@@ -244,8 +235,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 	public ValidationResultBean deletePeople(int pid) {
 		PeopleEntity people = dao.findOne(pid);
 		ValidationResultBean result = new ValidationResultBean();
-		if (people.getRelationId() != null
-				&& people.getRelationId() == RelationEnum.HOST.getCode()) {
+		if (people.getRelationId() != null && people.getRelationId() == RelationEnum.HOST.getCode()) {
 			result.getErrorList().add("该人员是户主，请先解散他的家庭再将他删除");
 			result.setStatus(JsonStatus.ERROR);
 		} else {
@@ -272,22 +262,18 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		return bean;
 	}
 
-	private Specification<PeopleEntity> buildSpecification(
-			final GridPeopleRequestBean requestBean) {
+	private Specification<PeopleEntity> buildSpecification(final GridPeopleRequestBean requestBean) {
 		Specification<PeopleEntity> spec = new Specification<PeopleEntity>() {
 			@Override
-			public Predicate toPredicate(Root<PeopleEntity> root,
-					CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<PeopleEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
 				if (!StringUtils.isEmpty(requestBean.getName())) {
-					predicates.add(cb.like(root.<String> get("name"), "%"
-							+ requestBean.getName() + "%"));
+					predicates.add(cb.like(root.<String> get("name"), "%" + requestBean.getName() + "%"));
 				}
 
 				if (!StringUtils.isEmpty(requestBean.getGender())) {
-					predicates.add(cb.equal(root.<Boolean> get("gender"),
-							Boolean.valueOf(requestBean.getGender())));
+					predicates.add(cb.equal(root.<Boolean> get("gender"), Boolean.valueOf(requestBean.getGender())));
 				}
 
 				Calendar calendar = Calendar.getInstance();
@@ -296,8 +282,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 					calendar.setTime(new Date());
 					calendar.add(Calendar.YEAR, -ageLow);
 					Date startDate = (Date) calendar.getTime().clone();
-					predicates.add(cb.greaterThanOrEqualTo(
-							root.<Date> get("birthday"), startDate));
+					predicates.add(cb.greaterThanOrEqualTo(root.<Date> get("birthday"), startDate));
 					System.out.println("startDate: " + startDate);
 				}
 
@@ -306,38 +291,30 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 					calendar.setTime(new Date());
 					calendar.add(Calendar.YEAR, -ageUp);
 					Date endDate = (Date) calendar.getTime().clone();
-					predicates.add(cb.lessThanOrEqualTo(
-							root.<Date> get("birthday"), endDate));
+					predicates.add(cb.lessThanOrEqualTo(root.<Date> get("birthday"), endDate));
 					System.out.println("endDate: " + endDate);
 				}
 
 				if (!StringUtils.isEmpty(requestBean.getIncomeLow())) {
-					Integer incomeLow = Integer.parseInt(requestBean
-							.getIncomeLow());
-					predicates.add(cb.greaterThanOrEqualTo(
-							root.<Integer> get("yearIncome"), incomeLow));
+					Integer incomeLow = Integer.parseInt(requestBean.getIncomeLow());
+					predicates.add(cb.greaterThanOrEqualTo(root.<Integer> get("yearIncome"), incomeLow));
 				}
 
 				if (!StringUtils.isEmpty(requestBean.getIncomeUp())) {
-					Integer incomeUp = Integer.parseInt(requestBean
-							.getIncomeUp());
-					predicates.add(cb.lessThanOrEqualTo(
-							root.<Integer> get("yearIncome"), incomeUp));
+					Integer incomeUp = Integer.parseInt(requestBean.getIncomeUp());
+					predicates.add(cb.lessThanOrEqualTo(root.<Integer> get("yearIncome"), incomeUp));
 				}
 
 				if (!requestBean.getPolitical().isEmpty()) {
-					predicates.add(root.<Integer> get("political").in(
-							requestBean.getPolitical()));
+					predicates.add(root.<Integer> get("political").in(requestBean.getPolitical()));
 				}
 
 				if (!requestBean.getEducation().isEmpty()) {
-					predicates.add(root.<Integer> get("education").in(
-							requestBean.getEducation()));
+					predicates.add(root.<Integer> get("education").in(requestBean.getEducation()));
 				}
 
 				if (predicates.size() > 0) {
-					return cb.and(predicates.toArray(new Predicate[predicates
-							.size()]));
+					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				}
 				return cb.conjunction();
 			}
@@ -345,8 +322,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		return spec;
 	}
 
-	private void buildResponse(GridJsonResponseBean response,
-			List<PeopleEntity> entityList) {
+	private void buildResponse(GridJsonResponseBean response, List<PeopleEntity> entityList) {
 		response.getRows().clear();
 		for (PeopleEntity pe : entityList) {
 			response.getRows().add(buildPeopleDomainBean(pe));
@@ -364,8 +340,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		pd.setCurrentAddress(pe.getCurrentAddress());
 		pd.setDiffCond(pe.getDiffCond());
 		pd.setEducationId(pe.getEducation());
-		pd.setEducation(pe.getEducationType() != null ? pe.getEducationType()
-				.getTypeName() : null);
+		pd.setEducation(pe.getEducationType() != null ? pe.getEducationType().getTypeName() : null);
 		pd.setEthnic(pe.getEthnic());
 		pd.setGenderId(pe.getGender());
 		if (pe.getGender() == null) {
@@ -378,8 +353,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		pd.setHealth(pe.getHealth());
 		pd.setHeight(pe.getHeight());
 		pd.setRelationId(pe.getRelationId());
-		pd.setRelation(pe.getRelationType() != null ? pe.getRelationType()
-				.getRelationName() : null);
+		pd.setRelation(pe.getRelationType() != null ? pe.getRelationType().getRelationName() : null);
 		pd.setIncomeSource(pe.getIncomeSource());
 		pd.setIsaddsafe(pe.getIsaddsafe());
 		pd.setIsCorps(pe.getIsCorps());
@@ -389,30 +363,23 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 		pd.setJob(pe.getJob());
 		pd.setLastUpdateTime(pe.getLastUpdateTime());
 		pd.setMarriageId(pe.getMarriageId());
-		pd.setMarriage(pe.getMarriageType() != null ? pe.getMarriageType()
-				.getTypeName() : null);
+		pd.setMarriage(pe.getMarriageType() != null ? pe.getMarriageType().getTypeName() : null);
 		pd.setMemo(pe.getMemo());
 		pd.setName(pe.getName());
 		pd.setPhone(pe.getPhone());
 		pd.setPid(pe.getPid());
 		pd.setPoliticalId(pe.getPolitical());
-		pd.setPolitical(pe.getPoliticalType() != null ? pe.getPoliticalType()
-				.getPolitical() : null);
+		pd.setPolitical(pe.getPoliticalType() != null ? pe.getPoliticalType().getPolitical() : null);
 		pd.setPositionId(pe.getPosition());
-		pd.setPosition(pe.getPositionType() != null ? pe.getPositionType()
-				.getPosition() : null);
-		pd.setPtype(pe.getMobilityType() != null ? pe.getMobilityType()
-				.getTypeName() : null);
+		pd.setPosition(pe.getPositionType() != null ? pe.getPositionType().getPosition() : null);
+		pd.setPtype(pe.getMobilityType() != null ? pe.getMobilityType().getTypeName() : null);
 		pd.setRelationId(pe.getRelationId());
-		pd.setRelation(pe.getRelationType() != null ? pe.getRelationType()
-				.getRelationName() : null);
+		pd.setRelation(pe.getRelationType() != null ? pe.getRelationType().getRelationName() : null);
 		pd.setResidentId(pe.getResidentId());
-		pd.setResident(pe.getResidentType() != null ? pe.getResidentType()
-				.getTypeName() : null);
+		pd.setResident(pe.getResidentType() != null ? pe.getResidentType().getTypeName() : null);
 		pd.setSname(pe.getSname());
 		pd.setSocialId(pe.getSocial());
-		pd.setSocial(pe.getSocialType() != null ? pe.getSocialType()
-				.getSocial() : null);
+		pd.setSocial(pe.getSocialType() != null ? pe.getSocialType().getSocial() : null);
 		pd.setSpec(pe.getSpec());
 		pd.setTel(pe.getTel());
 		// pd.setVillage(pe.getVillageId());
@@ -424,8 +391,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 
 	private PageRequest buildPageRequest(GridJsonRequestBean requestBean) {
 		Sort sort = null;
-		if (StringUtils.isEmpty(requestBean.getSidx())
-				&& StringUtils.isEmpty(requestBean.getSord())) {
+		if (StringUtils.isEmpty(requestBean.getSidx()) && StringUtils.isEmpty(requestBean.getSord())) {
 			sort = new Sort(Direction.DESC, "pid");
 		} else if (StringUtils.isEmpty(requestBean.getSidx())) {
 			if (requestBean.getSord().equalsIgnoreCase(Direction.DESC.name())) {
@@ -443,8 +409,7 @@ public class PeopleServiceImpl extends BaseService implements PeopleService {
 			}
 		}
 
-		return new PageRequest(requestBean.getPage() - 1,
-				requestBean.getRows(), sort);
+		return new PageRequest(requestBean.getPage() - 1, requestBean.getRows(), sort);
 	}
 
 }

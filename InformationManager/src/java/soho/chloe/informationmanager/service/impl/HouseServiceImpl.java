@@ -52,20 +52,16 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 	}
 
 	@Override
-	public GridJsonResponseBean getHouseWithoutPicturesList(
-			GridJsonRequestBean requestBean) {
+	public GridJsonResponseBean getHouseWithoutPicturesList(GridJsonRequestBean requestBean) {
 		if (requestBean.getRows() <= 0) {
-			requestBean
-					.setRows(Integer
-							.parseInt((String) InforPropertyPlaceholderConfigurer
-									.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
+			requestBean.setRows(Integer.parseInt((String) InforPropertyPlaceholderConfigurer
+					.getContextProperty(InformationManagerConstants.DEFAULT_PAGE_SIZE)));
 		}
 		int totalCount = 0;
 		List<HouseEntity> houseList = new ArrayList<HouseEntity>();
 
 		totalCount = (int) houseDao.count();
-		houseList.addAll(houseDao.findAll(buildPageRequest(requestBean))
-				.getContent());
+		houseList.addAll(houseDao.findAll(buildPageRequest(requestBean)).getContent());
 
 		int rowsInPage = requestBean.getRows();
 		GridJsonResponseBean response = new GridJsonResponseBean();
@@ -87,22 +83,19 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 	}
 
 	@Override
-	public void saveHousePictureThumbnail(File originalFile, String fileName)
-			throws IOException {
+	public void saveHousePictureThumbnail(File originalFile, String fileName) throws IOException {
 		Thumbnails
 				.of(originalFile)
 				.size(320, 240)
 				.outputFormat("png")
-				.toFile(InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR)
-						+ fileName + "_thumbnail");
+				.toFile(InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR) + fileName
+						+ "_thumbnail");
 	}
 
 	@Override
 	public HouseDomainBean getOneHouseDetail(Integer houseId) {
 		HouseEntity houseEntity = houseDao.findOne(houseId);
-		List<HousePictureEntity> housePictureEntityList = housePictureDao
-				.findByHouseId(houseId);
+		List<HousePictureEntity> housePictureEntityList = housePictureDao.findByHouseId(houseId);
 		HouseDomainBean houseBean = buildHouseDomainBean(houseEntity);
 		for (HousePictureEntity entity : housePictureEntityList) {
 			houseBean.getPictures().add(buildHousePictureDomainBean(entity));
@@ -145,8 +138,7 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public int createNewHouse(int hostId) {
 		HouseEntity houseEntity = houseDao.save(new HouseEntity());
-		peopleDao.updateSpecificHouseMembers(hostId, houseEntity.getId(),
-				RelationEnum.HOST.getCode());
+		peopleDao.updateSpecificHouseMembers(hostId, houseEntity.getId(), RelationEnum.HOST.getCode());
 		return houseEntity.getId();
 	}
 
@@ -156,8 +148,7 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 		housePictureDao.delete(pictureId);
 	}
 
-	private HousePictureDomainBean buildHousePictureDomainBean(
-			HousePictureEntity pictureEntity) {
+	private HousePictureDomainBean buildHousePictureDomainBean(HousePictureEntity pictureEntity) {
 		HousePictureDomainBean pictureBean = new HousePictureDomainBean();
 		pictureBean.setHouseId(pictureEntity.getHouseId());
 		pictureBean.setDescription(pictureEntity.getDescription());
@@ -167,8 +158,7 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 		return pictureBean;
 	}
 
-	private void buildResponse(GridJsonResponseBean response,
-			List<HouseEntity> houseList) {
+	private void buildResponse(GridJsonResponseBean response, List<HouseEntity> houseList) {
 		response.getRows().clear();
 		for (HouseEntity entity : houseList) {
 			response.getRows().add(buildHouseDomainBean(entity));
@@ -195,8 +185,7 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 		bean.setUseType(entity.getUseType());
 		if (!entity.getHouseMembers().isEmpty()) {
 			for (PeopleEntity people : entity.getHouseMembers()) {
-				if (people.getRelationId() != null
-						&& people.getRelationId() == 1) {
+				if (people.getRelationId() != null && people.getRelationId() == 1) {
 					bean.setName(people.getName());
 					bean.setPid(people.getPid());
 				}
@@ -216,16 +205,14 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 		bean.setName(entity.getName());
 		bean.setCardId(entity.getCardId());
 		bean.setBirthday(entity.getBirthday());
-		bean.setGender((entity.getGender() != null && entity.getGender() == 1) ? "男"
-				: "女");
+		bean.setGender((entity.getGender() != null && entity.getGender() == 1) ? "男" : "女");
 		bean.setRelation(String.valueOf(entity.getRelationId()));
 		return bean;
 	}
 
 	private PageRequest buildPageRequest(GridJsonRequestBean requestDTO) {
 		Sort sort = null;
-		if (StringUtils.isEmpty(requestDTO.getSidx())
-				&& StringUtils.isEmpty(requestDTO.getSord())) {
+		if (StringUtils.isEmpty(requestDTO.getSidx()) && StringUtils.isEmpty(requestDTO.getSord())) {
 			sort = new Sort(Direction.DESC, "id");
 		} else if (StringUtils.isEmpty(requestDTO.getSidx())) {
 			if (requestDTO.getSord().equalsIgnoreCase(Direction.DESC.name())) {
@@ -243,12 +230,10 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 			}
 		}
 
-		return new PageRequest(requestDTO.getPage() - 1, requestDTO.getRows(),
-				sort);
+		return new PageRequest(requestDTO.getPage() - 1, requestDTO.getRows(), sort);
 	}
 
-	private List<HouseMiniDomainBean> buildHouseMiniDomainBean(
-			List<HouseEntity> entityList) {
+	private List<HouseMiniDomainBean> buildHouseMiniDomainBean(List<HouseEntity> entityList) {
 		List<HouseMiniDomainBean> miniBeanList = new ArrayList<HouseMiniDomainBean>();
 		for (HouseEntity entity : entityList) {
 			HouseMiniDomainBean bean = new HouseMiniDomainBean();
@@ -256,8 +241,7 @@ public class HouseServiceImpl extends BaseService implements HouseService {
 			if (!entity.getHouseMembers().isEmpty()) {
 				for (PeopleEntity people : entity.getHouseMembers()) {
 					if (people.getRelationId() == 1) {
-						bean.setName(people.getName() + " - 户主id: "
-								+ people.getPid());
+						bean.setName(people.getName() + " - 户主id: " + people.getPid());
 						break;
 					}
 				}

@@ -13,13 +13,11 @@ import soho.chloe.informationmanager.bean.HousePictureDomainBean;
 public interface HouseService {
 	public List<HouseMiniDomainBean> getMiniHostBeanListUnmarkedOnMap();
 
-	public GridJsonResponseBean getHouseWithoutPicturesList(
-			GridJsonRequestBean requestBean);
+	public GridJsonResponseBean getHouseWithoutPicturesList(GridJsonRequestBean requestBean);
 
 	public Integer savePictureOfHouse(HousePictureDomainBean picture);
 
-	public void saveHousePictureThumbnail(File originalFile, String fileName)
-			throws IOException;
+	public void saveHousePictureThumbnail(File originalFile, String fileName) throws IOException;
 
 	public HouseDomainBean getOneHouseDetail(Integer houseId);
 
@@ -28,6 +26,6 @@ public interface HouseService {
 	public void deleteHouse(int houseId);
 
 	public int createNewHouse(int hostId);
-	
+
 	public void deletePicture(int pictureId);
 }

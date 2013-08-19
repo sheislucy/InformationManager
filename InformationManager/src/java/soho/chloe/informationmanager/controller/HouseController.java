@@ -51,8 +51,7 @@ public class HouseController extends BaseController {
 
 	@RequestMapping(value = "/house.json")
 	public @ResponseBody
-	GridJsonResponseBean getHousePagingList(
-			@RequestBody GridJsonRequestBean requestBean) {
+	GridJsonResponseBean getHousePagingList(@RequestBody GridJsonRequestBean requestBean) {
 		return houseService.getHouseWithoutPicturesList(requestBean);
 	}
 
@@ -73,24 +72,18 @@ public class HouseController extends BaseController {
 
 	@RequestMapping(value = "/uploadPicture", method = RequestMethod.POST)
 	public @ResponseBody
-	PictureUploadBean uploadHousePhotos(
-			@RequestParam("Filedata") MultipartFile multipartFile,
-			@RequestParam("Filename") String fileName,
-			@RequestParam("houseId") Integer houseId)
-			throws IllegalStateException, IOException {
+	PictureUploadBean uploadHousePhotos(@RequestParam("Filedata") MultipartFile multipartFile, @RequestParam("Filename") String fileName,
+			@RequestParam("houseId") Integer houseId) throws IllegalStateException, IOException {
 
-		StringBuffer pathDir = new StringBuffer()
-				.append(InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_DIR));
+		StringBuffer pathDir = new StringBuffer().append(InforPropertyPlaceholderConfigurer
+				.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_DIR));
 
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd-HH");
-		String newName = new StringBuffer().append(UUID.randomUUID())
-				.append(".").append(dateformat.format(new Date())).toString();// UUID.YYYY-MM-DD-HH
+		String newName = new StringBuffer().append(UUID.randomUUID()).append(".").append(dateformat.format(new Date())).toString();// UUID.YYYY-MM-DD-HH
 		// String originalName = multipartFile.getOriginalFilename();
 		String pathAndName = pathDir.append(newName).toString();// F:\\upload\\house\\pictures\\UUID.YYYY-MM-DD-HH
 		String[] nameExtPair = fileName.split(".");
-		String originalExtension = nameExtPair.length > 1 ? "."
-				+ nameExtPair[1] : ".png";
+		String originalExtension = nameExtPair.length > 1 ? "." + nameExtPair[1] : ".png";
 		File file = new File(pathAndName + originalExtension);
 		multipartFile.transferTo(file);
 		HousePictureDomainBean bean = new HousePictureDomainBean();
@@ -107,19 +100,15 @@ public class HouseController extends BaseController {
 	}
 
 	@RequestMapping(value = "/thumbnail", method = RequestMethod.GET)
-	public void download(@RequestParam("file") String fileName,
-			HttpServletResponse response) throws Exception {
+	public void download(@RequestParam("file") String fileName, HttpServletResponse response) throws Exception {
 		String path = new StringBuffer()
-				.append(InforPropertyPlaceholderConfigurer
-						.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR))
+				.append(InforPropertyPlaceholderConfigurer.getContextProperty(InformationManagerConstants.HOUSE_IMAGE_THUMBNAIL_DIR))
 				.append(fileName).append("_thumbnail.png").toString();
 		File thumbnail = new File(path);
 		response.setContentType("image/png; charset=UTF-8");
 		response.setHeader("Content-Length", String.valueOf(thumbnail.length()));
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
-				path));
-		BufferedOutputStream bos = new BufferedOutputStream(
-				response.getOutputStream());
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path));
+		BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
 		byte[] buff = new byte[1024 * 1024];
 		int bytesRead;
 		while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
@@ -155,7 +144,7 @@ public class HouseController extends BaseController {
 		result.setStatus(JsonStatus.SUCCESS);
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/deletePicture", method = RequestMethod.POST)
 	public @ResponseBody
 	JsonResultBean deletePicture(@RequestBody HousePictureDomainBean picture) {

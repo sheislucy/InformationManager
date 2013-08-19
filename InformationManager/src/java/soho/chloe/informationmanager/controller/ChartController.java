@@ -14,8 +14,7 @@ public class ChartController extends BaseController {
 	}
 
 	@RequestMapping(value = "/chart/{chartId}", method = RequestMethod.GET)
-	public ModelAndView initStatisticsPage(
-			@PathVariable("chartId") String chartId) {
+	public ModelAndView initStatisticsPage(@PathVariable("chartId") String chartId) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("chartId", chartId);
 		mv.setViewName("inc/chart.inc");

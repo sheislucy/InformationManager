@@ -189,8 +189,7 @@ public class MapServiceImpl extends BaseService implements MapService {
 		polygonDao.delete(featureId);
 	}
 
-	private List<PolygonDomainBean> buildPolygonDomainBeanList(
-			List<GeoPolygonEntity> entityList) {
+	private List<PolygonDomainBean> buildPolygonDomainBeanList(List<GeoPolygonEntity> entityList) {
 		List<PolygonDomainBean> beanList = new ArrayList<PolygonDomainBean>();
 		for (GeoPolygonEntity entity : entityList) {
 			beanList.add(buildPolygonDomainBean(entity));
@@ -207,8 +206,7 @@ public class MapServiceImpl extends BaseService implements MapService {
 		return bean;
 	}
 
-	private List<LineDomainBean> buildLineDomainBeanList(
-			List<GeoLineEntity> entityList) {
+	private List<LineDomainBean> buildLineDomainBeanList(List<GeoLineEntity> entityList) {
 		List<LineDomainBean> beanList = new ArrayList<LineDomainBean>();
 		for (GeoLineEntity entity : entityList) {
 			beanList.add(buildLineDomainBean(entity));
@@ -225,8 +223,7 @@ public class MapServiceImpl extends BaseService implements MapService {
 		return bean;
 	}
 
-	private List<PointDomainBean> buildPointDomainBeanList(
-			List<GeoPointEntity> entityList) {
+	private List<PointDomainBean> buildPointDomainBeanList(List<GeoPointEntity> entityList) {
 		List<PointDomainBean> beanList = new ArrayList<PointDomainBean>();
 		for (GeoPointEntity entity : entityList) {
 			beanList.add(buildPointDomainBean(entity));
@@ -243,8 +240,7 @@ public class MapServiceImpl extends BaseService implements MapService {
 		bean.setId(entity.getId());
 		if (!entity.getHouse().getHouseMembers().isEmpty()) {
 			for (PeopleEntity people : entity.getHouse().getHouseMembers()) {
-				if (people.getRelationId() != null
-						&& people.getRelationId() == 1) {
+				if (people.getRelationId() != null && people.getRelationId() == 1) {
 					bean.setHostName(people.getName());
 					bean.setHostId(people.getPid());
 					break;
@@ -267,8 +263,7 @@ public class MapServiceImpl extends BaseService implements MapService {
 		return bean;
 	}
 
-	private List<MapDomainBean> buildMapDomainBeanList(
-			List<MapEntity> mapEntityList) {
+	private List<MapDomainBean> buildMapDomainBeanList(List<MapEntity> mapEntityList) {
 		List<MapDomainBean> mapBeanList = new ArrayList<MapDomainBean>();
 		for (MapEntity entity : mapEntityList) {
 			mapBeanList.add(buildMapDomainBean(entity));
